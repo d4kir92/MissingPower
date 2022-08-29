@@ -1,0 +1,29 @@
+## Interface: 20504
+## Version: 2022.08.17-07:40 Release
+## Title: D4KiR |cffffffff• |cff9966ffM|cffffffffissing |cff9090ffP|cffffffffower
+## Notes: Show for each spell how much power is missing
+## Author: D4KiR
+## DefaultState: enabled
+## SavedVariables: MIPO
+## SavedVariablesPerCharacter: MIPOPC
+## X-Curse-Project-ID: 341275
+## X-Wago-ID: RXKqO8Ny
+
+config.lua
+
+libs/LIB_output.lua
+libs/LIB_math.lua
+libs/LIB_design.lua
+
+locale/enUS.lua
+locale/deDE.lua
+locale/koKR.lua
+locale/ruRU.lua
+locale/zhCN.lua
+locale/zhTW.lua
+libs/LIB_lang.lua
+
+settings.lua
+
+core.lua
+fivesecondrule.lua
