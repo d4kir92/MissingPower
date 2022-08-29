@@ -455,7 +455,7 @@ function MIPOShowOOM( init, from )
 							else
 								amount = 0
 							end
-							if MIPOGetConfig("experiment", false) and MiPoPercent then
+							--[[if MIPOGetConfig("experiment", false) and MiPoPercent then
 								if cost-ener > 0 and MiPoPercent > 0 then
 									if cost - (ener + 20) < 0 then
 										amount = 1 - MiPoPercent
@@ -465,7 +465,7 @@ function MIPOShowOOM( init, from )
 								else
 									amount = 0
 								end
-							end
+							end]]
 						elseif typ == Enum.PowerType.Focus then
 							color.r = r
 							color.g = g

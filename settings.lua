@@ -12,7 +12,7 @@ end
 
 function MIPO_InitSetting()
 	MIPO_Settings = {}
-	local settingname = MIPO.colorauthor .. MIPO.author .. " " .. MIPO.colorname .. MIPO.name
+	local settingname = MIPO.name
 	MIPO_Settings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPO_Settings.panel.name = settingname
 
@@ -53,7 +53,7 @@ function MIPO_InitSetting()
 		MIPO_CreateCheckBox(settings_shownextready)
 		Y = Y - H
 
-		local settings_experiment = {}
+		--[[local settings_experiment = {}
 		settings_experiment.name = "experiment"
 		settings_experiment.parent = MIPO_Settings.panel
 		settings_experiment.checked = MIPOGetConfig("experiment", false)
@@ -62,7 +62,7 @@ function MIPO_InitSetting()
 		settings_experiment.y = Y
 		settings_experiment.dbvalue = "experiment"
 		MIPO_CreateCheckBox(settings_experiment)
-		Y = Y - H
+		Y = Y - H]]
 	end
 
 	local settings_showamountcounter = {}
