@@ -1,8 +1,8 @@
 -- LIB Output
 
-MIPO.name = MIPO.name or "X"
-
 function MIPOmsg(str)
+	MIPO.name = MIPO.name or "X"
+
 	print("|c0000ffff" .. "[" .. "|cff8888ff" .. MIPO.name .. "|c0000ffff" .. "] " .. str)
 end
 

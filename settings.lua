@@ -12,7 +12,8 @@ end
 
 function MIPO_InitSetting()
 	MIPO_Settings = {}
-	local settingname = MIPO.name
+	local settingname = MIPOname
+
 	MIPO_Settings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPO_Settings.panel.name = settingname
 

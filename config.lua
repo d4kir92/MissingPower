@@ -3,10 +3,7 @@
 MIPO = MIPO or {}
 MIPOPC = MIPOPC or {}
 
-MIPO.name = "Missing Power"
-MIPO.colorname = "|c008888ff"
-MIPO.author = "D4KiR"
-MIPO.colorauthor = "|c0000ffff"
+MIPOname = "MissingPower |T136048/:16:16:0:0|t by |cFFAAAAFFD4KiR |T132115/:16:16:0:0|t"
 
 SetCVar("ScriptErrors", 1)
 MIPO.DEBUG = false
