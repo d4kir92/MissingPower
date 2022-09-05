@@ -1,6 +1,6 @@
 -- FSR
 
-if MIPOBUILD ~= "RETAIL" then
+if MIPOBUILD == "CLASSIC" or MIPOBUILD == "TBC" then
 	local tick = 0.01
 
 	local now = GetTime()
