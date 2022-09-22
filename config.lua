@@ -3,7 +3,7 @@
 MIPO = MIPO or {}
 MIPOPC = MIPOPC or {}
 
-MIPOname = "MissingPower |T136048/:16:16:0:0|t by |cff3FC7EBD4KiR |T132115/:16:16:0:0|t"
+MIPOname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
 
 SetCVar("ScriptErrors", 1)
 MIPO.DEBUG = false
