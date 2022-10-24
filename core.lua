@@ -166,59 +166,6 @@ function MIPOShowOOM( init, from )
 								end
 							end
 
-							-- Next
-							local BTNNAMENEXT = BTNNAME .. "Next"
-							_G[BTNNAMENEXT] = CreateFrame("FRAME", BTNNAMENEXT, obtn)
-							local OOMNext = _G[BTNNAMENEXT]
-							OOMNext:SetWidth(obtn:GetWidth())
-							OOMNext:SetHeight(obtn:GetHeight())
-							OOMNext:ClearAllPoints()
-							OOMNext:SetPoint("TOPLEFT", obtn, "TOPLEFT", 0, -36)
-							OOMNext.texture = OOMNext:CreateTexture("MyTexture", "ARTWORK")
-							OOMNext.texture:SetColorTexture(0, 0, 0, color.a)
-							OOMNext.texture:SetAllPoints(OOMNext)
-							OOMNext:SetFrameStrata("BACKGROUND")
-							OOMNext.OldHide = OOMNext.OldHide or OOMNext.Hide
-							OOMNext.Hide = function(self, forced)
-								if forced == true then
-									self:SetAlpha(0)
-								end
-							end
-							OOMNext.OldShow = OOMNext.OldShow or OOMNext.Show
-							OOMNext.Show = function(self, forced)
-								if forced == true then
-									self:SetAlpha(MIPOGetConfig("poweralpha", 0.7) / 2)
-								end
-							end
-
-							-- NextReady
-							if MIPOBUILD ~= "RETAIL" then
-								local BTNNAMENEXTREADY = BTNNAME .. "NextReady"
-								_G[BTNNAMENEXTREADY] = CreateFrame("FRAME", BTNNAMENEXTREADY, obtn)
-								OOMNextReady = _G[BTNNAMENEXTREADY]
-								OOMNextReady:SetWidth(obtn:GetWidth())
-								OOMNextReady:SetHeight(obtn:GetHeight())
-								OOMNextReady:ClearAllPoints()
-								OOMNextReady:SetPoint("TOPLEFT", obtn, "TOPLEFT", 0, -36)
-								OOMNextReady.texture = OOMNextReady:CreateTexture("MyTexture", "ARTWORK")
-								OOMNextReady.texture:SetColorTexture(0, 0, 0, color.a)
-								OOMNextReady.texture:SetAllPoints(OOMNextReady)
-								OOMNextReady:SetFrameStrata("BACKGROUND")
-								OOMNextReady.OldHide = OOMNextReady.OldHide or OOMNextReady.Hide
-								OOMNextReady.Hide = function(self, forced)
-									if forced == true then
-										self:SetAlpha(0)
-									end
-								end
-								OOMNextReady.OldShow = OOMNextReady.OldShow or OOMNextReady.Show
-								OOMNextReady.Show = function(self, forced)
-									if forced == true then
-										self:SetAlpha(color.a)
-									end
-								end
-								OOMNextReady:SetAlpha(0)
-							end
-
 							-- AmountCounter
 							local BTNNAMEAMOUNTCOUNTER = BTNNAME .. "AmountCounter"
 							_G[BTNNAMEAMOUNTCOUNTER] = CreateFrame("FRAME", BTNNAMEAMOUNTCOUNTER, obtn)
@@ -250,11 +197,6 @@ function MIPOShowOOM( init, from )
 							OOMAmountCounter:Show(true)
 
 							OOM:Hide(true)
-							OOMNext:Hide(true)
-							if OOMNextReady ~= nil then
-								OOMNextReady:Hide(true)
-								OOMNextReady.show = false
-							end
 							OOMAmountCounter:Hide(true)
 						end
 						if ActionButtons[BTNNAME] == nil then
@@ -328,15 +270,10 @@ function MIPOShowOOM( init, from )
 				local ABTN = _G[ab.name]
 				--local layer, sublevel = _G[ab.name .. "Icon"]:GetDrawLayer()
 				local OOM = _G[btnname]
-				local OOMNext = _G[btnname .. "Next"]
-				local OOMNextReady = _G[btnname .. "NextReady"]
+		
 				local OOMAmountCounter = _G[btnname .. "AmountCounter"]
 				OOM:Hide(true)
-				OOMNext:Hide(true)
-				if OOMNextReady ~= nil then
-					OOMNextReady:Hide(true)
-					OOMNextReady.show = false
-				end
+		
 				if OOMAmountCounter.text.fs ~= MIPOGetConfig("fontsize", 12) then
 					OOMAmountCounter.text.fs = MIPOGetConfig("fontsize", 12)
 					OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MIPOGetConfig("fontsize", 12), "OUTLINE")
@@ -358,7 +295,6 @@ function MIPOShowOOM( init, from )
 				local p = 0
 				local cost = 0
 				local typ = 0
-				local shownext = true
 				local regen = 0
 				local amount = 0
 
@@ -429,7 +365,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = true
 							regen = GetPowerRegen() / -2
 							if cost > 0 then
 								amount = rage / cost
@@ -475,7 +410,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = true
 							regen = GetPowerRegen() / -2
 							if cost > 0 then
 								amount = focu / cost
@@ -491,7 +425,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = true
 							regen = GetPowerRegen()
 							if cost > 0 then
 								amount = rune / cost
@@ -507,7 +440,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = false
 							regen = GetPowerRegen()
 							if cost > 0 then
 								amount = luna / cost
@@ -523,7 +455,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = true
 							regen = GetPowerRegen()
 							if cost > 0 then
 								amount = pain / cost
@@ -539,7 +470,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = true
 							regen = GetPowerRegen()
 							if cost > 0 then
 								amount = fury / cost
@@ -555,7 +485,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = true
 							regen = GetPowerRegen()
 							if cost > 0 then
 								amount = mael / cost
@@ -571,7 +500,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = true
 							regen = GetPowerRegen()
 							if cost > 0 then
 								amount = holy / cost
@@ -587,7 +515,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = true
 							regen = GetPowerRegen()
 							if cost > 0 then
 								amount = insa / cost
@@ -603,7 +530,6 @@ function MIPOShowOOM( init, from )
 							else
 								p = 0
 							end
-							shownext = true
 							regen = GetPowerRegen()
 							if cost > 0 then
 								amount = chi / cost
@@ -619,10 +545,7 @@ function MIPOShowOOM( init, from )
 
 						if OOM.texture ~= nil then
 							OOM.texture:SetColorTexture(color.r, color.g, color.b)
-							OOMNext.texture:SetColorTexture(color.r, color.g, color.b)
-							if OOMNextReady ~= nil then
-								OOMNextReady.texture:SetColorTexture(color.r, color.g, color.b)
-							end
+						
 							if MIPOGetConfig("customcolor", false) then
 								OOMAmountCounter.text:SetTextColor( MIPOGetConfig("ccolr", 0), MIPOGetConfig("ccolg", 0), MIPOGetConfig("ccolb", 0) )
 							else
@@ -683,31 +606,15 @@ function MIPOShowOOM( init, from )
 					OOMAmountCounter.text:SetJustifyV(ay)
 
 					if p <= 0 then
-						if OOMNextReady ~= nil then
-							OOMNextReady:SetFrameStrata("BACKGROUND")
-							OOMNextReady:SetHeight(0.1)
-							OOMNextReady:Hide(true)
-							OOMNextReady.show = false
-						end
-
 						OOM:SetHeight(0.1)
-						OOMNext:SetHeight(0.1)
-
+						
 						OOM:Hide(true)
 						OOM:SetFrameStrata("BACKGROUND")
 						OOM:SetAlpha(0)
-						OOMNext:Hide(true)
-						OOMNext:SetFrameStrata("BACKGROUND")
-						OOMNext:SetAlpha(0)
 					else
 						OOM:Show(true)
 						OOM:SetFrameStrata(ABTN:GetFrameStrata())
 						OOM:SetAlpha(MIPOGetConfig("poweralpha", 0.7))
-						if shownext and MIPOBUILD ~= "RETAIL" then
-							OOMNext:Show(true)
-							OOMNext:SetFrameStrata(ABTN:GetFrameStrata())
-							OOMNext:SetAlpha(MIPOGetConfig("poweralpha", 0.7) / 2)
-						end
 
 						local h = ABTN:GetHeight()
 						local y = h * p - h
@@ -723,40 +630,12 @@ function MIPOShowOOM( init, from )
 								ph = ph - y
 								y = 0
 							end
-							if MIPOGetConfig("shownextready", true) then
-								if OOMNextReady ~= nil then
-									OOMNextReady:SetFrameStrata(OOM:GetFrameStrata())
-									OOMNextReady:SetHeight(h)
-									OOMNextReady:ClearAllPoints()
-									OOMNextReady:SetPoint("TOPLEFT", ABTN, "TOPLEFT", 0, 0)
-									OOMNextReady:Show(true)
-									OOMNextReady.show = true
-								end
-
-								OOM:Hide(true)
-								OOMNext:Hide(true)
-							end
 						end
-						OOMNext:ClearAllPoints()
-						OOMNext:SetPoint("TOPLEFT", ABTN, "TOPLEFT", 0, y)
-						OOMNext:SetHeight(ph)
 					end
 				else
 					OOM:SetFrameStrata("BACKGROUND")
-					OOMNext:SetFrameStrata("BACKGROUND")
-
-					if OOMNextReady ~= nil then
-						OOMNextReady:SetFrameStrata("BACKGROUND")
-						OOMNextReady:SetHeight(0.1)
-						OOMNextReady:Hide(true)
-						OOMNextReady.show = false
-					end
 
 					OOM:SetHeight(0.1)
-					OOMNext:SetHeight(0.1)
-
-					OOMNext:Hide(true)
-					OOMNext:SetAlpha(0)
 
 					OOM:Hide(true)
 					OOM:SetAlpha(0)
@@ -765,29 +644,6 @@ function MIPOShowOOM( init, from )
 		end
 	end
 end
-
-function MIPOBlink_Think()
-	if ready and MIPOBUILD ~= "RETAIL" then
-		cur = cur + dir
-		if cur > CONFIG.max then
-			cur = CONFIG.max
-			dir = -CONFIG.dir
-		elseif cur < CONFIG.min then
-			cur = CONFIG.min
-			dir = CONFIG.dir
-		end
-
-		for btnname, ab in pairs(MIPOActionButtons) do
-			local OOMNextReady = _G[btnname .. "NextReady"]
-			if OOMNextReady ~= nil and OOMNextReady.show then
-				OOMNextReady:SetAlpha(cur)
-			end
-		end
-	end
-
-	C_Timer.After(CONFIG.tick, MIPOBlink_Think)
-end
-MIPOBlink_Think()
 
 local power = -1
 local mana = -1
