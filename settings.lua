@@ -42,30 +42,6 @@ function MIPO_InitSetting()
 	MIPO_CreateCheckBox(settings_showoverlap)
 	Y = Y - H
 
-	if MIPOBUILD ~= "RETAIL" then
-		local settings_shownextready = {}
-		settings_shownextready.name = "shownextready"
-		settings_shownextready.parent = MIPO_Settings.panel
-		settings_shownextready.checked = MIPOGetConfig("shownextready", true)
-		settings_shownextready.text = "shownextready"
-		settings_shownextready.x = 10
-		settings_shownextready.y = Y
-		settings_shownextready.dbvalue = "shownextready"
-		MIPO_CreateCheckBox(settings_shownextready)
-		Y = Y - H
-
-		--[[local settings_experiment = {}
-		settings_experiment.name = "experiment"
-		settings_experiment.parent = MIPO_Settings.panel
-		settings_experiment.checked = MIPOGetConfig("experiment", false)
-		settings_experiment.text = "experiment"
-		settings_experiment.x = 10
-		settings_experiment.y = Y
-		settings_experiment.dbvalue = "experiment"
-		MIPO_CreateCheckBox(settings_experiment)
-		Y = Y - H]]
-	end
-
 	local settings_showamountcounter = {}
 	settings_showamountcounter.name = "showamountcounter"
 	settings_showamountcounter.parent = MIPO_Settings.panel
@@ -152,16 +128,18 @@ function MIPO_InitSetting()
 	MIPO_CreateSlider(settings_fonty)
 	Y = Y - BR
 
-	local settings_showtickbar = {}
-	settings_showtickbar.name = "showtickbar"
-	settings_showtickbar.parent = MIPO_Settings.panel
-	settings_showtickbar.checked = MIPOGetConfig("showtickbar", true)
-	settings_showtickbar.text = "showtickbar"
-	settings_showtickbar.x = 10
-	settings_showtickbar.y = Y
-	settings_showtickbar.dbvalue = "showtickbar"
-	MIPO_CreateCheckBox(settings_showtickbar)
-	Y = Y - BR
+	if MIPOBUILD == "CLASSIC" or MIPOBUILD == "TBC" then
+		local settings_showtickbar = {}
+		settings_showtickbar.name = "showtickbar"
+		settings_showtickbar.parent = MIPO_Settings.panel
+		settings_showtickbar.checked = MIPOGetConfig("showtickbar", true)
+		settings_showtickbar.text = "showtickbar"
+		settings_showtickbar.x = 10
+		settings_showtickbar.y = Y
+		settings_showtickbar.dbvalue = "showtickbar"
+		MIPO_CreateCheckBox(settings_showtickbar)
+		Y = Y - BR
+	end
 
 	local settings_customcolor = {}
 	settings_customcolor.name = "customcolor"
