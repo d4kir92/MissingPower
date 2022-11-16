@@ -340,6 +340,7 @@ function MIPOShowOOM( init, from )
 						local insa = UnitPower("player", Enum.PowerType.Insanity)
 						local holy = UnitPower("player", Enum.PowerType.HolyPower)
 						local chi = UnitPower("player", Enum.PowerType.Chi)
+						local ess = UnitPower("player", Enum.PowerType.Essence)
 
 						if typ == Enum.PowerType.Mana then
 							color.r = r
@@ -390,17 +391,6 @@ function MIPOShowOOM( init, from )
 							else
 								amount = 0
 							end
-							--[[if MIPOGetConfig("experiment", false) and MiPoPercent then
-								if cost-ener > 0 and MiPoPercent > 0 then
-									if cost - (ener + 20) < 0 then
-										amount = 1 - MiPoPercent
-									else
-										amount = 0
-									end
-								else
-									amount = 0
-								end
-							end]]
 						elseif typ == Enum.PowerType.Focus then
 							color.r = r
 							color.g = g
@@ -522,17 +512,18 @@ function MIPOShowOOM( init, from )
 								amount = 0
 							end
 						elseif typ == Enum.PowerType.Chi then
+						elseif typ == Enum.PowerType.Essence then
 							color.r = r
 							color.g = g
 							color.b = b
-							if cost > chi then
-								p = chi / cost
+							if cost > ess then
+								p = ess / cost
 							else
 								p = 0
 							end
 							regen = GetPowerRegen()
 							if cost > 0 then
-								amount = chi / cost
+								amount = ess / cost
 							else
 								amount = 0
 							end
@@ -540,7 +531,9 @@ function MIPOShowOOM( init, from )
 							local _, englishClass, _ = UnitClass("player")
 							print("Send this to missing power Developer [POWERTYP]: " .. typ .. " Class: " .. englishClass .. " WoW: " .. tostring(MIPOBUILD))
 							print(UnitPowerType("PLAYER"))
-							--pTab(Enum.PowerType)
+							if Enum.PowerType[typ] then
+								print(Enum.PowerType[typ])
+							end
 						end
 
 						if OOM.texture ~= nil then
