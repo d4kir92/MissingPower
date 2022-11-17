@@ -1,5 +1,7 @@
 -- By D4KiR
 
+local AddOnName, MissingPower = ...
+
 --[[ ### CONFIG START ### ]]--
 
 local CONFIG = {}
@@ -69,7 +71,7 @@ color.a = 1
 local cur = CONFIG.min
 local dir = CONFIG.dir
 
-function MIPOGetActionFromButton(button, action)
+function MissingPower:GetActionFromButton(button, action)
 	if strfind(button:GetName(), "MAI") then
 		local id = button.sbsid or button.spellid
 		local at = "spell"
@@ -100,7 +102,7 @@ function MIPOGetActionFromButton(button, action)
 end
 
 local loaded = false
-function MIPOShowOOM( init, from )
+function MissingPower:ShowOOM( init, from )
 	if init then
 		loaded = true
 	end
@@ -133,7 +135,7 @@ function MIPOShowOOM( init, from )
 								obtn.actionID = actionID
 
 								MIPOUpdate = true
-								MIPOShowOOM( nil, "ID CHANGE" )
+								MissingPower:ShowOOM( nil, "ID CHANGE" )
 							end
 
 							C_Timer.After( 0.5, obtn.ActionChanged )
@@ -162,7 +164,7 @@ function MIPOShowOOM( init, from )
 							OOM.OldShow = OOM.OldShow or OOM.Show
 							OOM.Show = function(self, forced)
 								if forced == true then
-									self:SetAlpha(MIPOGetConfig("poweralpha", 0.7))
+									self:SetAlpha(MissingPower:GetConfig("poweralpha", 0.7))
 								end
 							end
 
@@ -176,7 +178,7 @@ function MIPOShowOOM( init, from )
 							OOMAmountCounter:SetPoint("CENTER", obtn, "CENTER", 0, 0)
 
 							OOMAmountCounter.text = OOMAmountCounter:CreateFontString(nil, "ARTWORK")
-							OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MIPOGetConfig("fontsize", 12), "OUTLINE")
+							OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MissingPower:GetConfig("fontsize", 12), "OUTLINE")
 							OOMAmountCounter.text:SetText("")
 							OOMAmountCounter.text:SetTextColor(1, 1, 1, 0.9)
 							OOMAmountCounter.text:SetPoint("CENTER", obtn, "CENTER", 0, 0)
@@ -210,8 +212,8 @@ function MIPOShowOOM( init, from )
 			end
 
 			ready = true
-			MIPO_InitSetting()
-			MIPOShowOOM( nil, "SETUP" )
+			MissingPower:InitSetting()
+			MissingPower:ShowOOM( nil, "SETUP" )
 		elseif ready then
 			if UnitInVehicle then
 				if UnitInVehicle("PLAYER") then
@@ -226,7 +228,7 @@ function MIPOShowOOM( init, from )
 				for btnname, ab in pairs(ActionButtons) do
 					local ABTN = _G[ab.name]
 					
-					local id, at = MIPOGetActionFromButton(ABTN, ABTN._state_action)
+					local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action)
 					local name = nil
 					local spellId = nil
 					if at == "macro" then
@@ -274,12 +276,12 @@ function MIPOShowOOM( init, from )
 				local OOMAmountCounter = _G[btnname .. "AmountCounter"]
 				OOM:Hide(true)
 		
-				if OOMAmountCounter.text.fs ~= MIPOGetConfig("fontsize", 12) then
-					OOMAmountCounter.text.fs = MIPOGetConfig("fontsize", 12)
-					OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MIPOGetConfig("fontsize", 12), "OUTLINE")
+				if OOMAmountCounter.text.fs ~= MissingPower:GetConfig("fontsize", 12) then
+					OOMAmountCounter.text.fs = MissingPower:GetConfig("fontsize", 12)
+					OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MissingPower:GetConfig("fontsize", 12), "OUTLINE")
 				end
 
-				local id, at = MIPOGetActionFromButton(ABTN, ABTN._state_action)
+				local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action)
 				local name = nil
 				local spellId = nil
 				if at == "macro" then
@@ -323,9 +325,9 @@ function MIPOShowOOM( init, from )
 							g = pbc.g or g
 							b = pbc.b or b
 						end
-						r = mathC(r, 0.3, 1.0)
-						g = mathC(g, 0.3, 1.0)
-						b = mathC(b, 0.3, 1.0)
+						r = MissingPower:MathC(r, 0.3, 1.0)
+						g = MissingPower:MathC(g, 0.3, 1.0)
+						b = MissingPower:MathC(b, 0.3, 1.0)
 
 						-- TYPES
 						local mana = UnitPower("player", Enum.PowerType.Mana)
@@ -539,8 +541,8 @@ function MIPOShowOOM( init, from )
 						if OOM.texture ~= nil then
 							OOM.texture:SetColorTexture(color.r, color.g, color.b)
 						
-							if MIPOGetConfig("customcolor", false) then
-								OOMAmountCounter.text:SetTextColor( MIPOGetConfig("ccolr", 0), MIPOGetConfig("ccolg", 0), MIPOGetConfig("ccolb", 0) )
+							if MissingPower:GetConfig("customcolor", false) then
+								OOMAmountCounter.text:SetTextColor( MissingPower:GetConfig("ccolr", 0), MissingPower:GetConfig("ccolg", 0), MissingPower:GetConfig("ccolb", 0) )
 							else
 								OOMAmountCounter.text:SetTextColor(color.r + 0.2, color.g + 0.2, color.b + 0.2)
 							end
@@ -551,13 +553,13 @@ function MIPOShowOOM( init, from )
 					OOMAmountCounter:SetPoint("CENTER", ABTN, "CENTER", 0, 0)
 					OOMAmountCounter:Show(true)
 					OOMAmountCounter:SetFrameStrata(ABTN:GetFrameStrata())
-					if amount > 0 and at ~= nil and MIPOGetConfig("showamountcounter", true) and (at == "spell" or at == "macro") then
+					if amount > 0 and at ~= nil and MissingPower:GetConfig("showamountcounter", true) and (at == "spell" or at == "macro") then
 						OOMAmountCounter:SetAlpha(1)
 					else
 						OOMAmountCounter:SetAlpha(0)
 					end
 
-					local decimals = MIPOGetConfig( "decimals", 1 )
+					local decimals = MissingPower:GetConfig( "decimals", 1 )
 					local amo = -1
 					if decimals == 0 or amount > 99 then
 						amo = math.floor( amount )
@@ -565,8 +567,8 @@ function MIPOShowOOM( init, from )
 						amo = format( "%." .. decimals .. "f", amount )
 					end
 
-					if MIPOGetConfig("displayiflowerthanx", 10) > 0 then
-						if amount < MIPOGetConfig("displayiflowerthanx", 10) then
+					if MissingPower:GetConfig("displayiflowerthanx", 10) > 0 then
+						if amount < MissingPower:GetConfig("displayiflowerthanx", 10) then
 							OOMAmountCounter.text:SetText(amo)
 						else
 							OOMAmountCounter.text:SetText("")
@@ -579,22 +581,22 @@ function MIPOShowOOM( init, from )
 					local ay = "CENTER"
 					local px = 0
 					local py = 0
-					if MIPOGetConfig("fontx", 0) < 0 then
+					if MissingPower:GetConfig("fontx", 0) < 0 then
 						ax = "LEFT"
 						px = 2
-					elseif MIPOGetConfig("fontx", 0) > 0 then
+					elseif MissingPower:GetConfig("fontx", 0) > 0 then
 						ax = "RIGHT"
 						px = -2
 					end
-					if MIPOGetConfig("fonty", 0) < 0 then
+					if MissingPower:GetConfig("fonty", 0) < 0 then
 						ay = "BOTTOM"
 						py = 2
-					elseif MIPOGetConfig("fonty", 0) > 0 then
+					elseif MissingPower:GetConfig("fonty", 0) > 0 then
 						ay = "TOP"
 						py = -2
 					end
 					OOMAmountCounter.text:SetSize(OOM:GetWidth(), OOM:GetWidth())
-					OOMAmountCounter.text:SetPoint("CENTER", ABTN, "CENTER", MIPOGetConfig("fontx", 0) + px, MIPOGetConfig("fonty", 0) + py)
+					OOMAmountCounter.text:SetPoint("CENTER", ABTN, "CENTER", MissingPower:GetConfig("fontx", 0) + px, MissingPower:GetConfig("fonty", 0) + py)
 					OOMAmountCounter.text:SetJustifyH(ax)
 					OOMAmountCounter.text:SetJustifyV(ay)
 
@@ -607,7 +609,7 @@ function MIPOShowOOM( init, from )
 					else
 						OOM:Show(true)
 						OOM:SetFrameStrata(ABTN:GetFrameStrata())
-						OOM:SetAlpha(MIPOGetConfig("poweralpha", 0.7))
+						OOM:SetAlpha(MissingPower:GetConfig("poweralpha", 0.7))
 
 						local h = ABTN:GetHeight()
 						local y = h * p - h
@@ -619,7 +621,7 @@ function MIPOShowOOM( init, from )
 						ph = h / cost * regen
 						y = y + ph
 						if y > 0 then
-							if MIPOGetConfig("hideoverlap", true) then -- overlap disabled
+							if MissingPower:GetConfig("hideoverlap", true) then -- overlap disabled
 								ph = ph - y
 								y = 0
 							end
@@ -641,26 +643,26 @@ end
 local power = -1
 local mana = -1
 local lastSF = 0
-function MIPOThink()
+function MissingPower:Think()
 	if lastSF ~= GetShapeshiftForm() then
 		lastSF = GetShapeshiftForm()
 
 		C_Timer.After( 0.8, function()
 			MIPOUpdate = true
 
-			MIPOShowOOM( nil, "SHAPESHIFT" )
+			MissingPower:ShowOOM( nil, "SHAPESHIFT" )
 		end )
 	end
 
 	if power ~= UnitPower("PLAYER") or mana ~= UnitPower("PLAYER", Enum.PowerType.Mana) then
 		power = UnitPower("PLAYER")
 		mana = UnitPower("PLAYER", Enum.PowerType.Mana)
-		MIPOShowOOM( nil, "Think")
+		MissingPower:ShowOOM( nil, "Think")
 	end
 
-	C_Timer.After(0.1, MIPOThink)
+	C_Timer.After( 0.1, MissingPower.Think )
 end
-MIPOThink()
+MissingPower:Think()
 
 
 
@@ -678,20 +680,20 @@ local MPLoaded = false
 local function eventHandler(self, event, unit, powertype, ...)
 	if event == "PLAYER_ENTERING_WORLD" and not MPLoaded then
 		MPLoaded = true
-		C_Timer.After(1, function()
+		C_Timer.After( 1, function()
 			MIPOUpdate = true
 
-			MIPOShowOOM( true, "PLAYER_ENTERING_WORLD" )
-		end)
+			MissingPower:ShowOOM( true, "PLAYER_ENTERING_WORLD" )
+		end )
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
-			C_Timer.After(0.8, function()
+			C_Timer.After( 0.8, function()
 				MIPOUpdate = true
 
-				MIPOShowOOM( nil, "ACTIONBAR_PAGE_CHANGED" )
-			end)
+				MissingPower:ShowOOM( nil, "ACTIONBAR_PAGE_CHANGED" )
+			end )
 		else
-			MIPOShowOOM( nil, "ELSE: " .. event )
+			MissingPower:ShowOOM( nil, "ELSE: " .. event )
 		end
 	end
 end
@@ -704,7 +706,7 @@ frame2:RegisterEvent("UNIT_POWER_UPDATE")
 --frame2:RegisterEvent("UNIT_POWER_FREQUENT")
 local function eventHandler2(self, event, unit, powertype, ...)
 	if event == "UNIT_POWER_UPDATE" and unit == "player" and ready then
-		MIPOShowOOM( nil, "UNIT_POWER_UPDATE" )
+		MissingPower:ShowOOM( nil, "UNIT_POWER_UPDATE" )
 	end
 end
 frame2:SetScript("OnEvent", eventHandler2)

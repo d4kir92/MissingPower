@@ -1,10 +1,10 @@
 -- ruRU Russian
 
-MIPO = MIPO or {}
+local AddOnName, MissingPower = ...
 
-lang = lang or {}
+function MissingPower:Lang_ruRU()
+	local lang = MissingPower:GetLangTab()
 
-function MIPO.Lang_ruRU()
 	lang.hideoverlap = "Скрыть Нахлест"
 	lang.shownextready = "Показать след. готовность"
 	lang.showamountcounter = "Показать счетчик"

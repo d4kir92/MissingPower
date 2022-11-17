@@ -115,7 +115,7 @@ if MIPOBUILD == "CLASSIC" or MIPOBUILD == "TBC" then
 			full = true
 		end
 
-		if MIPOGetConfig("showtickbar", true) == false then -- if false, hide it
+		if MissingPower:GetConfig("showtickbar", true) == false then -- if false, hide it
 			full = true
 		end
 

@@ -1,18 +1,20 @@
 -- LIB Output
 
-function MIPOmsg(str)
+local AddOnName, MissingPower = ...
+
+function MissingPower:MSG(str)
 	MIPO.name = MIPO.name or "X"
 
 	print("|c0000ffff" .. "[" .. "|cff8888ff" .. MIPO.name .. "|c0000ffff" .. "] " .. str)
 end
 
-function MIPO.deb(str)
+function MissingPower:DEB(str)
 	if MIPO.DEBUG then
 		print("[DEB] " .. str)
 	end
 end
 
-function MIPOpTab(tab)
+function MissingPower:PTAB(tab)
 	print("pTab", tab)
 	if type(tab) == "table" then
 		for i, v in pairs(tab) do

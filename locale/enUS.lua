@@ -1,10 +1,10 @@
 -- enUS English
 
-MIPO = MIPO or {}
+local AddOnName, MissingPower = ...
 
-lang = lang or {}
+function MissingPower:Lang_enUS()
+	local lang = MissingPower:GetLangTab()
 
-function MIPO.Lang_enUS()
 	lang.hideoverlap = "Hide Overlap"
 	lang.shownextready = "Show Next Ready"
 	lang.showamountcounter = "Show counter"

@@ -1,10 +1,10 @@
 -- koKR Korean
 
-MIPO = MIPO or {}
+local AddOnName, MissingPower = ...
 
-lang = lang or {}
+function MissingPower:Lang_koKR()
+	local lang = MissingPower:GetLangTab()
 
-function MIPO.Lang_koKR()
 	lang.hideoverlap = "오버랩 숨김"
 	lang.shownextready = "다음 틱에 준비되는 주문 보기 (깜빡임)"
 	lang.showamountcounter = "몇번 사용이 가능한지 표시"

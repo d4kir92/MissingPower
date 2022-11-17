@@ -1,28 +1,23 @@
 -- LIB Design
 
-function SetPoint(frame, point, relativeFrame, relativePoint, ofsx, ofsy)
-	if not InCombatLockdown() then
-		frame:ClearAllPoints()
-		frame:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy)
-	end
-end
+local AddOnName, MissingPower = ...
 
-function MIPO_CreateText(tab)
+function MissingPower:CreateText(tab)
 	tab.textsize = tab.textsize or 12
 	local text = tab.frame:CreateFontString(nil, "ARTWORK")
 	tab.frame:SetFrameStrata("HIGH")
 	text:SetFont(STANDARD_TEXT_FONT, tab.textsize, "OUTLINE")
 	text:SetPoint("TOPLEFT", tab.parent, "TOPLEFT", tab.x, tab.y)
-	text:SetText(MIPOGT(tab.text))
-
-	hooksecurefunc("MIPOUpdateLanguage", function()
-		text:SetText(MIPOGT(tab.text))
-	end)
+	text:SetText(MissingPower:GT(tab.text))
+	
+	hooksecurefunc( MissingPower, "UpdateLanguage", function()
+		text:SetText(MissingPower:GT(tab.text))
+	end )
 
 	return text
 end
 
-function MIPO_CreateCheckBox(tab)
+function MissingPower:CreateCheckBox(tab)
 	tab = tab or {}
 	tab.parent = tab.parent or UIParent
 	tab.tooltip = tab.tooltip or ""
@@ -45,12 +40,12 @@ function MIPO_CreateCheckBox(tab)
 	tab.frame = CB
 	tab.x = tab.x + 26
 	tab.y = tab.y - 6
-	CB.text = MIPO_CreateText(tab)
+	CB.text = MissingPower:CreateText(tab)
 
 	return CB
 end
 
-function MIPO_CreateSlider(tab, extratext)
+function MissingPower:CreateSlider(tab, extratext)
 	tab = tab or {}
 	tab.parent = tab.parent or UIParent
 	tab.x = tab.x or 0
@@ -63,9 +58,9 @@ function MIPO_CreateSlider(tab, extratext)
 	local trans = {}
 	trans["VALUE"] = tab.value
 	if extratext then
-		SL.Text:SetText(MIPOGT(tab.text, trans) .. " " .. extratext)
+		SL.Text:SetText(MissingPower:GT(tab.text, trans) .. " " .. extratext)
 	else
-		SL.Text:SetText(MIPOGT(tab.text, trans))
+		SL.Text:SetText(MissingPower:GT(tab.text, trans))
 	end
 	SL:SetMinMaxValues(tab.min, tab.max)
 	SL:SetValue(tab.value)
@@ -75,40 +70,40 @@ function MIPO_CreateSlider(tab, extratext)
 	SL:SetValueStep(tab.steps)
 	SL.decimals = tab.decimals or 1
 	SL:SetScript("OnValueChanged", function(self, val)
-		val = mathR(val, self.decimals)
+		val = MissingPower:MathR(val, self.decimals)
 		if tab.steps > 0 then
 			val = val - val % tab.steps
 		end
-		val = mathR(val, self.decimals)
+		val = MissingPower:MathR(val, self.decimals)
 		MIPOPC[tab.dbvalue] = val
 		trans = {}
 		trans["VALUE"] = val
 		if extratext then
-			SL.Text:SetText(MIPOGT(tab.text, trans) .. " " .. extratext)
+			SL.Text:SetText(MissingPower:GT(tab.text, trans) .. " " .. extratext)
 		else
-			SL.Text:SetText(MIPOGT(tab.text, trans))
+			SL.Text:SetText(MissingPower:GT(tab.text, trans))
 		end
 		if tab.func ~= nil then
 			tab:func()
 		else
-			MIPOShowOOM()
+			MissingPower:ShowOOM()
 		end
 	end)
 
-	hooksecurefunc("MIPOUpdateLanguage", function()
+	hooksecurefunc( MissingPower, "UpdateLanguage", function()
 		trans = {}
 		trans["VALUE"] = SL:GetValue()
 		if extratext then
-			SL.Text:SetText(MIPOGT(tab.text, trans) .. " " .. extratext)
+			SL.Text:SetText(MissingPower:GT(tab.text, trans) .. " " .. extratext)
 		else
-			SL.Text:SetText(MIPOGT(tab.text, trans))
+			SL.Text:SetText(MissingPower:GT(tab.text, trans))
 		end
-	end)
+	end) 
 
 	return EB
 end
 
-function MIPO_CTexture(frame, tab)
+function MissingPower:CTexture(frame, tab)
 	tab.layer = tab.layer or "BACKGROUND"
 	local texture = frame:CreateTexture(nil, tab.layer)
 	tab.texture = tab.texture or ""
@@ -145,7 +140,7 @@ function MIPO_CTexture(frame, tab)
 	return texture
 end
 
-function MIPO_createF(tab)
+function MissingPower:createF(tab)
 	tab.w = tab.w or 2
 	tab.h = tab.h or 2
 	tab.x = tab.x or 0
@@ -162,7 +157,7 @@ function MIPO_createF(tab)
 	frame:SetPoint(tab.align, tab.parent, tab.align, tab.x, tab.y)
 
 	tab.layer = tab.layer or "BACKGROUND"
-	frame.texture = MIPO_CTexture(frame, tab)
+	frame.texture = MissingPower:CTexture(frame, tab)
 
 	tab.textlayer = tab.textlayer or "ARTWORK"
 	frame.text = frame:CreateFontString(nil, tab.textlayer)
@@ -188,7 +183,7 @@ function MIPO_createF(tab)
 	return frame
 end
 
-function MIPO_CreateBar(tab)
+function MissingPower:CreateBar(tab)
 	tab.w = 800
 	tab.h = 16
 	tab.alpha = 0.7
@@ -205,7 +200,7 @@ function MIPO_CreateBar(tab)
 	tab.framestrata = "BACKGROUND"
 	tab.oldname = tab.name or ""
 	tab.name = tab.oldname .. "Background"
-	bar.background = MIPO_createF(tab)
+	bar.background = MissingPower:createF(tab)
 
 	tab.parent = bar.background
 	tab.barcolor = tab.barcolor or {}
@@ -219,7 +214,7 @@ function MIPO_CreateBar(tab)
 	tab.texture = "Interface/TargetingFrame/UI-StatusBar"
 	tab.autoresize = true
 	tab.name = tab.oldname .. "Bar"
-	bar.bar = MIPO_createF(tab)
+	bar.bar = MissingPower:createF(tab)
 	tab.autoresize = false
 
 	tab.align = "CENTER"
@@ -227,7 +222,7 @@ function MIPO_CreateBar(tab)
 	tab.color.a = 0
 	tab.text = ""
 	tab.name = tab.oldname .. "Overlay"
-	bar.overlay = MIPO_createF(tab)
+	bar.overlay = MissingPower:createF(tab)
 	local bars = {}
 	bars.layer = "BORDER"
 	bars.color = {}
@@ -239,24 +234,24 @@ function MIPO_CreateBar(tab)
 	bars.w = tab.w
 	bars.h = bars.thickness
 	bars.align = "TOP"
-	bar.overlay.t = MIPO_CTexture(bar.overlay, bars)
+	bar.overlay.t = MissingPower:CTexture(bar.overlay, bars)
 	bars.y = 0
 	bars.align = "BOTTOM"
-	bar.overlay.b = MIPO_CTexture(bar.overlay, bars)
+	bar.overlay.b = MissingPower:CTexture(bar.overlay, bars)
 	bars.w = bars.thickness
 	bars.h = tab.h
 	bars.y = 0
 	bars.align = "LEFT"
-	bar.overlay.l = MIPO_CTexture(bar.overlay, bars)
+	bar.overlay.l = MissingPower:CTexture(bar.overlay, bars)
 	bars.x = 0
 	bars.align = "RIGHT"
-	bar.overlay.r = MIPO_CTexture(bar.overlay, bars)
+	bar.overlay.r = MissingPower:CTexture(bar.overlay, bars)
 	local perc = 10
 	local amount = 100 / perc
 	for i = 1, amount - 1 do
 		bars.x = tonumber(string.format("%.0f", (bar.overlay:GetWidth() / amount) * i) - (bars.thickness / 2))
 		bars.align = nil
-		bar.overlay[i] = MIPO_CTexture(bar.overlay, bars)
+		bar.overlay[i] = MissingPower:CTexture(bar.overlay, bars)
 	end
 
 	function bar:Hide()
@@ -289,7 +284,7 @@ function MIPO_CreateBar(tab)
 	end
 
 	function bar:SetWidth(w)
-		w = mathR(w, 0)
+		w = MissingPower:MathR(w, 0)
 		bar.background:SetWidth(w)
 
 		bar.overlay:SetWidth(w)

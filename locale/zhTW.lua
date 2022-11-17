@@ -1,10 +1,10 @@
 -- zhTW Traditional Chinese
 
-MIPO = MIPO or {}
+local AddOnName, MissingPower = ...
 
-lang = lang or {}
+function MissingPower:Lang_zhTW()
+	local lang = MissingPower:GetLangTab()
 
-function MIPO.Lang_zhTW()
 	lang.hideoverlap = "隱藏重疊"
 	lang.shownextready = "顯示下一次準備"
 	lang.showamountcounter = "顯示計數器"

@@ -1,12 +1,15 @@
 -- LIB Design
 
-MIPO = MIPO or {}
+local AddOnName, MissingPower = ...
 
-lang = lang or {}
+local ltab = {}
+function MissingPower:GetLangTab()
+	return ltab
+end
 
-function MIPOGT(str, tab)
+function MissingPower:GT(str, tab)
 	local strid = string.lower(str)
-	local result = lang[strid]
+	local result = MissingPower:GetLangTab()[strid]
 	if result ~= nil then
 		if tab ~= nil then
 			for i, v in pairs(tab) do
@@ -23,30 +26,30 @@ function MIPOGT(str, tab)
 	end
 end
 
-function MIPOUpdateLanguage()
-	MIPO:Lang_enUS()
+function MissingPower:UpdateLanguage()
+	MissingPower:Lang_enUS()
 	if GetLocale() == "enUS" then
-		--MIPOmsg("Language detected: enUS (English)")
-		MIPO.Lang_enUS()
+		--MissingPower:MSG("Language detected: enUS (English)")
+		MissingPower:Lang_enUS()
 	elseif GetLocale() == "deDE" then
-		--MIPOmsg("Language detected: deDE (Deutsch)")
-		MIPO.Lang_deDE()
+		--MissingPower:MSG("Language detected: deDE (Deutsch)")
+		MissingPower:Lang_deDE()
 	elseif GetLocale() == "koKR" then
-		--MIPOmsg("Language detected: koKR (Korean)")
-		MIPO.Lang_koKR()
+		--MissingPower:MSG("Language detected: koKR (Korean)")
+		MissingPower:Lang_koKR()
 	elseif GetLocale() == "ruRU" then
-		--MIPOmsg("Language detected: ruRU (Russian)")
-		MIPO.Lang_ruRU()
+		--MissingPower:MSG("Language detected: ruRU (Russian)")
+		MissingPower:Lang_ruRU()
 	elseif GetLocale() == "zhCN" then
-		--MIPOmsg("Language detected: zhCN (Simplified Chinese)")
-		MIPO.Lang_zhCN()
+		--MissingPower:MSG("Language detected: zhCN (Simplified Chinese)")
+		MissingPower:Lang_zhCN()
 	elseif GetLocale() == "zhTW" then
-		--MIPOmsg("Language detected: zhTW (Traditional Chinese)")
-		MIPO.Lang_zhTW()
+		--MissingPower:MSG("Language detected: zhTW (Traditional Chinese)")
+		MissingPower:Lang_zhTW()
 	else
-		MIPOmsg("Language not found (" .. GetLocale() .. "), using English one!")
-		MIPOmsg("If you want your language, please visit the cursegaming site of this project!")
+		MissingPower:MSG("Language not found (" .. GetLocale() .. "), using English one!")
+		MissingPower:MSG("If you want your language, please visit the cursegaming site of this project!")
 	end
 end
 
-MIPOUpdateLanguage()
+MissingPower:UpdateLanguage()

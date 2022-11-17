@@ -1,10 +1,10 @@
 -- deDE German Deutsch
 
-MIPO = MIPO or {}
+local AddOnName, MissingPower = ...
 
-lang = lang or {}
+function MissingPower:Lang_deDE()
+	local lang = MissingPower:GetLangTab()
 
-function MIPO.Lang_deDE()
 	lang.hideoverlap = "Überlappen verstecken"
 	lang.shownextready = "Nächste Fertig anzeigen"
 	lang.showamountcounter = "Zähler anzeigen"
