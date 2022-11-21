@@ -2,8 +2,6 @@
 
 local AddOnName, MissingPower = ...
 
-SetCVar("ScriptErrors", 1)
-
 function MissingPower:GetConfig(str, val)
 	MIPO = MIPO or {}
 	MIPOPC = MIPOPC or {}
