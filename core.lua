@@ -664,9 +664,6 @@ function MissingPower:Think()
 end
 MissingPower:Think()
 
-
-
-SetCVar( "ScriptErrors", 1 )
 local frame = CreateFrame("FRAME")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 --frame:RegisterEvent("UPDATE_SHAPESHIFT_FORM") -- spams in tbc
@@ -682,8 +679,6 @@ local function eventHandler(self, event, unit, powertype, ...)
 	if event == "PLAYER_ENTERING_WORLD" and not MPLoaded then
 		MPLoaded = true
 		
-		SetCVar( "ScriptErrors", 1 )
-
 		C_Timer.After( 1, function()
 			MIPOUpdate = true
 
