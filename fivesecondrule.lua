@@ -1,5 +1,7 @@
 -- FSR
 
+local AddOnName, MissingPower = ...
+
 if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
 	local tick = 0.01
 
