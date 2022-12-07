@@ -2,13 +2,22 @@
 
 local AddOnName, MissingPower = ...
 
-MIPOBUILD = "CLASSIC"
-if select(4, GetBuildInfo()) >= 100000 then
-	MIPOBUILD = "RETAIL"
-elseif select(4, GetBuildInfo()) > 29999 then
-	MIPOBUILD = "WRATH"
-elseif select(4, GetBuildInfo()) > 19999 then
-	MIPOBUILD = "TBC"
+local BuildNr = select(4, GetBuildInfo())
+local Build = "CLASSIC"
+if BuildNr >= 100000 then
+	Build = "RETAIL"
+elseif BuildNr > 29999 then
+	Build = "WRATH"
+elseif BuildNr > 19999 then
+	Build = "TBC"
+end
+
+function MissingPower:GetWoWBuildNr()
+	return BuildNr
+end
+
+function MissingPower:GetWoWBuild()
+	return Build
 end
 
 local MIPOSettings = {}
@@ -129,7 +138,7 @@ function MissingPower:InitSetting()
 	MissingPower:CreateSlider(settings_fonty)
 	Y = Y - BR
 
-	if MIPOBUILD == "CLASSIC" or MIPOBUILD == "TBC" then
+	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
 		local settings_showtickbar = {}
 		settings_showtickbar.name = "showtickbar"
 		settings_showtickbar.parent = MIPOSettings.panel

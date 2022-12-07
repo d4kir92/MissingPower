@@ -531,7 +531,7 @@ function MissingPower:ShowOOM( init, from )
 							end
 						elseif typ > 0 and typ ~= 5 and typ ~= 7 and typ ~= 10 and typ ~= 15 and typ ~= 16 and typ < 20 then
 							local _, englishClass, _ = UnitClass("player")
-							print("Send this to missing power Developer [POWERTYP]: " .. typ .. " Class: " .. englishClass .. " WoW: " .. tostring(MIPOBUILD))
+							print("Send this to missing power Developer [POWERTYP]: " .. typ .. " Class: " .. englishClass .. " WoW: " .. tostring(MissingPower:GetWoWBuild()))
 							print(UnitPowerType("PLAYER"))
 							if Enum.PowerType[typ] then
 								print(Enum.PowerType[typ])

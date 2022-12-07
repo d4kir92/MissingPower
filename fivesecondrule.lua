@@ -1,6 +1,6 @@
 -- FSR
 
-if MIPOBUILD == "CLASSIC" or MIPOBUILD == "TBC" then
+if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
 	local tick = 0.01
 
 	local now = GetTime()
