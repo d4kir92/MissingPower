@@ -48,6 +48,16 @@ local MIPOActionBars = {
 	"ActionBar8",
 	"ActionBar9",
 	"ActionBar10",
+	"MAActionBar1",
+	"MAActionBar2",
+	"MAActionBar3",
+	"MAActionBar4",
+	"MAActionBar5",
+	"MAActionBar6",
+	"MAActionBar7",
+	"MAActionBar8",
+	"MAActionBar9",
+	"MAActionBar10",
 	"MAIStance"
 }
 --[[ ### CONFIG END ### ]]--
