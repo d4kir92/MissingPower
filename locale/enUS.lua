@@ -1,10 +1,8 @@
 -- enUS English
-
-local AddOnName, MissingPower = ...
+local _, MissingPower = ...
 
 function MissingPower:Lang_enUS()
 	local lang = MissingPower:GetLangTab()
-
 	lang.hideoverlap = "Hide Overlap"
 	lang.shownextready = "Show Next Ready"
 	lang.showamountcounter = "Show counter"

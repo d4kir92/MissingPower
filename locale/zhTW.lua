@@ -1,10 +1,8 @@
 -- zhTW Traditional Chinese
-
-local AddOnName, MissingPower = ...
+local _, MissingPower = ...
 
 function MissingPower:Lang_zhTW()
 	local lang = MissingPower:GetLangTab()
-
 	lang.hideoverlap = "隱藏重疊"
 	lang.shownextready = "顯示下一次準備"
 	lang.showamountcounter = "顯示計數器"

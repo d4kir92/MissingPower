@@ -1,10 +1,8 @@
 -- zhCN Simplified Chinese
-
-local AddOnName, MissingPower = ...
+local _, MissingPower = ...
 
 function MissingPower:Lang_zhCN()
 	local lang = MissingPower:GetLangTab()
-
 	lang.hideoverlap = "隐藏重叠(需要重载 /reload)"
 	lang.shownextready = "显示下一次准备(需要重载 /reload)"
 	lang.showamountcounter = "显示计数器(需要重载 /reload)"

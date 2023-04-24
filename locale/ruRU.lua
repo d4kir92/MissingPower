@@ -1,10 +1,8 @@
 -- ruRU Russian
-
-local AddOnName, MissingPower = ...
+local _, MissingPower = ...
 
 function MissingPower:Lang_ruRU()
 	local lang = MissingPower:GetLangTab()
-
 	lang.hideoverlap = "Скрыть Нахлест"
 	lang.shownextready = "Показать след. готовность"
 	lang.showamountcounter = "Показать счетчик"

@@ -1,10 +1,8 @@
 -- deDE German Deutsch
-
-local AddOnName, MissingPower = ...
+local _, MissingPower = ...
 
 function MissingPower:Lang_deDE()
 	local lang = MissingPower:GetLangTab()
-
 	lang.hideoverlap = "Überlappen verstecken"
 	lang.shownextready = "Nächste Fertig anzeigen"
 	lang.showamountcounter = "Zähler anzeigen"

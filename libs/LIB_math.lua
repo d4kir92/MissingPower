@@ -1,9 +1,9 @@
 -- LIB Math
-
-local AddOnName, MissingPower = ...
+local _, MissingPower = ...
 
 function MissingPower:MathR(num, dec)
 	dec = dec or 2
+
 	return tonumber(string.format("%." .. dec .. "f", num))
 end
 
@@ -13,5 +13,6 @@ function MissingPower:MathC(input, min, max)
 	elseif input > max then
 		input = max
 	end
+
 	return input
 end

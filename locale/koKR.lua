@@ -1,10 +1,8 @@
 -- koKR Korean
-
-local AddOnName, MissingPower = ...
+local _, MissingPower = ...
 
 function MissingPower:Lang_koKR()
 	local lang = MissingPower:GetLangTab()
-
 	lang.hideoverlap = "오버랩 숨김"
 	lang.shownextready = "다음 틱에 준비되는 주문 보기 (깜빡임)"
 	lang.showamountcounter = "몇번 사용이 가능한지 표시"

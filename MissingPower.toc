@@ -3,7 +3,7 @@
 ## Interface-Wrath: 30401
 ## Interface: 100007
 
-## Version: 1.0.22
+## Version: 1.0.23
 ## Title: MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Show for each spell how much power is missing
 ## Author: D4KiR

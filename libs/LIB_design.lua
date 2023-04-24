@@ -1,6 +1,5 @@
 -- LIB Design
-
-local AddOnName, MissingPower = ...
+local _, MissingPower = ...
 
 function MissingPower:CreateText(tab)
 	tab.textsize = tab.textsize or 12
@@ -9,10 +8,10 @@ function MissingPower:CreateText(tab)
 	text:SetFont(STANDARD_TEXT_FONT, tab.textsize, "OUTLINE")
 	text:SetPoint("TOPLEFT", tab.parent, "TOPLEFT", tab.x, tab.y)
 	text:SetText(MissingPower:GT(tab.text))
-	
-	hooksecurefunc( MissingPower, "UpdateLanguage", function()
+
+	hooksecurefunc(MissingPower, "UpdateLanguage", function()
 		text:SetText(MissingPower:GT(tab.text))
-	end )
+	end)
 
 	return text
 end
@@ -27,9 +26,10 @@ function MissingPower:CreateCheckBox(tab)
 	CB:SetPoint("TOPLEFT", tab.x, tab.y)
 	CB.tooltip = tab.tooltip
 	CB:SetChecked(tab.checked)
-	CB:SetScript("OnClick", function(self)
+
+	CB:SetScript("OnClick", function(sel)
 		local status = CB:GetChecked()
-		self:SetChecked(status)
+		sel:SetChecked(status)
 		MIPOPC[tab.dbvalue] = status
 
 		if tab.func ~= nil then
@@ -57,11 +57,13 @@ function MissingPower:CreateSlider(tab, extratext)
 	SL.High:SetText(tab.max)
 	local trans = {}
 	trans["VALUE"] = tab.value
+
 	if extratext then
 		SL.Text:SetText(MissingPower:GT(tab.text, trans) .. " " .. extratext)
 	else
 		SL.Text:SetText(MissingPower:GT(tab.text, trans))
 	end
+
 	SL:SetMinMaxValues(tab.min, tab.max)
 	SL:SetValue(tab.value)
 	SL:SetWidth(tab.w or 600)
@@ -69,20 +71,25 @@ function MissingPower:CreateSlider(tab, extratext)
 	tab.steps = tab.steps or 1
 	SL:SetValueStep(tab.steps)
 	SL.decimals = tab.decimals or 1
-	SL:SetScript("OnValueChanged", function(self, val)
-		val = MissingPower:MathR(val, self.decimals)
+
+	SL:SetScript("OnValueChanged", function(sel, val)
+		val = MissingPower:MathR(val, sel.decimals)
+
 		if tab.steps > 0 then
 			val = val - val % tab.steps
 		end
-		val = MissingPower:MathR(val, self.decimals)
+
+		val = MissingPower:MathR(val, sel.decimals)
 		MIPOPC[tab.dbvalue] = val
 		trans = {}
 		trans["VALUE"] = val
+
 		if extratext then
 			SL.Text:SetText(MissingPower:GT(tab.text, trans) .. " " .. extratext)
 		else
 			SL.Text:SetText(MissingPower:GT(tab.text, trans))
 		end
+
 		if tab.func ~= nil then
 			tab:func()
 		else
@@ -90,15 +97,16 @@ function MissingPower:CreateSlider(tab, extratext)
 		end
 	end)
 
-	hooksecurefunc( MissingPower, "UpdateLanguage", function()
+	hooksecurefunc(MissingPower, "UpdateLanguage", function()
 		trans = {}
 		trans["VALUE"] = SL:GetValue()
+
 		if extratext then
 			SL.Text:SetText(MissingPower:GT(tab.text, trans) .. " " .. extratext)
 		else
 			SL.Text:SetText(MissingPower:GT(tab.text, trans))
 		end
-	end) 
+	end)
 
 	return EB
 end
@@ -108,12 +116,13 @@ function MissingPower:CTexture(frame, tab)
 	local texture = frame:CreateTexture(nil, tab.layer)
 	tab.texture = tab.texture or ""
 	tab.color = tab.color or {}
+
 	if tab.texture ~= "" then
 		tab.color.r = tab.color.r or 1
 		tab.color.g = tab.color.g or 1
 		tab.color.b = tab.color.b or 1
 		tab.color.a = tab.color.a or 1
-	 	texture:SetTexture(tab.texture)
+		texture:SetTexture(tab.texture)
 		texture:SetVertexColor(tab.color.r, tab.color.g, tab.color.b, tab.color.a)
 	elseif tab.color ~= nil then
 		tab.color.r = tab.color.r or 1
@@ -131,7 +140,6 @@ function MissingPower:CTexture(frame, tab)
 		tab.w = tab.w or frame:GetWidth()
 		tab.h = tab.h or frame:GetHeight()
 		texture:SetSize(tab.w, tab.h)
-
 		tab.x = tab.x or 0
 		tab.y = tab.y or 0
 		texture:SetPoint(tab.align or "TOPLEFT", frame, tab.x, tab.y)
@@ -155,17 +163,17 @@ function MissingPower:createF(tab)
 	frame:SetHeight(tab.h)
 	frame:ClearAllPoints()
 	frame:SetPoint(tab.align, tab.parent, tab.align, tab.x, tab.y)
-
 	tab.layer = tab.layer or "BACKGROUND"
 	frame.texture = MissingPower:CTexture(frame, tab)
-
 	tab.textlayer = tab.textlayer or "ARTWORK"
 	frame.text = frame:CreateFontString(nil, tab.textlayer)
+
 	if tab.framestrata ~= nil then
 		frame:SetFrameStrata(tab.framestrata)
 	else
 		frame:SetFrameStrata("HIGH")
 	end
+
 	frame.text:SetFont(STANDARD_TEXT_FONT, tab.textsize, "OUTLINE")
 	frame.text:SetPoint(tab.textalign, 0, 0)
 	frame.text:SetText(tab.text)
@@ -175,6 +183,7 @@ function MissingPower:createF(tab)
 	end
 
 	frame.oldSetSize = frame.SetSize
+
 	function frame:SetSize(w, h)
 		frame:oldSetSize(w, h)
 		self.texture:SetSize(w, h)
@@ -201,7 +210,6 @@ function MissingPower:CreateBar(tab)
 	tab.oldname = tab.name or ""
 	tab.name = tab.oldname .. "Background"
 	bar.background = MissingPower:createF(tab)
-
 	tab.parent = bar.background
 	tab.barcolor = tab.barcolor or {}
 	tab.barcolor.r = tab.barcolor.r or 0.3
@@ -216,7 +224,6 @@ function MissingPower:CreateBar(tab)
 	tab.name = tab.oldname .. "Bar"
 	bar.bar = MissingPower:createF(tab)
 	tab.autoresize = false
-
 	tab.align = "CENTER"
 	tab.texture = ""
 	tab.color.a = 0
@@ -248,6 +255,7 @@ function MissingPower:CreateBar(tab)
 	bar.overlay.r = MissingPower:CTexture(bar.overlay, bars)
 	local perc = 10
 	local amount = 100 / perc
+
 	for i = 1, amount - 1 do
 		bars.x = tonumber(string.format("%.0f", (bar.overlay:GetWidth() / amount) * i) - (bars.thickness / 2))
 		bars.align = nil
@@ -257,6 +265,7 @@ function MissingPower:CreateBar(tab)
 	function bar:Hide()
 		bar.background:Hide()
 	end
+
 	function bar:Show()
 		bar.background:Show()
 	end
@@ -268,13 +277,14 @@ function MissingPower:CreateBar(tab)
 	function bar:SetHeight(h)
 		bar.background:SetHeight(h)
 		bar.bar:SetHeight(h)
-
 		bar.overlay:SetHeight(h)
 		bar.overlay.l:SetHeight(h)
 		bar.overlay.r:SetHeight(h)
+
 		for i = 1, amount - 1 do
 			bar.overlay[i]:SetHeight(h)
 		end
+
 		bar.overlay.text:SetFont(STANDARD_TEXT_FONT, tonumber(string.format("%.0f", h * 0.69)), "OUTLINE")
 		--bar.overlay.text:SetTextHeight(tonumber(string.format("%.0f", h * 0.69)))
 	end
@@ -286,10 +296,10 @@ function MissingPower:CreateBar(tab)
 	function bar:SetWidth(w)
 		w = MissingPower:MathR(w, 0)
 		bar.background:SetWidth(w)
-
 		bar.overlay:SetWidth(w)
 		bar.overlay.t:SetWidth(w)
 		bar.overlay.b:SetWidth(w)
+
 		for i = 1, amount - 1 do
 			local x = tonumber(string.format("%.0f", (bar.overlay:GetWidth() / amount) * i) - (bars.thickness / 2))
 			bar.overlay[i]:SetPoint("TOPLEFT", bar.overlay, x, 0)
@@ -297,8 +307,14 @@ function MissingPower:CreateBar(tab)
 	end
 
 	bar.overlay:EnableMouse()
-	bar.overlay:SetScript("OnEnter", function() bar.overlay.text:Hide() end)
-	bar.overlay:SetScript("OnLeave", function() bar.overlay.text:Show() end)
+
+	bar.overlay:SetScript("OnEnter", function()
+		bar.overlay.text:Hide()
+	end)
+
+	bar.overlay:SetScript("OnLeave", function()
+		bar.overlay.text:Show()
+	end)
 
 	return bar
 end
