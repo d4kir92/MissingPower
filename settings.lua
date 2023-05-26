@@ -1,9 +1,8 @@
 -- By D4KiR
-
-local AddOnName, MissingPower = ...
-
+local _, MissingPower = ...
 local BuildNr = select(4, GetBuildInfo())
 local Build = "CLASSIC"
+
 if BuildNr >= 100000 then
 	Build = "RETAIL"
 elseif BuildNr > 29999 then
@@ -21,16 +20,14 @@ function MissingPower:GetWoWBuild()
 end
 
 local MIPOSettings = {}
+
 function MissingPower:InitSetting()
 	local settingname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
-
 	MIPOSettings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPOSettings.panel.name = settingname
-
 	local Y = -14
 	local H = 16
 	local BR = 30
-
 	local settings_header = {}
 	settings_header.frame = MIPOSettings.panel
 	settings_header.parent = MIPOSettings.panel
@@ -40,7 +37,6 @@ function MissingPower:InitSetting()
 	settings_header.textsize = 24
 	MissingPower:CreateText(settings_header)
 	Y = Y - BR
-
 	local settings_showoverlap = {}
 	settings_showoverlap.name = "hideoverlap"
 	settings_showoverlap.parent = MIPOSettings.panel
@@ -51,7 +47,6 @@ function MissingPower:InitSetting()
 	settings_showoverlap.dbvalue = "hideoverlap"
 	MissingPower:CreateCheckBox(settings_showoverlap)
 	Y = Y - H
-
 	local settings_showamountcounter = {}
 	settings_showamountcounter.name = "showamountcounter"
 	settings_showamountcounter.parent = MIPOSettings.panel
@@ -62,7 +57,6 @@ function MissingPower:InitSetting()
 	settings_showamountcounter.dbvalue = "showamountcounter"
 	MissingPower:CreateCheckBox(settings_showamountcounter)
 	Y = Y - BR
-
 	local settings_poweralpha = {}
 	settings_poweralpha.name = "poweralpha"
 	settings_poweralpha.parent = MIPOSettings.panel
@@ -77,7 +71,6 @@ function MissingPower:InitSetting()
 	settings_poweralpha.dbvalue = "poweralpha"
 	MissingPower:CreateSlider(settings_poweralpha)
 	Y = Y - BR
-
 	local settings_decimals = {}
 	settings_decimals.name = "decimals"
 	settings_decimals.parent = MIPOSettings.panel
@@ -92,7 +85,6 @@ function MissingPower:InitSetting()
 	settings_decimals.dbvalue = "decimals"
 	MissingPower:CreateSlider(settings_decimals)
 	Y = Y - BR
-
 	local settings_fontsize = {}
 	settings_fontsize.name = "fontsize"
 	settings_fontsize.parent = MIPOSettings.panel
@@ -107,7 +99,6 @@ function MissingPower:InitSetting()
 	settings_fontsize.dbvalue = "fontsize"
 	MissingPower:CreateSlider(settings_fontsize)
 	Y = Y - BR
-
 	local settings_fontx = {}
 	settings_fontx.name = "fontx"
 	settings_fontx.parent = MIPOSettings.panel
@@ -122,7 +113,6 @@ function MissingPower:InitSetting()
 	settings_fontx.dbvalue = "fontx"
 	MissingPower:CreateSlider(settings_fontx)
 	Y = Y - BR
-
 	local settings_fonty = {}
 	settings_fonty.name = "fonty"
 	settings_fonty.parent = MIPOSettings.panel
@@ -161,7 +151,6 @@ function MissingPower:InitSetting()
 	settings_customcolor.dbvalue = "customcolor"
 	MissingPower:CreateCheckBox(settings_customcolor)
 	Y = Y - BR
-	
 	local settings_ccolr = {}
 	settings_ccolr.name = "ccolr"
 	settings_ccolr.parent = MIPOSettings.panel
@@ -176,7 +165,6 @@ function MissingPower:InitSetting()
 	settings_ccolr.dbvalue = "ccolr"
 	MissingPower:CreateSlider(settings_ccolr)
 	Y = Y - BR
-
 	local settings_ccolg = {}
 	settings_ccolg.name = "ccolg"
 	settings_ccolg.parent = MIPOSettings.panel
@@ -191,7 +179,6 @@ function MissingPower:InitSetting()
 	settings_ccolg.dbvalue = "ccolg"
 	MissingPower:CreateSlider(settings_ccolg)
 	Y = Y - BR
-
 	local settings_ccolb = {}
 	settings_ccolb.name = "ccolb"
 	settings_ccolb.parent = MIPOSettings.panel
@@ -206,9 +193,6 @@ function MissingPower:InitSetting()
 	settings_ccolb.dbvalue = "ccolb"
 	MissingPower:CreateSlider(settings_ccolb)
 	Y = Y - BR
-
-	
-
 	Y = Y - BR
 	local settings_displayiflowerthanx = {}
 	settings_displayiflowerthanx.name = "displayiflowerthanx"
@@ -224,6 +208,5 @@ function MissingPower:InitSetting()
 	settings_displayiflowerthanx.dbvalue = "displayiflowerthanx"
 	MissingPower:CreateSlider(settings_displayiflowerthanx, "   [0 = unlimited]")
 	Y = Y - BR
-
 	InterfaceOptions_AddCategory(MIPOSettings.panel)
 end

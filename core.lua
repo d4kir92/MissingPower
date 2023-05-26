@@ -77,6 +77,80 @@ end
 
 local loaded = false
 
+function MissingPower:CreateOOM(obtn, name, nr)
+	local BTNNAME = name .. "OOM"
+
+	if _G[BTNNAME] == nil then
+		-- OOM
+		_G[BTNNAME] = CreateFrame("FRAME", BTNNAME, obtn)
+		local OOM = _G[BTNNAME]
+		OOM:SetWidth(obtn:GetWidth())
+		OOM:SetHeight(obtn:GetHeight())
+		OOM:ClearAllPoints()
+		OOM:SetPoint("TOPLEFT", obtn, "TOPLEFT", 0, -obtn:GetHeight())
+		OOM.texture = OOM:CreateTexture("MyTexture", "ARTWORK")
+		OOM.texture:SetColorTexture(color.r, color.g, color.b, color.a)
+		OOM.texture:SetAllPoints(OOM)
+		OOM:SetFrameStrata("BACKGROUND")
+		OOM.OldHide = OOM.OldHide or OOM.Hide
+
+		OOM.Hide = function(sel, forced)
+			if forced == true then
+				sel:SetAlpha(0)
+			end
+		end
+
+		OOM.OldShow = OOM.OldShow or OOM.Show
+
+		OOM.Show = function(sel, forced)
+			if forced == true then
+				sel:SetAlpha(MissingPower:GetConfig("poweralpha", 0.7))
+			end
+		end
+
+		-- AmountCounter
+		local BTNNAMEAMOUNTCOUNTER = BTNNAME .. "AmountCounter"
+		_G[BTNNAMEAMOUNTCOUNTER] = CreateFrame("FRAME", BTNNAMEAMOUNTCOUNTER, obtn)
+		local OOMAmountCounter = _G[BTNNAMEAMOUNTCOUNTER]
+		OOMAmountCounter:SetWidth(obtn:GetWidth())
+		OOMAmountCounter:SetHeight(obtn:GetHeight())
+		OOMAmountCounter:ClearAllPoints()
+		OOMAmountCounter:SetPoint("CENTER", obtn, "CENTER", 0, 0)
+		OOMAmountCounter.text = OOMAmountCounter:CreateFontString(nil, "ARTWORK")
+		OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MissingPower:GetConfig("fontsize", 12), "OUTLINE")
+		OOMAmountCounter.text:SetText("")
+		OOMAmountCounter.text:SetTextColor(1, 1, 1, 0.9)
+		OOMAmountCounter.text:SetPoint("CENTER", obtn, "CENTER", 0, 0)
+		OOMAmountCounter:SetFrameStrata("BACKGROUND")
+		OOMAmountCounter.OldHide = OOMAmountCounter.OldHide or OOMAmountCounter.Hide
+
+		OOMAmountCounter.Hide = function(sel, forced)
+			if forced == true then
+				sel:SetAlpha(0)
+			end
+		end
+
+		OOMAmountCounter.OldShow = OOMAmountCounter.OldShow or OOMAmountCounter.Show
+
+		OOMAmountCounter.Show = function(sel, forced)
+			if forced == true then
+				sel:SetAlpha(0.9)
+			end
+		end
+
+		OOMAmountCounter:Show(true)
+		OOM:Hide(true)
+		OOMAmountCounter:Hide(true)
+	end
+
+	if ActionButtons[BTNNAME] == nil then
+		ActionButtons[BTNNAME] = {}
+		ActionButtons[BTNNAME].name = name
+		ActionButtons[BTNNAME].btn = _G[BTNNAME]
+		ActionButtons[BTNNAME].nr = nr
+	end
+end
+
 function MissingPower:ShowOOM(init, from)
 	if init then
 		loaded = true
@@ -117,77 +191,7 @@ function MissingPower:ShowOOM(init, from)
 						end
 
 						obtn.ActionChanged()
-						local BTNNAME = NAME .. "OOM"
-
-						if _G[BTNNAME] == nil then
-							-- OOM
-							_G[BTNNAME] = CreateFrame("FRAME", BTNNAME, obtn)
-							local OOM = _G[BTNNAME]
-							OOM:SetWidth(obtn:GetWidth())
-							OOM:SetHeight(obtn:GetHeight())
-							OOM:ClearAllPoints()
-							OOM:SetPoint("TOPLEFT", obtn, "TOPLEFT", 0, -obtn:GetHeight())
-							OOM.texture = OOM:CreateTexture("MyTexture", "ARTWORK")
-							OOM.texture:SetColorTexture(color.r, color.g, color.b, color.a)
-							OOM.texture:SetAllPoints(OOM)
-							OOM:SetFrameStrata("BACKGROUND")
-							OOM.OldHide = OOM.OldHide or OOM.Hide
-
-							OOM.Hide = function(sel, forced)
-								if forced == true then
-									sel:SetAlpha(0)
-								end
-							end
-
-							OOM.OldShow = OOM.OldShow or OOM.Show
-
-							OOM.Show = function(sel, forced)
-								if forced == true then
-									sel:SetAlpha(MissingPower:GetConfig("poweralpha", 0.7))
-								end
-							end
-
-							-- AmountCounter
-							local BTNNAMEAMOUNTCOUNTER = BTNNAME .. "AmountCounter"
-							_G[BTNNAMEAMOUNTCOUNTER] = CreateFrame("FRAME", BTNNAMEAMOUNTCOUNTER, obtn)
-							local OOMAmountCounter = _G[BTNNAMEAMOUNTCOUNTER]
-							OOMAmountCounter:SetWidth(obtn:GetWidth())
-							OOMAmountCounter:SetHeight(obtn:GetHeight())
-							OOMAmountCounter:ClearAllPoints()
-							OOMAmountCounter:SetPoint("CENTER", obtn, "CENTER", 0, 0)
-							OOMAmountCounter.text = OOMAmountCounter:CreateFontString(nil, "ARTWORK")
-							OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MissingPower:GetConfig("fontsize", 12), "OUTLINE")
-							OOMAmountCounter.text:SetText("")
-							OOMAmountCounter.text:SetTextColor(1, 1, 1, 0.9)
-							OOMAmountCounter.text:SetPoint("CENTER", obtn, "CENTER", 0, 0)
-							OOMAmountCounter:SetFrameStrata("BACKGROUND")
-							OOMAmountCounter.OldHide = OOMAmountCounter.OldHide or OOMAmountCounter.Hide
-
-							OOMAmountCounter.Hide = function(sel, forced)
-								if forced == true then
-									sel:SetAlpha(0)
-								end
-							end
-
-							OOMAmountCounter.OldShow = OOMAmountCounter.OldShow or OOMAmountCounter.Show
-
-							OOMAmountCounter.Show = function(sel, forced)
-								if forced == true then
-									sel:SetAlpha(0.9)
-								end
-							end
-
-							OOMAmountCounter:Show(true)
-							OOM:Hide(true)
-							OOMAmountCounter:Hide(true)
-						end
-
-						if ActionButtons[BTNNAME] == nil then
-							ActionButtons[BTNNAME] = {}
-							ActionButtons[BTNNAME].name = NAME
-							ActionButtons[BTNNAME].btn = _G[BTNNAME]
-							ActionButtons[BTNNAME].nr = i
-						end
+						MissingPower:CreateOOM(obtn, NAME, i)
 					end
 				end
 			end
@@ -589,6 +593,8 @@ function MissingPower:ShowOOM(init, from)
 
 					if decimals == 0 or amount > 99 then
 						amo = math.floor(amount)
+					elseif decimals == 1 then
+						amo = format("%." .. decimals .. "f", math.floor(amount * 10) / 10)
 					else
 						amo = format("%." .. decimals .. "f", amount)
 					end
@@ -696,9 +702,10 @@ frame:RegisterEvent("UNIT_SPELLCAST_START")
 frame:RegisterEvent("ACTIONBAR_PAGE_CHANGED")
 --frame:RegisterEvent("SPELL_UPDATE_USABLE")
 --frame:RegisterEvent( "ACTIONBAR_SLOT_CHANGED" ) -- SPAMS
+frame:RegisterEvent("MODIFIER_STATE_CHANGED")
 local MPLoaded = false
 
-local function eventHandler(self, event, unit, powertype, ...)
+local function OnEvent(self, event, unit, powertype, ...)
 	if event == "PLAYER_ENTERING_WORLD" and not MPLoaded then
 		MPLoaded = true
 
@@ -718,15 +725,15 @@ local function eventHandler(self, event, unit, powertype, ...)
 	end
 end
 
-frame:SetScript("OnEvent", eventHandler)
+frame:SetScript("OnEvent", OnEvent)
 local frame2 = CreateFrame("FRAME")
 frame2:RegisterEvent("UNIT_POWER_UPDATE")
 
 --frame2:RegisterEvent("UNIT_POWER_FREQUENT")
-local function eventHandler2(self, event, unit, powertype, ...)
+local function OnEvent2(self, event, unit, powertype, ...)
 	if event == "UNIT_POWER_UPDATE" and unit == "player" and ready then
 		MissingPower:ShowOOM(nil, "UNIT_POWER_UPDATE")
 	end
 end
 
-frame2:SetScript("OnEvent", eventHandler2)
+frame2:SetScript("OnEvent", OnEvent2)
