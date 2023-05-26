@@ -677,7 +677,7 @@ function MissingPower:Think()
 	if lastSF ~= GetShapeshiftForm() then
 		lastSF = GetShapeshiftForm()
 
-		C_Timer.After(0.8, function()
+		C_Timer.After(0.01, function()
 			MIPOUpdate = true
 			MissingPower:ShowOOM(nil, "SHAPESHIFT")
 		end)
@@ -715,7 +715,7 @@ local function OnEvent(self, event, unit, powertype, ...)
 		end)
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
-			C_Timer.After(0.8, function()
+			C_Timer.After(0.01, function()
 				MIPOUpdate = true
 				MissingPower:ShowOOM(nil, "ACTIONBAR_PAGE_CHANGED")
 			end)
