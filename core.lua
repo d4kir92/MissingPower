@@ -701,9 +701,30 @@ frame:RegisterEvent("UNIT_SPELLCAST_START")
 --frame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED")
 frame:RegisterEvent("ACTIONBAR_PAGE_CHANGED")
 --frame:RegisterEvent("SPELL_UPDATE_USABLE")
---frame:RegisterEvent( "ACTIONBAR_SLOT_CHANGED" ) -- SPAMS
 frame:RegisterEvent("MODIFIER_STATE_CHANGED")
+--frame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- SPAMS
 local MPLoaded = false
+
+hooksecurefunc("PickupAction", function(id)
+	C_Timer.After(0.01, function()
+		MIPOUpdate = true
+		MissingPower:ShowOOM(nil, "PickupAction")
+	end)
+end)
+
+hooksecurefunc("PlaceAction", function(id)
+	C_Timer.After(0.01, function()
+		MIPOUpdate = true
+		MissingPower:ShowOOM(nil, "PlaceAction")
+	end)
+end)
+
+hooksecurefunc("ClearCursor", function(id)
+	C_Timer.After(0.01, function()
+		MIPOUpdate = true
+		MissingPower:ShowOOM(nil, "ClearCursor")
+	end)
+end)
 
 local function OnEvent(self, event, unit, powertype, ...)
 	if event == "PLAYER_ENTERING_WORLD" and not MPLoaded then
