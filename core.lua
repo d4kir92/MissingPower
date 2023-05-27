@@ -151,6 +151,12 @@ function MissingPower:CreateOOM(obtn, name, nr)
 	end
 end
 
+local function SpecialRound(number, decimalPlaces)
+	local multiplier = 10 ^ decimalPlaces
+
+	return math.floor(number * multiplier) / multiplier
+end
+
 function MissingPower:ShowOOM(init, from)
 	if init then
 		loaded = true
@@ -592,11 +598,9 @@ function MissingPower:ShowOOM(init, from)
 					local amo = -1
 
 					if decimals == 0 or amount > 99 then
-						amo = math.floor(amount)
-					elseif decimals == 1 then
-						amo = format("%." .. decimals .. "f", math.floor(amount * 10) / 10)
+						amo = SpecialRound(amount, 0)
 					else
-						amo = format("%." .. decimals .. "f", amount)
+						amo = format("%." .. decimals .. "f", SpecialRound(amount, decimals))
 					end
 
 					if MissingPower:GetConfig("displayiflowerthanx", 10) > 0 then
@@ -736,12 +740,14 @@ local function OnEvent(self, event, unit, powertype, ...)
 		end)
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
-			C_Timer.After(0.01, function()
+			C_Timer.After(0.001, function()
 				MIPOUpdate = true
 				MissingPower:ShowOOM(nil, "ACTIONBAR_PAGE_CHANGED")
 			end)
 		else
-			MissingPower:ShowOOM(nil, "ELSE: " .. event)
+			C_Timer.After(0.001, function()
+				MissingPower:ShowOOM(nil, "ELSE: " .. event)
+			end)
 		end
 	end
 end
