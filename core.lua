@@ -88,7 +88,7 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		OOM:SetHeight(obtn:GetHeight())
 		OOM:ClearAllPoints()
 		OOM:SetPoint("TOPLEFT", obtn, "TOPLEFT", 0, -obtn:GetHeight())
-		OOM.texture = OOM:CreateTexture("MyTexture", "ARTWORK")
+		OOM.texture = OOM:CreateTexture("OOM.texture", "ARTWORK")
 		OOM.texture:SetColorTexture(color.r, color.g, color.b, color.a)
 		OOM.texture:SetAllPoints(OOM)
 		OOM:SetFrameStrata("BACKGROUND")
@@ -155,6 +155,14 @@ local function SpecialRound(number, decimalPlaces)
 	local multiplier = 10 ^ decimalPlaces
 
 	return math.floor(number * multiplier) / multiplier
+end
+
+function MissingPower:HideOOM(btnname)
+	local OOM = _G[btnname]
+	OOM:SetHeight(0.1)
+	OOM:Hide(true)
+	OOM:SetFrameStrata("BACKGROUND")
+	OOM:SetAlpha(0)
 end
 
 function MissingPower:ShowOOM(init, from)
@@ -251,6 +259,7 @@ function MissingPower:ShowOOM(init, from)
 					if cost >= 0 then
 						MIPOActionButtons[btnname] = ActionButtons[btnname]
 					else
+						MissingPower:HideOOM(btnname)
 						local OOMAmountCounter = _G[btnname .. "AmountCounter"]
 
 						if OOMAmountCounter and OOMAmountCounter.text then
@@ -640,10 +649,7 @@ function MissingPower:ShowOOM(init, from)
 					OOMAmountCounter.text:SetJustifyV(ay)
 
 					if p <= 0 then
-						OOM:SetHeight(0.1)
-						OOM:Hide(true)
-						OOM:SetFrameStrata("BACKGROUND")
-						OOM:SetAlpha(0)
+						MissingPower:HideOOM(btnname)
 					else
 						OOM:Show(true)
 						OOM:SetFrameStrata(ABTN:GetFrameStrata())
@@ -663,10 +669,7 @@ function MissingPower:ShowOOM(init, from)
 						end
 					end
 				else
-					OOM:SetFrameStrata("BACKGROUND")
-					OOM:SetHeight(0.1)
-					OOM:Hide(true)
-					OOM:SetAlpha(0)
+					MissingPower:HideOOM(btnname)
 				end
 			end
 		end
@@ -740,7 +743,7 @@ local function OnEvent(self, event, unit, powertype, ...)
 		end)
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
-			C_Timer.After(0.001, function()
+			C_Timer.After(0.01, function()
 				MIPOUpdate = true
 				MissingPower:ShowOOM(nil, "ACTIONBAR_PAGE_CHANGED")
 			end)
