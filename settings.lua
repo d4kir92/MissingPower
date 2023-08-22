@@ -27,7 +27,7 @@ function MissingPower:InitSetting()
 	MIPOSettings.panel.name = settingname
 	local Y = -14
 	local H = 16
-	local BR = 30
+	local BR = 34
 	local settings_header = {}
 	settings_header.frame = MIPOSettings.panel
 	settings_header.parent = MIPOSettings.panel
@@ -64,7 +64,7 @@ function MissingPower:InitSetting()
 	settings_poweralpha.text = "poweralpha"
 	settings_poweralpha.x = 10
 	settings_poweralpha.y = Y
-	settings_poweralpha.min = 0.1
+	settings_poweralpha.min = 0.0
 	settings_poweralpha.max = 1.0
 	settings_poweralpha.decimals = 2
 	settings_poweralpha.steps = 0.02
@@ -105,6 +105,14 @@ function MissingPower:InitSetting()
 			MissingPower:UpdateUi("Settings:fontanchor1")
 		end)
 	end, MissingPower:GetAnchorTab())
+
+	Y = Y - BR
+
+	MissingPower:CreateSlider(MIPOSettings.panel, 10, Y, "textoffset", "textoffset", MissingPower:GetConfig("textoffset", 0), 1.0, -100, 100, function()
+		C_Timer.After(0.01, function()
+			MissingPower:UpdateUi("Settings:textoffset")
+		end)
+	end)
 
 	Y = Y - BR
 

@@ -12,6 +12,7 @@ function MissingPower:Lang_deDE()
 	lang.fontx = "Position X"
 	lang.fonty = "Position Y"
 	lang.fontanchor = "Text-Anker"
+	lang.textoffset = "Text-Abstand"
 	lang.showtickbar = "Tickbar anzeigen"
 	lang.customcolor = "Benutzerdefinierte Farbe"
 	lang.ccolr = "Farbe Rot"

@@ -12,6 +12,7 @@ function MissingPower:Lang_enUS()
 	lang.fontx = "Position X"
 	lang.fonty = "Position Y"
 	lang.fontanchor = "Text-Anchor"
+	lang.textoffset = "Text-Offset"
 	lang.showtickbar = "Show Tickbar"
 	lang.customcolor = "Custom Color"
 	lang.ccolr = "Color Red"

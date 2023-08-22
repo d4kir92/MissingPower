@@ -192,6 +192,26 @@ function MissingPower:HideOOM(btnname)
 	OOM:SetAlpha(0)
 end
 
+local offsets = {
+	["TOPLEFT"] = {-1, 1},
+	["TOP"] = {0, 1},
+	["TOPRIGHT"] = {1, 1},
+	["RIGHT"] = {1, 0},
+	["BOTTOMRIGHT"] = {1, -1},
+	["BOTTOM"] = {0, -1},
+	["BOTTOMLEFT"] = {-1, -1},
+	["LEFT"] = {-1, 0},
+	["CENTER"] = {0, 1},
+}
+
+function MissingPower:GetOffsetXY(anchor, offset, sw, sh)
+	local tab = offsets[anchor]
+	local x = tab[1] * offset * sw / 100
+	local y = tab[2] * offset * sh / 100
+
+	return x, y
+end
+
 function MissingPower:ShowOOM(init, from)
 	if init then
 		loaded = true
@@ -649,15 +669,17 @@ function MissingPower:ShowOOM(init, from)
 					end
 
 					local anchor = MissingPower:GetAnchor(MissingPower:GetConfig("fontanchor", 0))
-					local textAlignH = (anchor == "LEFT" or anchor == "TOPLEFT" or anchor == "BOTTOMLEFT") and "LEFT" or (anchor == "RIGHT" or anchor == "TOPRIGHT" or anchor == "BOTTOMRIGHT") and "RIGHT" or "CENTER"
-					local textAlignV = (anchor == "TOP" or anchor == "TOPLEFT" or anchor == "TOPRIGHT") and "TOP" or (anchor == "BOTTOM" or anchor == "BOTTOMLEFT" or anchor == "BOTTOMRIGHT") and "BOTTOM" or "CENTER"
+					local offset = MissingPower:GetConfig("textoffset", 0)
+					local offsetX, offsetY = MissingPower:GetOffsetXY(anchor, offset, ABTN:GetWidth(), ABTN:GetHeight())
+					--local textAlignH = (anchor == "LEFT" or anchor == "TOPLEFT" or anchor == "BOTTOMLEFT") and "LEFT" or (anchor == "RIGHT" or anchor == "TOPRIGHT" or anchor == "BOTTOMRIGHT") and "RIGHT" or "CENTER"
+					--local textAlignV = (anchor == "TOP" or anchor == "TOPLEFT" or anchor == "TOPRIGHT") and "TOP" or (anchor == "BOTTOM" or anchor == "BOTTOMLEFT" or anchor == "BOTTOMRIGHT") and "BOTTOM" or "CENTER"
 					OOMAmountCounter.text:SetSize(OOM:GetWidth(), OOM:GetWidth())
 					OOMAmountCounter.text:ClearAllPoints()
-					OOMAmountCounter.text:SetPoint(anchor, ABTN, anchor, 0, 0)
-					OOMAmountCounter.text:SetJustifyH(textAlignH)
-					OOMAmountCounter.text:SetJustifyV(textAlignV)
+					OOMAmountCounter.text:SetPoint("CENTER", ABTN, anchor, offsetX, offsetY)
+					OOMAmountCounter.text:SetJustifyH("CENTER")
+					OOMAmountCounter.text:SetJustifyV("CENTER")
 
-					if from == "Settings:fontanchor1" then
+					if from == "Settings:fontanchor1" or from == "Settings:textoffset" then
 						local oldText = OOMAmountCounter.text:GetText()
 						OOMAmountCounter.text:SetText("TEST")
 						OOMAmountCounter.text:SetText(oldText)
