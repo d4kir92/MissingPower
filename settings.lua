@@ -69,7 +69,7 @@ function MissingPower:InitSetting()
 	settings_poweralpha.decimals = 2
 	settings_poweralpha.steps = 0.02
 	settings_poweralpha.dbvalue = "poweralpha"
-	MissingPower:CreateSlider(settings_poweralpha)
+	MissingPower:OldCreateSlider(settings_poweralpha)
 	Y = Y - BR
 	local settings_decimals = {}
 	settings_decimals.name = "decimals"
@@ -83,7 +83,7 @@ function MissingPower:InitSetting()
 	settings_decimals.decimals = 0
 	settings_decimals.steps = 1
 	settings_decimals.dbvalue = "decimals"
-	MissingPower:CreateSlider(settings_decimals)
+	MissingPower:OldCreateSlider(settings_decimals)
 	Y = Y - BR
 	local settings_fontsize = {}
 	settings_fontsize.name = "fontsize"
@@ -97,35 +97,15 @@ function MissingPower:InitSetting()
 	settings_fontsize.decimals = 0
 	settings_fontsize.steps = 1
 	settings_fontsize.dbvalue = "fontsize"
-	MissingPower:CreateSlider(settings_fontsize)
+	MissingPower:OldCreateSlider(settings_fontsize)
 	Y = Y - BR
-	local settings_fontx = {}
-	settings_fontx.name = "fontx"
-	settings_fontx.parent = MIPOSettings.panel
-	settings_fontx.value = MissingPower:GetConfig("fontx", 0)
-	settings_fontx.text = "fontx"
-	settings_fontx.x = 10
-	settings_fontx.y = Y
-	settings_fontx.min = -2
-	settings_fontx.max = 2
-	settings_fontx.decimals = 1
-	settings_fontx.steps = 0.1
-	settings_fontx.dbvalue = "fontx"
-	MissingPower:CreateSlider(settings_fontx)
-	Y = Y - BR
-	local settings_fonty = {}
-	settings_fonty.name = "fonty"
-	settings_fonty.parent = MIPOSettings.panel
-	settings_fonty.value = MissingPower:GetConfig("fonty", 0)
-	settings_fonty.text = "fonty"
-	settings_fonty.x = 10
-	settings_fonty.y = Y
-	settings_fonty.min = -2
-	settings_fonty.max = 2
-	settings_fonty.decimals = 1
-	settings_fonty.steps = 0.1
-	settings_fonty.dbvalue = "fonty"
-	MissingPower:CreateSlider(settings_fonty)
+
+	MissingPower:CreateSlider(MIPOSettings.panel, 10, Y, "fontanchor", "fontanchor", MissingPower:GetConfig("fontanchor", 0), 1, 0, 8, function()
+		C_Timer.After(0.01, function()
+			MissingPower:UpdateUi("Settings:fontanchor1")
+		end)
+	end, MissingPower:GetAnchorTab())
+
 	Y = Y - BR
 
 	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
@@ -163,7 +143,7 @@ function MissingPower:InitSetting()
 	settings_ccolr.decimals = 2
 	settings_ccolr.steps = 0.01
 	settings_ccolr.dbvalue = "ccolr"
-	MissingPower:CreateSlider(settings_ccolr)
+	MissingPower:OldCreateSlider(settings_ccolr)
 	Y = Y - BR
 	local settings_ccolg = {}
 	settings_ccolg.name = "ccolg"
@@ -177,7 +157,7 @@ function MissingPower:InitSetting()
 	settings_ccolg.decimals = 2
 	settings_ccolg.steps = 0.01
 	settings_ccolg.dbvalue = "ccolg"
-	MissingPower:CreateSlider(settings_ccolg)
+	MissingPower:OldCreateSlider(settings_ccolg)
 	Y = Y - BR
 	local settings_ccolb = {}
 	settings_ccolb.name = "ccolb"
@@ -191,7 +171,7 @@ function MissingPower:InitSetting()
 	settings_ccolb.decimals = 2
 	settings_ccolb.steps = 0.01
 	settings_ccolb.dbvalue = "ccolb"
-	MissingPower:CreateSlider(settings_ccolb)
+	MissingPower:OldCreateSlider(settings_ccolb)
 	Y = Y - BR
 	Y = Y - BR
 	local settings_displayiflowerthanx = {}
@@ -206,7 +186,7 @@ function MissingPower:InitSetting()
 	settings_displayiflowerthanx.decimals = 0
 	settings_displayiflowerthanx.steps = 1
 	settings_displayiflowerthanx.dbvalue = "displayiflowerthanx"
-	MissingPower:CreateSlider(settings_displayiflowerthanx, "   [0 = unlimited]")
+	MissingPower:OldCreateSlider(settings_displayiflowerthanx, "   [0 = unlimited]")
 	Y = Y - BR
 	InterfaceOptions_AddCategory(MIPOSettings.panel)
 end

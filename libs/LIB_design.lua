@@ -45,70 +45,47 @@ function MissingPower:CreateCheckBox(tab)
 	return CB
 end
 
-function MissingPower:CreateSlider(tab, extratext)
-	tab = tab or {}
-	tab.parent = tab.parent or UIParent
-	tab.x = tab.x or 0
-	tab.y = tab.y or 0
-	tab.value = tab.value or 0
-	local SL = CreateFrame("Slider", tab.name, tab.parent, "OptionsSliderTemplate")
-	SL:SetPoint("TOPLEFT", tab.x, tab.y)
-	SL.Low:SetText(tab.min)
-	SL.High:SetText(tab.max)
-	local trans = {}
-	trans["VALUE"] = tab.value
+function MissingPower:CreateSlider(parent, x, y, name, key, value, steps, vmin, vmax, func, lanArray)
+	local slider = CreateFrame("Slider", nil, parent, "OptionsSliderTemplate")
+	slider:SetWidth(600)
+	slider:SetPoint("TOPLEFT", parent, "TOPLEFT", x, y)
+	slider.Low:SetText(vmin)
+	slider.High:SetText(vmax)
 
-	if extratext then
-		SL.Text:SetText(MissingPower:GT(tab.text, trans) .. " " .. extratext)
+	if lanArray then
+		slider.Text:SetText(MissingPower:GT(key) .. ": " .. lanArray[value])
 	else
-		SL.Text:SetText(MissingPower:GT(tab.text, trans))
+		slider.Text:SetText(MissingPower:GT(key) .. ": " .. value)
 	end
 
-	SL:SetMinMaxValues(tab.min, tab.max)
-	SL:SetValue(tab.value)
-	SL:SetWidth(tab.w or 600)
-	SL:SetObeyStepOnDrag(tab.steps)
-	tab.steps = tab.steps or 1
-	SL:SetValueStep(tab.steps)
-	SL.decimals = tab.decimals or 1
+	slider:SetMinMaxValues(vmin, vmax)
+	slider:SetObeyStepOnDrag(true)
+	slider:SetValueStep(steps)
+	slider:SetValue(value)
 
-	SL:SetScript("OnValueChanged", function(sel, val)
-		val = MissingPower:MathR(val, sel.decimals)
+	slider:SetScript("OnValueChanged", function(sel, val)
+		val = tonumber(string.format("%" .. steps .. "f", val))
 
-		if tab.steps > 0 then
-			val = val - val % tab.steps
-		end
+		if val then
+			MIPOPC[key] = val
 
-		val = MissingPower:MathR(val, sel.decimals)
-		MIPOPC[tab.dbvalue] = val
-		trans = {}
-		trans["VALUE"] = val
+			if lanArray then
+				slider.Text:SetText(MissingPower:GT(key) .. ": " .. lanArray[val])
+			else
+				slider.Text:SetText(MissingPower:GT(key) .. ": " .. val)
+			end
 
-		if extratext then
-			SL.Text:SetText(MissingPower:GT(tab.text, trans) .. " " .. extratext)
-		else
-			SL.Text:SetText(MissingPower:GT(tab.text, trans))
-		end
-
-		if tab.func ~= nil then
-			tab:func()
-		else
-			MissingPower:ShowOOM()
+			if func then
+				func()
+			end
 		end
 	end)
 
-	hooksecurefunc(MissingPower, "UpdateLanguage", function()
-		trans = {}
-		trans["VALUE"] = SL:GetValue()
+	return slider
+end
 
-		if extratext then
-			SL.Text:SetText(MissingPower:GT(tab.text, trans) .. " " .. extratext)
-		else
-			SL.Text:SetText(MissingPower:GT(tab.text, trans))
-		end
-	end)
-
-	return EB
+function MissingPower:OldCreateSlider(tab)
+	MissingPower:CreateSlider(tab.parent, tab.x, tab.y, tab.name, tab.dbvalue, tab.value, tab.steps, tab.min, tab.max, tab.func)
 end
 
 function MissingPower:CTexture(frame, tab)

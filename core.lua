@@ -157,6 +157,33 @@ local function SpecialRound(number, decimalPlaces)
 	return math.floor(number * multiplier) / multiplier
 end
 
+local MIPOUpdate = true
+
+function MissingPower:UpdateUi(from, init)
+	MIPOUpdate = true -- Update
+	MissingPower:ShowOOM(init, from)
+end
+
+local anchorTab = {
+	[0] = "CENTER",
+	[1] = "TOPLEFT",
+	[2] = "TOP",
+	[3] = "TOPRIGHT",
+	[4] = "RIGHT",
+	[5] = "BOTTOMRIGHT",
+	[6] = "BOTTOM",
+	[7] = "BOTTOMLEFT",
+	[8] = "LEFT",
+}
+
+function MissingPower:GetAnchorTab()
+	return anchorTab
+end
+
+function MissingPower:GetAnchor(id)
+	return anchorTab[id]
+end
+
 function MissingPower:HideOOM(btnname)
 	local OOM = _G[btnname]
 	OOM:SetHeight(0.1)
@@ -197,8 +224,7 @@ function MissingPower:ShowOOM(init, from)
 								obtn.id = obtn:GetID()
 								obtn.actionType = actionType
 								obtn.actionID = actionID
-								MIPOUpdate = true
-								MissingPower:ShowOOM(nil, "ID CHANGE")
+								MissingPower:UpdateUi("ID CHANGE")
 							end
 
 							C_Timer.After(0.5, obtn.ActionChanged)
@@ -622,31 +648,20 @@ function MissingPower:ShowOOM(init, from)
 						OOMAmountCounter.text:SetText(amo)
 					end
 
-					local ax = "CENTER"
-					local ay = "CENTER"
-					local px = 0
-					local py = 0
-
-					if MissingPower:GetConfig("fontx", 0) < 0 then
-						ax = "LEFT"
-						px = 2
-					elseif MissingPower:GetConfig("fontx", 0) > 0 then
-						ax = "RIGHT"
-						px = -2
-					end
-
-					if MissingPower:GetConfig("fonty", 0) < 0 then
-						ay = "BOTTOM"
-						py = 2
-					elseif MissingPower:GetConfig("fonty", 0) > 0 then
-						ay = "TOP"
-						py = -2
-					end
-
+					local anchor = MissingPower:GetAnchor(MissingPower:GetConfig("fontanchor", 0))
+					local textAlignH = (anchor == "LEFT" or anchor == "TOPLEFT" or anchor == "BOTTOMLEFT") and "LEFT" or (anchor == "RIGHT" or anchor == "TOPRIGHT" or anchor == "BOTTOMRIGHT") and "RIGHT" or "CENTER"
+					local textAlignV = (anchor == "TOP" or anchor == "TOPLEFT" or anchor == "TOPRIGHT") and "TOP" or (anchor == "BOTTOM" or anchor == "BOTTOMLEFT" or anchor == "BOTTOMRIGHT") and "BOTTOM" or "CENTER"
 					OOMAmountCounter.text:SetSize(OOM:GetWidth(), OOM:GetWidth())
-					OOMAmountCounter.text:SetPoint("CENTER", ABTN, "CENTER", MissingPower:GetConfig("fontx", 0) + px, MissingPower:GetConfig("fonty", 0) + py)
-					OOMAmountCounter.text:SetJustifyH(ax)
-					OOMAmountCounter.text:SetJustifyV(ay)
+					OOMAmountCounter.text:ClearAllPoints()
+					OOMAmountCounter.text:SetPoint(anchor, ABTN, anchor, 0, 0)
+					OOMAmountCounter.text:SetJustifyH(textAlignH)
+					OOMAmountCounter.text:SetJustifyV(textAlignV)
+
+					if from == "Settings:fontanchor1" then
+						local oldText = OOMAmountCounter.text:GetText()
+						OOMAmountCounter.text:SetText("TEST")
+						OOMAmountCounter.text:SetText(oldText)
+					end
 
 					if p <= 0 then
 						MissingPower:HideOOM(btnname)
@@ -685,8 +700,7 @@ function MissingPower:Think()
 		lastSF = GetShapeshiftForm()
 
 		C_Timer.After(0.01, function()
-			MIPOUpdate = true
-			MissingPower:ShowOOM(nil, "SHAPESHIFT")
+			MissingPower:UpdateUi("SHAPESHIFT")
 		end)
 	end
 
@@ -714,22 +728,19 @@ local MPLoaded = false
 
 hooksecurefunc("PickupAction", function(id)
 	C_Timer.After(0.01, function()
-		MIPOUpdate = true
-		MissingPower:ShowOOM(nil, "PickupAction")
+		MissingPower:UpdateUi("PickupAction")
 	end)
 end)
 
 hooksecurefunc("PlaceAction", function(id)
 	C_Timer.After(0.01, function()
-		MIPOUpdate = true
-		MissingPower:ShowOOM(nil, "PlaceAction")
+		MissingPower:UpdateUi("PlaceAction")
 	end)
 end)
 
 hooksecurefunc("ClearCursor", function(id)
 	C_Timer.After(0.01, function()
-		MIPOUpdate = true
-		MissingPower:ShowOOM(nil, "ClearCursor")
+		MissingPower:UpdateUi("ClearCursor")
 	end)
 end)
 
@@ -738,14 +749,12 @@ local function OnEvent(self, event, unit, powertype, ...)
 		MPLoaded = true
 
 		C_Timer.After(1, function()
-			MIPOUpdate = true
-			MissingPower:ShowOOM(true, "PLAYER_ENTERING_WORLD")
+			MissingPower:UpdateUi("PLAYER_ENTERING_WORLD", true)
 		end)
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
 			C_Timer.After(0.01, function()
-				MIPOUpdate = true
-				MissingPower:ShowOOM(nil, "ACTIONBAR_PAGE_CHANGED")
+				MissingPower:UpdateUi("ACTIONBAR_PAGE_CHANGED")
 			end)
 		else
 			C_Timer.After(0.001, function()
