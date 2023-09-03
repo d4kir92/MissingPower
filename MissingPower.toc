@@ -3,7 +3,7 @@
 ## Interface-Wrath: 30402
 ## Interface: 100105
 
-## Version: 1.1.8
+## Version: 1.1.9
 ## Title: MissingPower by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Show for each spell how much power is missing
 ## Author: D4KiR
@@ -32,3 +32,4 @@ settings.lua
 
 core.lua
 fivesecondrule.lua
+healthregen.lua
