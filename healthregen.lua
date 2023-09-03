@@ -1,7 +1,7 @@
 local _, MissingPower = ...
 
 if (MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC") and MissingPower:GetConfig("showtickbar", true) then
-	local hpReg = 1.7
+	local hpReg = 1.66
 	local tickRate = 0.01
 	local p = 0
 	local movingElement = CreateFrame("Frame", nil, PlayerFrameHealthBar)
@@ -46,6 +46,8 @@ if (MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TB
 
 				if UnitHealth("player") == UnitHealthMax("player") then
 					movingElement:Hide()
+				else
+					movingElement:Show()
 				end
 			end
 		end
