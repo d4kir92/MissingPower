@@ -19,4 +19,5 @@ function MissingPower:Lang_enUS()
 	lang.ccolg = "Color Green"
 	lang.ccolb = "Color Blue"
 	lang.displayiflowerthanx = "Display if lower than VALUE"
+	lang.showhealthreg = "Show Health Regeneration"
 end

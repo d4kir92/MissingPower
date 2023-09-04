@@ -19,4 +19,5 @@ function MissingPower:Lang_deDE()
 	lang.ccolg = "Farbe Grün"
 	lang.ccolb = "Farbe Blau"
 	lang.displayiflowerthanx = "Anzeigen, wenn niedriger als VALUE"
+	lang.showhealthreg = "Gesundheitsregeneration anzeigen"
 end

@@ -127,6 +127,16 @@ function MissingPower:InitSetting()
 		settings_showtickbar.dbvalue = "showtickbar"
 		MissingPower:CreateCheckBox(settings_showtickbar)
 		Y = Y - BR
+		local settings_showhealthreg = {}
+		settings_showhealthreg.name = "showhealthreg"
+		settings_showhealthreg.parent = MIPOSettings.panel
+		settings_showhealthreg.checked = MissingPower:GetConfig("showhealthreg", false)
+		settings_showhealthreg.text = "showhealthreg"
+		settings_showhealthreg.x = 10
+		settings_showhealthreg.y = Y
+		settings_showhealthreg.dbvalue = "showhealthreg"
+		MissingPower:CreateCheckBox(settings_showhealthreg)
+		Y = Y - BR
 	end
 
 	local settings_customcolor = {}
