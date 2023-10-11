@@ -1,6 +1,5 @@
 -- enUS English
 local _, MissingPower = ...
-
 function MissingPower:Lang_enUS()
 	local lang = MissingPower:GetLangTab()
 	lang.hideoverlap = "Hide Overlap"
@@ -13,11 +12,13 @@ function MissingPower:Lang_enUS()
 	lang.fonty = "Position Y"
 	lang.fontanchor = "Text-Anchor"
 	lang.textoffset = "Text-Offset"
+	lang.textoffsetx = "Text-Offset X"
+	lang.textoffsety = "Text-Offset Y"
 	lang.showtickbar = "Show Tickbar"
 	lang.customcolor = "Custom Color"
 	lang.ccolr = "Color Red"
 	lang.ccolg = "Color Green"
 	lang.ccolb = "Color Blue"
-	lang.displayiflowerthanx = "Display if lower than VALUE"
+	lang.displayiflowerthanx = "Display if lower than"
 	lang.showhealthreg = "Show Health Regeneration"
 end

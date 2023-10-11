@@ -2,7 +2,6 @@
 local _, MissingPower = ...
 local BuildNr = select(4, GetBuildInfo())
 local Build = "CLASSIC"
-
 if BuildNr >= 100000 then
 	Build = "RETAIL"
 elseif BuildNr > 29999 then
@@ -20,7 +19,6 @@ function MissingPower:GetWoWBuild()
 end
 
 local MIPOSettings = {}
-
 function MissingPower:InitSetting()
 	local settingname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
 	MIPOSettings.panel = CreateFrame("Frame", settingname, UIParent)
@@ -99,31 +97,69 @@ function MissingPower:InitSetting()
 	settings_fontsize.dbvalue = "fontsize"
 	MissingPower:OldCreateSlider(settings_fontsize)
 	Y = Y - BR
-
-	MissingPower:CreateSlider(MIPOSettings.panel, 10, Y, "fontanchor", "fontanchor", MissingPower:GetConfig("fontanchor", 0), 1, 0, 8, function()
-		C_Timer.After(0.01, function()
-			MissingPower:UpdateUi("Settings:fontanchor1")
-		end)
-	end, MissingPower:GetAnchorTab())
-
-	Y = Y - BR
-
-	MissingPower:CreateSlider(MIPOSettings.panel, 10, Y, "textoffsetX", "textoffsetX", MissingPower:GetConfig("textoffsetX", 0), 1.0, -100, 100, function()
-		C_Timer.After(0.01, function()
-			MissingPower:UpdateUi("Settings:textoffsetX")
-		end)
-	end)
-	
-	Y = Y - BR
-	
-	MissingPower:CreateSlider(MIPOSettings.panel, 10, Y, "textoffsetY", "textoffsetY", MissingPower:GetConfig("textoffsetY", 0), 1.0, -100, 100, function()
-		C_Timer.After(0.01, function()
-			MissingPower:UpdateUi("Settings:textoffsetY")
-		end)
-	end)
+	MissingPower:CreateSlider(
+		MIPOSettings.panel,
+		10,
+		Y,
+		"fontanchor",
+		"fontanchor",
+		MissingPower:GetConfig("fontanchor", 0),
+		1,
+		0,
+		8,
+		function()
+			C_Timer.After(
+				0.01,
+				function()
+					MissingPower:UpdateUi("Settings:fontanchor1")
+				end
+			)
+		end, MissingPower:GetAnchorTab()
+	)
 
 	Y = Y - BR
+	MissingPower:CreateSlider(
+		MIPOSettings.panel,
+		10,
+		Y,
+		"textoffsetX",
+		"textoffsetX",
+		MissingPower:GetConfig("textoffsetX", 0),
+		1.0,
+		-100,
+		100,
+		function()
+			C_Timer.After(
+				0.01,
+				function()
+					MissingPower:UpdateUi("Settings:textoffsetX")
+				end
+			)
+		end
+	)
 
+	Y = Y - BR
+	MissingPower:CreateSlider(
+		MIPOSettings.panel,
+		10,
+		Y,
+		"textoffsetY",
+		"textoffsetY",
+		MissingPower:GetConfig("textoffsetY", 0),
+		1.0,
+		-100,
+		100,
+		function()
+			C_Timer.After(
+				0.01,
+				function()
+					MissingPower:UpdateUi("Settings:textoffsetY")
+				end
+			)
+		end
+	)
+
+	Y = Y - BR
 	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
 		local settings_showtickbar = {}
 		settings_showtickbar.name = "showtickbar"

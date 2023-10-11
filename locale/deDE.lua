@@ -1,6 +1,5 @@
 -- deDE German Deutsch
 local _, MissingPower = ...
-
 function MissingPower:Lang_deDE()
 	local lang = MissingPower:GetLangTab()
 	lang.hideoverlap = "Überlappen verstecken"
@@ -13,11 +12,13 @@ function MissingPower:Lang_deDE()
 	lang.fonty = "Position Y"
 	lang.fontanchor = "Text-Anker"
 	lang.textoffset = "Text-Abstand"
+	lang.textoffsetx = "Text-Abstand X"
+	lang.textoffsety = "Text-Abstand Y"
 	lang.showtickbar = "Tickbar anzeigen"
 	lang.customcolor = "Benutzerdefinierte Farbe"
 	lang.ccolr = "Farbe Rot"
 	lang.ccolg = "Farbe Grün"
 	lang.ccolb = "Farbe Blau"
-	lang.displayiflowerthanx = "Anzeigen, wenn niedriger als VALUE"
+	lang.displayiflowerthanx = "Anzeigen, wenn niedriger als"
 	lang.showhealthreg = "Gesundheitsregeneration anzeigen"
 end
