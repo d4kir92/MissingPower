@@ -108,9 +108,17 @@ function MissingPower:InitSetting()
 
 	Y = Y - BR
 
-	MissingPower:CreateSlider(MIPOSettings.panel, 10, Y, "textoffset", "textoffset", MissingPower:GetConfig("textoffset", 0), 1.0, -100, 100, function()
+	MissingPower:CreateSlider(MIPOSettings.panel, 10, Y, "textoffsetX", "textoffsetX", MissingPower:GetConfig("textoffsetX", 0), 1.0, -100, 100, function()
 		C_Timer.After(0.01, function()
-			MissingPower:UpdateUi("Settings:textoffset")
+			MissingPower:UpdateUi("Settings:textoffsetX")
+		end)
+	end)
+	
+	Y = Y - BR
+	
+	MissingPower:CreateSlider(MIPOSettings.panel, 10, Y, "textoffsetY", "textoffsetY", MissingPower:GetConfig("textoffsetY", 0), 1.0, -100, 100, function()
+		C_Timer.After(0.01, function()
+			MissingPower:UpdateUi("Settings:textoffsetY")
 		end)
 	end)
 

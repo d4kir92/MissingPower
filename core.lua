@@ -669,8 +669,9 @@ function MissingPower:ShowOOM(init, from)
 					end
 
 					local anchor = MissingPower:GetAnchor(MissingPower:GetConfig("fontanchor", 0))
-					local offset = MissingPower:GetConfig("textoffset", 0)
-					local offsetX, offsetY = MissingPower:GetOffsetXY(anchor, offset, ABTN:GetWidth(), ABTN:GetHeight())
+					local offsetX = MissingPower:GetConfig("textoffsetX", 0)
+					local offsetY = MissingPower:GetConfig("textoffsetY", 0)
+					--local offsetX, offsetY = MissingPower:GetOffsetXY(anchor, offset, ABTN:GetWidth(), ABTN:GetHeight())
 					--local textAlignH = (anchor == "LEFT" or anchor == "TOPLEFT" or anchor == "BOTTOMLEFT") and "LEFT" or (anchor == "RIGHT" or anchor == "TOPRIGHT" or anchor == "BOTTOMRIGHT") and "RIGHT" or "CENTER"
 					--local textAlignV = (anchor == "TOP" or anchor == "TOPLEFT" or anchor == "TOPRIGHT") and "TOP" or (anchor == "BOTTOM" or anchor == "BOTTOMLEFT" or anchor == "BOTTOMRIGHT") and "BOTTOM" or "CENTER"
 					OOMAmountCounter.text:SetSize(OOM:GetWidth(), OOM:GetWidth())
