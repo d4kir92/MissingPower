@@ -3,7 +3,7 @@
 ## Interface-Wrath: 30403
 ## Interface: 100200
 
-## Version: 1.1.17
+## Version: 1.1.18
 ## Title: MissingPower by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Show for each spell how much power is missing
 ## Author: D4KiR
@@ -13,6 +13,8 @@
 ## X-Curse-Project-ID: 341275
 ## X-Wago-ID: RXKqO8Ny
 ## IconTexture: 136048
+
+libs\D4Lib\D4Lib.xml
 
 config.lua
 

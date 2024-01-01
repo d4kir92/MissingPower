@@ -1,5 +1,5 @@
 -- By D4KiR
-local _, MissingPower = ...
+local AddonName, MissingPower = ...
 local BuildNr = select(4, GetBuildInfo())
 local Build = "CLASSIC"
 if BuildNr >= 100000 then
@@ -20,6 +20,7 @@ end
 
 local MIPOSettings = {}
 function MissingPower:InitSetting()
+	D4:SetVersion(AddonName, 136048, "1.1.18")
 	local settingname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
 	MIPOSettings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPOSettings.panel.name = settingname
