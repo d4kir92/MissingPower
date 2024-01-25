@@ -1,6 +1,7 @@
 -- FSR
 local _, MissingPower = ...
 if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
+	local wOnce = true
 	local tick = 0.01
 	local now = GetTime()
 	nexttick = now + 2
@@ -120,19 +121,22 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		if ElvUF_Player ~= nil and ElvUF_Player:IsShown() then
 			mb = ElvUF_Player.Power
 			frame:SetFrameStrata("HIGH")
-			if mb == nil then
+			if mb == nil and wOnce then
+				wOnce = false
 				MissingPower:MSG("ElvUi Renamed PlayerFrame, please tell Missing Power Dev to fix it")
 			end
 		elseif SUFUnitplayer ~= nil and SUFUnitplayer:IsShown() then
 			mb = SUFUnitplayer.powerBar
 			frame:SetFrameStrata("HIGH")
-			if mb == nil then
+			if SUFUnitplayer == nil and wOnce then
+				wOnce = false
 				MissingPower:MSG("ShadowUnitFrames Renamed PlayerFrame, please tell Missing Power Dev to fix it")
 			end
 		elseif XPerl_PlayerstatsFramemanaBar ~= nil and XPerl_PlayerstatsFramemanaBar:IsShown() then
 			mb = XPerl_PlayerstatsFramemanaBar
 			frame:SetFrameStrata("HIGH")
-			if mb == nil then
+			if mb == nil and wOnce then
+				wOnce = false
 				MissingPower:MSG("XPerl Renamed PlayerFrame, please tell Missing Power Dev to fix it")
 			end
 		end
