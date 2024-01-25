@@ -1,6 +1,5 @@
 -- FSR
 local _, MissingPower = ...
-
 if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
 	local tick = 0.01
 	local now = GetTime()
@@ -20,21 +19,17 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 	local tex = frame:CreateTexture(nil, "BACKGROUND")
 	tex:SetAllPoints()
 	tex:SetColorTexture(1, 1, 1, 0)
-
 	local function eventHandler(self, event, unit, a, b, c, ...)
 		now = GetTime()
-
 		if event == "UNIT_SPELLCAST_SUCCEEDED" then
 			mana = UnitPower("player", Enum.PowerType.Mana)
 			manamax = UnitPowerMax("player", Enum.PowerType.Mana)
 			ener = UnitPower("player", Enum.PowerType.Energy)
 			enermax = UnitPowerMax("player", Enum.PowerType.Energy)
-
 			if unit == "player" and event == "UNIT_SPELLCAST_SUCCEEDED" and oldmana ~= mana then
 				oldmana = mana
 				--local name, rank, icon, castTime, minRange, maxRange = GetSpellInfo(b)
 				local costs = GetSpellPowerCost(b)
-
 				if costs[1] ~= nil and costs[1].cost > 0 then
 					max = fsr
 					gain = false
@@ -56,7 +51,6 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 	--glow:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
 	glow:SetColorTexture(1, 1, 1, 1)
 	glow:SetWidth(1)
-
 	--glow:SetVertexColor(1, 1, 1)
 	--glow:SetBlendMode("ADD")
 	function FSR_Think()
@@ -67,11 +61,9 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		enermax = UnitPowerMax("player", Enum.PowerType.Energy)
 		local t = UnitPowerType("player")
 		local full = false
-
 		if t == Enum.PowerType.Mana then
 			if mana < manamax then
 				frame:Show()
-
 				if gain then
 					-- GAIN MANA
 					if oldmana + 10 < mana or oldmana - 10 > mana or now >= nexttick then
@@ -90,7 +82,6 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		elseif t == Enum.PowerType.Energy then
 			max = 2
 			local percent = (nexttick - now) / max
-
 			if oldener < ener then
 				oldener = ener
 				nexttick = now + max
@@ -104,7 +95,6 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		end
 
 		local percent = 0
-
 		if max > 2 then
 			percent = (nexttick - now) / max
 		else
@@ -127,28 +117,38 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		end
 
 		local mb = PlayerFrameManaBar
-
 		if ElvUF_Player ~= nil and ElvUF_Player:IsShown() then
 			mb = ElvUF_Player.Power
 			frame:SetFrameStrata("HIGH")
+			if mb == nil then
+				MissingPower:MSG("ElvUi Renamed PlayerFrame, please tell Missing Power Dev to fix it")
+			end
 		elseif SUFUnitplayer ~= nil and SUFUnitplayer:IsShown() then
 			mb = SUFUnitplayer.powerBar
 			frame:SetFrameStrata("HIGH")
+			if mb == nil then
+				MissingPower:MSG("ShadowUnitFrames Renamed PlayerFrame, please tell Missing Power Dev to fix it")
+			end
 		elseif XPerl_PlayerstatsFramemanaBar ~= nil and XPerl_PlayerstatsFramemanaBar:IsShown() then
 			mb = XPerl_PlayerstatsFramemanaBar
 			frame:SetFrameStrata("HIGH")
+			if mb == nil then
+				MissingPower:MSG("XPerl Renamed PlayerFrame, please tell Missing Power Dev to fix it")
+			end
 		end
 
-		frame:SetParent(mb)
-		frame:SetHeight(mb:GetHeight()) -- * scale)--_G.UIParent:GetScale())
-		frame:SetWidth(mb:GetWidth()) -- * scale)--_G.UIParent:GetScale())
-		frame:SetPoint("LEFT", mb, "LEFT")
-		glow:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
-		glow:SetHeight(mb:GetHeight() * 1)
-		--tex:SetColorTexture(1, 1, 1, 0.8)
-		local newsize = mb:GetWidth() * percent
-		MiPoPercent = percent
-		frame:SetWidth(newsize)
+		if mb then
+			frame:SetParent(mb)
+			frame:SetHeight(mb:GetHeight()) -- * scale)--_G.UIParent:GetScale())
+			frame:SetWidth(mb:GetWidth()) -- * scale)--_G.UIParent:GetScale())
+			frame:SetPoint("LEFT", mb, "LEFT")
+			glow:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
+			glow:SetHeight(mb:GetHeight() * 1)
+			--tex:SetColorTexture(1, 1, 1, 0.8)
+			local newsize = mb:GetWidth() * percent
+			MiPoPercent = percent
+			frame:SetWidth(newsize)
+		end
 	end
 
 	C_Timer.NewTicker(tick, FSR_Think)
