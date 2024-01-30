@@ -1,6 +1,5 @@
 -- zhCN Simplified Chinese
 local _, MissingPower = ...
-
 function MissingPower:Lang_zhCN()
 	local lang = MissingPower:GetLangTab()
 	lang.hideoverlap = "隐藏重叠(需要重载 /reload)"

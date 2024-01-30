@@ -1,6 +1,5 @@
 -- koKR Korean
 local _, MissingPower = ...
-
 function MissingPower:Lang_koKR()
 	local lang = MissingPower:GetLangTab()
 	lang.hideoverlap = "오버랩 숨김"

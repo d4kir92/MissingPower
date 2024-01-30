@@ -1,6 +1,5 @@
 -- LIB Math
 local _, MissingPower = ...
-
 function MissingPower:MathR(num, dec)
 	dec = dec or 2
 

@@ -1,6 +1,5 @@
 -- ruRU Russian
 local _, MissingPower = ...
-
 function MissingPower:Lang_ruRU()
 	local lang = MissingPower:GetLangTab()
 	lang.hideoverlap = "Скрыть Нахлест"

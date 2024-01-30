@@ -1,6 +1,5 @@
 -- zhTW Traditional Chinese
 local _, MissingPower = ...
-
 function MissingPower:Lang_zhTW()
 	local lang = MissingPower:GetLangTab()
 	lang.hideoverlap = "隱藏重疊"

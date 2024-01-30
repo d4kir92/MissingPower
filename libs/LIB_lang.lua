@@ -1,7 +1,6 @@
 -- LIB Design
 local _, MissingPower = ...
 local ltab = {}
-
 function MissingPower:GetLangTab()
 	return ltab
 end
@@ -9,13 +8,11 @@ end
 function MissingPower:GT(str, tab)
 	local strid = string.lower(str)
 	local result = MissingPower:GetLangTab()[strid]
-
 	if result ~= nil then
 		if tab ~= nil then
 			for i, v in pairs(tab) do
 				local find = i -- "[" .. i .. "]"
 				local replace = v
-
 				if find ~= nil and replace ~= nil then
 					result = string.gsub(result, find, replace)
 				end
@@ -30,7 +27,6 @@ end
 
 function MissingPower:UpdateLanguage()
 	MissingPower:Lang_enUS()
-
 	if GetLocale() == "enUS" then
 		--MissingPower:MSG("Language detected: enUS (English)")
 		MissingPower:Lang_enUS()

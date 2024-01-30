@@ -1,6 +1,5 @@
 -- LIB Design
 local _, MissingPower = ...
-
 function MissingPower:CreateText(tab)
 	tab.textsize = tab.textsize or 12
 	local text = tab.frame:CreateFontString(nil, "ARTWORK")
@@ -8,10 +7,13 @@ function MissingPower:CreateText(tab)
 	text:SetFont(STANDARD_TEXT_FONT, tab.textsize, "OUTLINE")
 	text:SetPoint("TOPLEFT", tab.parent, "TOPLEFT", tab.x, tab.y)
 	text:SetText(MissingPower:GT(tab.text))
-
-	hooksecurefunc(MissingPower, "UpdateLanguage", function()
-		text:SetText(MissingPower:GT(tab.text))
-	end)
+	hooksecurefunc(
+		MissingPower,
+		"UpdateLanguage",
+		function()
+			text:SetText(MissingPower:GT(tab.text))
+		end
+	)
 
 	return text
 end
@@ -26,16 +28,17 @@ function MissingPower:CreateCheckBox(tab)
 	CB:SetPoint("TOPLEFT", tab.x, tab.y)
 	CB.tooltip = tab.tooltip
 	CB:SetChecked(tab.checked)
-
-	CB:SetScript("OnClick", function(sel)
-		local status = CB:GetChecked()
-		sel:SetChecked(status)
-		MIPOPC[tab.dbvalue] = status
-
-		if tab.func ~= nil then
-			tab:func()
+	CB:SetScript(
+		"OnClick",
+		function(sel)
+			local status = CB:GetChecked()
+			sel:SetChecked(status)
+			MIPOPC[tab.dbvalue] = status
+			if tab.func ~= nil then
+				tab:func()
+			end
 		end
-	end)
+	)
 
 	tab.frame = CB
 	tab.x = tab.x + 26
@@ -51,7 +54,6 @@ function MissingPower:CreateSlider(parent, x, y, name, key, value, steps, vmin, 
 	slider:SetPoint("TOPLEFT", parent, "TOPLEFT", x, y)
 	slider.Low:SetText(vmin)
 	slider.High:SetText(vmax)
-
 	if lanArray then
 		slider.Text:SetText(MissingPower:GT(key) .. ": " .. lanArray[value])
 	else
@@ -62,24 +64,24 @@ function MissingPower:CreateSlider(parent, x, y, name, key, value, steps, vmin, 
 	slider:SetObeyStepOnDrag(true)
 	slider:SetValueStep(steps)
 	slider:SetValue(value)
+	slider:SetScript(
+		"OnValueChanged",
+		function(sel, val)
+			val = tonumber(string.format("%" .. steps .. "f", val))
+			if val then
+				MIPOPC[key] = val
+				if lanArray then
+					slider.Text:SetText(MissingPower:GT(key) .. ": " .. lanArray[val])
+				else
+					slider.Text:SetText(MissingPower:GT(key) .. ": " .. val)
+				end
 
-	slider:SetScript("OnValueChanged", function(sel, val)
-		val = tonumber(string.format("%" .. steps .. "f", val))
-
-		if val then
-			MIPOPC[key] = val
-
-			if lanArray then
-				slider.Text:SetText(MissingPower:GT(key) .. ": " .. lanArray[val])
-			else
-				slider.Text:SetText(MissingPower:GT(key) .. ": " .. val)
-			end
-
-			if func then
-				func()
+				if func then
+					func()
+				end
 			end
 		end
-	end)
+	)
 
 	return slider
 end
@@ -93,7 +95,6 @@ function MissingPower:CTexture(frame, tab)
 	local texture = frame:CreateTexture(nil, tab.layer)
 	tab.texture = tab.texture or ""
 	tab.color = tab.color or {}
-
 	if tab.texture ~= "" then
 		tab.color.r = tab.color.r or 1
 		tab.color.g = tab.color.g or 1
@@ -144,7 +145,6 @@ function MissingPower:createF(tab)
 	frame.texture = MissingPower:CTexture(frame, tab)
 	tab.textlayer = tab.textlayer or "ARTWORK"
 	frame.text = frame:CreateFontString(nil, tab.textlayer)
-
 	if tab.framestrata ~= nil then
 		frame:SetFrameStrata(tab.framestrata)
 	else
@@ -154,13 +154,11 @@ function MissingPower:createF(tab)
 	frame.text:SetFont(STANDARD_TEXT_FONT, tab.textsize, "OUTLINE")
 	frame.text:SetPoint(tab.textalign, 0, 0)
 	frame.text:SetText(tab.text)
-
 	function frame:SetText(text)
 		frame.text:SetText(text)
 	end
 
 	frame.oldSetSize = frame.SetSize
-
 	function frame:SetSize(w, h)
 		frame:oldSetSize(w, h)
 		self.texture:SetSize(w, h)
@@ -232,7 +230,6 @@ function MissingPower:CreateBar(tab)
 	bar.overlay.r = MissingPower:CTexture(bar.overlay, bars)
 	local perc = 10
 	local amount = 100 / perc
-
 	for i = 1, amount - 1 do
 		bars.x = tonumber(string.format("%.0f", (bar.overlay:GetWidth() / amount) * i) - (bars.thickness / 2))
 		bars.align = nil
@@ -257,7 +254,6 @@ function MissingPower:CreateBar(tab)
 		bar.overlay:SetHeight(h)
 		bar.overlay.l:SetHeight(h)
 		bar.overlay.r:SetHeight(h)
-
 		for i = 1, amount - 1 do
 			bar.overlay[i]:SetHeight(h)
 		end
@@ -276,7 +272,6 @@ function MissingPower:CreateBar(tab)
 		bar.overlay:SetWidth(w)
 		bar.overlay.t:SetWidth(w)
 		bar.overlay.b:SetWidth(w)
-
 		for i = 1, amount - 1 do
 			local x = tonumber(string.format("%.0f", (bar.overlay:GetWidth() / amount) * i) - (bars.thickness / 2))
 			bar.overlay[i]:SetPoint("TOPLEFT", bar.overlay, x, 0)
@@ -284,14 +279,19 @@ function MissingPower:CreateBar(tab)
 	end
 
 	bar.overlay:EnableMouse()
+	bar.overlay:SetScript(
+		"OnEnter",
+		function()
+			bar.overlay.text:Hide()
+		end
+	)
 
-	bar.overlay:SetScript("OnEnter", function()
-		bar.overlay.text:Hide()
-	end)
-
-	bar.overlay:SetScript("OnLeave", function()
-		bar.overlay.text:Show()
-	end)
+	bar.overlay:SetScript(
+		"OnLeave",
+		function()
+			bar.overlay.text:Show()
+		end
+	)
 
 	return bar
 end
