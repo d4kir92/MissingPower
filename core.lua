@@ -17,11 +17,9 @@ CONFIG.max = 0.9
 CONFIG.dir = 0.1
 -- Transparency tick
 CONFIG.tick = 0.1
-
 --[[ ActionBars ]]
 --
 local MIPOActionBars = {"ActionButton", "MultiBarBottomLeftButton", "MultiBarBottomRightButton", "MultiBarRightButton", "MultiBarLeftButton", "StanceButton", "AB", "DominosActionButton", "BT4", "ElvUI_Bar1Button", "ElvUI_Bar2Button", "ElvUI_Bar3Button", "ElvUI_Bar4Button", "ElvUI_Bar5Button", "ElvUI_Bar6Button", "ElvUI_StanceBar", "ActionBar1", "ActionBar2", "ActionBar3", "ActionBar4", "ActionBar5", "ActionBar6", "ActionBar7", "ActionBar8", "ActionBar9", "ActionBar10", "MAActionBar1", "MAActionBar2", "MAActionBar3", "MAActionBar4", "MAActionBar5", "MAActionBar6", "MAActionBar7", "MAActionBar8", "MAActionBar9", "MAActionBar10", "MAIStance"}
-
 --[[ ### CONFIG END ### ]]
 --
 --[[ Functions, do not change, write me! ]]
@@ -35,7 +33,6 @@ color.r = 0.3
 color.g = 0.3
 color.b = 1.0
 color.a = 1
-
 function MissingPower:GetActionFromButton(button, action)
 	if strfind(button:GetName(), "MAI") then
 		local id = button.sbsid or button.spellid
@@ -45,7 +42,6 @@ function MissingPower:GetActionFromButton(button, action)
 	end
 
 	local abslot = nil
-
 	if ActionButton_GetPagedID and ActionButton_CalculateAction then
 		abslot = action or button.action or button:GetAttribute("action") or ActionButton_GetPagedID(button) or ActionButton_CalculateAction(button) or 0
 	else
@@ -54,7 +50,6 @@ function MissingPower:GetActionFromButton(button, action)
 
 	if abslot ~= nil then
 		local at, id, _
-
 		if type(abslot) == "number" and HasAction(abslot) then
 			at, id, _ = GetActionInfo(abslot)
 
@@ -76,10 +71,8 @@ function MissingPower:GetActionFromButton(button, action)
 end
 
 local loaded = false
-
 function MissingPower:CreateOOM(obtn, name, nr)
 	local BTNNAME = name .. "OOM"
-
 	if _G[BTNNAME] == nil then
 		-- OOM
 		_G[BTNNAME] = CreateFrame("FRAME", BTNNAME, obtn)
@@ -93,7 +86,6 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		OOM.texture:SetAllPoints(OOM)
 		OOM:SetFrameStrata("BACKGROUND")
 		OOM.OldHide = OOM.OldHide or OOM.Hide
-
 		OOM.Hide = function(sel, forced)
 			if forced == true then
 				sel:SetAlpha(0)
@@ -101,7 +93,6 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		end
 
 		OOM.OldShow = OOM.OldShow or OOM.Show
-
 		OOM.Show = function(sel, forced)
 			if forced == true then
 				sel:SetAlpha(MissingPower:GetConfig("poweralpha", 0.7))
@@ -123,7 +114,6 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		OOMAmountCounter.text:SetPoint("CENTER", obtn, "CENTER", 0, 0)
 		OOMAmountCounter:SetFrameStrata("BACKGROUND")
 		OOMAmountCounter.OldHide = OOMAmountCounter.OldHide or OOMAmountCounter.Hide
-
 		OOMAmountCounter.Hide = function(sel, forced)
 			if forced == true then
 				sel:SetAlpha(0)
@@ -131,7 +121,6 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		end
 
 		OOMAmountCounter.OldShow = OOMAmountCounter.OldShow or OOMAmountCounter.Show
-
 		OOMAmountCounter.Show = function(sel, forced)
 			if forced == true then
 				sel:SetAlpha(0.9)
@@ -158,7 +147,6 @@ local function SpecialRound(number, decimalPlaces)
 end
 
 local MIPOUpdate = true
-
 function MissingPower:UpdateUi(from, init)
 	MIPOUpdate = true -- Update
 	MissingPower:ShowOOM(init, from)
@@ -220,12 +208,10 @@ function MissingPower:ShowOOM(init, from)
 	if loaded then
 		if setup and not InCombatLockdown() then
 			setup = false
-
 			for _, ab in pairs(MIPOActionBars) do
 				for i = 1, 120 do
 					local NAME = ab .. i
 					local obtn = _G[NAME]
-
 					if obtn == nil then
 						NAME = ab .. "Button" .. i
 						obtn = _G[NAME]
@@ -236,10 +222,8 @@ function MissingPower:ShowOOM(init, from)
 						local atype, aid = GetActionInfo(obtn.id)
 						obtn.actionType = atype
 						obtn.actionID = aid
-
 						function obtn:ActionChanged()
 							local actionType, actionID = GetActionInfo(obtn.id)
-
 							if obtn.id ~= obtn:GetID() or obtn.actionType ~= actionType or obtn.actionID ~= actionID then
 								obtn.id = obtn:GetID()
 								obtn.actionType = actionType
@@ -261,37 +245,30 @@ function MissingPower:ShowOOM(init, from)
 			MissingPower:ShowOOM(nil, "SETUP")
 		elseif ready then
 			if UnitInVehicle and UnitInVehicle("PLAYER") then return end
-
 			if MIPOUpdate then
 				MIPOUpdate = false
 				MIPOActionButtons = {} -- new table
-
 				for btnname, ab in pairs(ActionButtons) do
 					local ABTN = _G[ab.name]
 					local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action)
 					local name = nil
 					local spellId = nil
-
 					if at == "macro" then
 						id = GetMacroSpell(id)
 					end
 
 					name, _, _, _, _, _, spellId = GetSpellInfo(id)
-
 					if string.find(ab.name, "StanceButton") and not string.find(ab.name, "MAIStanceButton") and id ~= nil then
 						_, _, _, id = GetShapeshiftFormInfo(ab.nr)
 						name, _, _, _, _, _, spellId = GetSpellInfo(id)
 					end
 
 					local cost = -1
-
 					if name then
 						local costs = GetSpellPowerCost(spellId)
-
 						if costs ~= nil and costs[1] ~= nil and (at == "spell" or at == "macro") then
 							local ptid, _ = UnitPowerType("PLAYER")
 							cost = costs[1].cost
-
 							if costs[2] ~= nil and costs[2].type == ptid and costs[2].cost ~= 0 then
 								cost = costs[2].cost
 							end
@@ -307,7 +284,6 @@ function MissingPower:ShowOOM(init, from)
 					else
 						MissingPower:HideOOM(btnname)
 						local OOMAmountCounter = _G[btnname .. "AmountCounter"]
-
 						if OOMAmountCounter and OOMAmountCounter.text then
 							OOMAmountCounter.text:SetText("")
 						end
@@ -321,7 +297,6 @@ function MissingPower:ShowOOM(init, from)
 				local OOM = _G[btnname]
 				local OOMAmountCounter = _G[btnname .. "AmountCounter"]
 				OOM:Hide(true)
-
 				if OOMAmountCounter.text.fs ~= MissingPower:GetConfig("fontsize", 12) then
 					OOMAmountCounter.text.fs = MissingPower:GetConfig("fontsize", 12)
 					OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MissingPower:GetConfig("fontsize", 12), "OUTLINE")
@@ -330,13 +305,11 @@ function MissingPower:ShowOOM(init, from)
 				local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action)
 				local name = nil
 				local spellId = nil
-
 				if at == "macro" then
 					id = GetMacroSpell(id)
 				end
 
 				name, _, _, _, _, _, spellId = GetSpellInfo(id)
-
 				if string.find(ab.name, "StanceButton") and not string.find(ab.name, "MAIStanceButton") and id ~= nil then
 					_, _, _, id = GetShapeshiftFormInfo(ab.nr)
 					name, _, _, _, _, _, spellId = GetSpellInfo(id)
@@ -348,15 +321,12 @@ function MissingPower:ShowOOM(init, from)
 				local typ = 0
 				local regen = 0
 				local amount = 0
-
 				if name then
 					local costs = GetSpellPowerCost(spellId)
-
 					if costs ~= nil and costs[1] ~= nil and (at == "spell" or at == "macro") then
 						local ptid, _ = UnitPowerType("PLAYER")
 						cost = costs[1].cost
 						typ = costs[1].type
-
 						if costs[2] ~= nil and costs[2].type == ptid and costs[2].cost ~= 0 then
 							cost = costs[2].cost
 							typ = costs[2].type
@@ -372,7 +342,6 @@ function MissingPower:ShowOOM(init, from)
 						local g = 1.0
 						local b = 1.0
 						local pbc = PowerBarColor[typ]
-
 						if pbc ~= nil then
 							r = pbc.r or r
 							g = pbc.g or g
@@ -396,12 +365,10 @@ function MissingPower:ShowOOM(init, from)
 						local holy = UnitPower("player", Enum.PowerType.HolyPower)
 						--local chi = UnitPower("player", Enum.PowerType.Chi)
 						local ess = UnitPower("player", Enum.PowerType.Essence)
-
 						if typ == Enum.PowerType.Mana then
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > mana then
 								p = mana / cost
 							else
@@ -409,7 +376,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen() * 2
-
 							if cost > 0 then
 								amount = mana / cost
 							else
@@ -419,7 +385,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > rage then
 								p = rage / cost
 							else
@@ -427,7 +392,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen() / -2
-
 							if cost > 0 then
 								amount = rage / cost
 							else
@@ -437,7 +401,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > ener then
 								p = ener / cost
 							else
@@ -459,7 +422,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > focu then
 								p = focu / cost
 							else
@@ -467,7 +429,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen() / -2
-
 							if cost > 0 then
 								amount = focu / cost
 							else
@@ -477,7 +438,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > rune then
 								p = rune / cost
 							else
@@ -485,7 +445,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen()
-
 							if cost > 0 then
 								amount = rune / cost
 							else
@@ -495,7 +454,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > luna then
 								p = luna / cost
 							else
@@ -503,7 +461,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen()
-
 							if cost > 0 then
 								amount = luna / cost
 							else
@@ -513,7 +470,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > pain then
 								p = pain / cost
 							else
@@ -521,7 +477,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen()
-
 							if cost > 0 then
 								amount = pain / cost
 							else
@@ -531,7 +486,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > fury then
 								p = fury / cost
 							else
@@ -539,7 +493,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen()
-
 							if cost > 0 then
 								amount = fury / cost
 							else
@@ -549,7 +502,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > mael then
 								p = mael / cost
 							else
@@ -557,7 +509,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen()
-
 							if cost > 0 then
 								amount = mael / cost
 							else
@@ -567,7 +518,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > holy then
 								p = holy / cost
 							else
@@ -575,7 +525,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen()
-
 							if cost > 0 then
 								amount = holy / cost
 							else
@@ -585,7 +534,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > insa then
 								p = insa / cost
 							else
@@ -593,7 +541,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen()
-
 							if cost > 0 then
 								amount = insa / cost
 							else
@@ -603,7 +550,6 @@ function MissingPower:ShowOOM(init, from)
 							color.r = r
 							color.g = g
 							color.b = b
-
 							if cost > ess then
 								p = ess / cost
 							else
@@ -611,17 +557,14 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							regen = GetPowerRegen()
-
 							if cost > 0 then
 								amount = ess / cost
 							else
 								amount = 0
 							end
-						elseif typ > 0 and typ ~= 5 and typ ~= 7 and typ ~= 10 and typ ~= 15 and typ ~= 16 and typ < 20 then
+						elseif typ > 0 and typ ~= 5 and typ ~= 7 and typ ~= 10 and typ ~= 12 and typ ~= 15 and typ ~= 16 and typ < 20 then
 							local _, englishClass, _ = UnitClass("player")
-							print("Send this to missing power Developer [POWERTYP]: " .. typ .. " Class: " .. englishClass .. " WoW: " .. tostring(MissingPower:GetWoWBuild()))
-							print(UnitPowerType("PLAYER"))
-
+							print("[MissingPower] Send this to the Developer: [POWERTYP]: " .. typ .. " Class: " .. englishClass .. " WoW-Version: " .. tostring(MissingPower:GetWoWBuild()) .. " UnitPowerType: " .. UnitPowerType("PLAYER"))
 							if Enum.PowerType[typ] then
 								print(Enum.PowerType[typ])
 							end
@@ -629,7 +572,6 @@ function MissingPower:ShowOOM(init, from)
 
 						if OOM.texture ~= nil then
 							OOM.texture:SetColorTexture(color.r, color.g, color.b)
-
 							if MissingPower:GetConfig("customcolor", false) then
 								OOMAmountCounter.text:SetTextColor(MissingPower:GetConfig("ccolr", 0), MissingPower:GetConfig("ccolg", 0), MissingPower:GetConfig("ccolb", 0))
 							else
@@ -642,7 +584,6 @@ function MissingPower:ShowOOM(init, from)
 					OOMAmountCounter:SetPoint("CENTER", ABTN, "CENTER", 0, 0)
 					OOMAmountCounter:Show(true)
 					OOMAmountCounter:SetFrameStrata(ABTN:GetFrameStrata())
-
 					if amount > 0 and at ~= nil and MissingPower:GetConfig("showamountcounter", true) and (at == "spell" or at == "macro") then
 						OOMAmountCounter:SetAlpha(1)
 					else
@@ -651,7 +592,6 @@ function MissingPower:ShowOOM(init, from)
 
 					local decimals = MissingPower:GetConfig("decimals", 1)
 					local amo = -1
-
 					if decimals == 0 or amount > 99 then
 						amo = SpecialRound(amount, 0)
 					else
@@ -679,7 +619,6 @@ function MissingPower:ShowOOM(init, from)
 					OOMAmountCounter.text:SetPoint("CENTER", ABTN, anchor, offsetX, offsetY)
 					OOMAmountCounter.text:SetJustifyH("CENTER")
 					OOMAmountCounter.text:SetJustifyV("CENTER")
-
 					if from == "Settings:fontanchor1" or from == "Settings:textoffset" then
 						local oldText = OOMAmountCounter.text:GetText()
 						OOMAmountCounter.text:SetText("TEST")
@@ -700,7 +639,6 @@ function MissingPower:ShowOOM(init, from)
 						h = ABTN:GetHeight()
 						ph = h / cost * regen
 						y = y + ph
-
 						if y > 0 and MissingPower:GetConfig("hideoverlap", true) then
 							ph = ph - y
 							y = 0
@@ -717,14 +655,15 @@ end
 local power = -1
 local mana = -1
 local lastSF = 0
-
 function MissingPower:Think()
 	if lastSF ~= GetShapeshiftForm() then
 		lastSF = GetShapeshiftForm()
-
-		C_Timer.After(0.01, function()
-			MissingPower:UpdateUi("SHAPESHIFT")
-		end)
+		C_Timer.After(
+			0.01,
+			function()
+				MissingPower:UpdateUi("SHAPESHIFT")
+			end
+		)
 	end
 
 	if power ~= UnitPower("PLAYER") or mana ~= UnitPower("PLAYER", Enum.PowerType.Mana) then
@@ -748,41 +687,66 @@ frame:RegisterEvent("ACTIONBAR_PAGE_CHANGED")
 frame:RegisterEvent("MODIFIER_STATE_CHANGED")
 --frame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- SPAMS
 local MPLoaded = false
+hooksecurefunc(
+	"PickupAction",
+	function(id)
+		C_Timer.After(
+			0.01,
+			function()
+				MissingPower:UpdateUi("PickupAction")
+			end
+		)
+	end
+)
 
-hooksecurefunc("PickupAction", function(id)
-	C_Timer.After(0.01, function()
-		MissingPower:UpdateUi("PickupAction")
-	end)
-end)
+hooksecurefunc(
+	"PlaceAction",
+	function(id)
+		C_Timer.After(
+			0.01,
+			function()
+				MissingPower:UpdateUi("PlaceAction")
+			end
+		)
+	end
+)
 
-hooksecurefunc("PlaceAction", function(id)
-	C_Timer.After(0.01, function()
-		MissingPower:UpdateUi("PlaceAction")
-	end)
-end)
-
-hooksecurefunc("ClearCursor", function(id)
-	C_Timer.After(0.01, function()
-		MissingPower:UpdateUi("ClearCursor")
-	end)
-end)
+hooksecurefunc(
+	"ClearCursor",
+	function(id)
+		C_Timer.After(
+			0.01,
+			function()
+				MissingPower:UpdateUi("ClearCursor")
+			end
+		)
+	end
+)
 
 local function OnEvent(self, event, unit, powertype, ...)
 	if event == "PLAYER_ENTERING_WORLD" and not MPLoaded then
 		MPLoaded = true
-
-		C_Timer.After(1, function()
-			MissingPower:UpdateUi("PLAYER_ENTERING_WORLD", true)
-		end)
+		C_Timer.After(
+			1,
+			function()
+				MissingPower:UpdateUi("PLAYER_ENTERING_WORLD", true)
+			end
+		)
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
-			C_Timer.After(0.01, function()
-				MissingPower:UpdateUi("ACTIONBAR_PAGE_CHANGED")
-			end)
+			C_Timer.After(
+				0.01,
+				function()
+					MissingPower:UpdateUi("ACTIONBAR_PAGE_CHANGED")
+				end
+			)
 		else
-			C_Timer.After(0.001, function()
-				MissingPower:ShowOOM(nil, "ELSE: " .. event)
-			end)
+			C_Timer.After(
+				0.001,
+				function()
+					MissingPower:ShowOOM(nil, "ELSE: " .. event)
+				end
+			)
 		end
 	end
 end
@@ -790,7 +754,6 @@ end
 frame:SetScript("OnEvent", OnEvent)
 local frame2 = CreateFrame("FRAME")
 frame2:RegisterEvent("UNIT_POWER_UPDATE")
-
 --frame2:RegisterEvent("UNIT_POWER_FREQUENT")
 local function OnEvent2(self, event, unit, powertype, ...)
 	if event == "UNIT_POWER_UPDATE" and unit == "player" and ready then
