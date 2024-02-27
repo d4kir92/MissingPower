@@ -150,7 +150,6 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 			glow:SetHeight(mb:GetHeight() * 1)
 			--tex:SetColorTexture(1, 1, 1, 0.8)
 			local newsize = mb:GetWidth() * percent
-			MiPoPercent = percent
 			frame:SetWidth(newsize)
 		end
 	end
