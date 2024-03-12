@@ -52,16 +52,24 @@ function MissingPower:CreateSlider(parent, x, y, name, key, value, steps, vmin, 
 	local slider = CreateFrame("Slider", nil, parent, "OptionsSliderTemplate")
 	slider:SetWidth(600)
 	slider:SetPoint("TOPLEFT", parent, "TOPLEFT", x, y)
-	slider.Low:SetText(vmin)
-	slider.High:SetText(vmax)
-	if lanArray then
-		slider.Text:SetText(MissingPower:GT(key) .. ": " .. lanArray[value])
-	else
-		slider.Text:SetText(MissingPower:GT(key) .. ": " .. value)
+	if slider.Low then
+		slider.Low:SetText(vmin)
+		slider.High:SetText(vmax)
+	end
+
+	if slider.Text then
+		if lanArray then
+			slider.Text:SetText(MissingPower:GT(key) .. ": " .. lanArray[value])
+		else
+			slider.Text:SetText(MissingPower:GT(key) .. ": " .. value)
+		end
 	end
 
 	slider:SetMinMaxValues(vmin, vmax)
-	slider:SetObeyStepOnDrag(true)
+	if slider.SetObeyStepOnDrag then
+		slider:SetObeyStepOnDrag(true)
+	end
+
 	slider:SetValueStep(steps)
 	slider:SetValue(value)
 	slider:SetScript(

@@ -20,7 +20,7 @@ end
 
 local MIPOSettings = {}
 function MissingPower:InitSetting()
-	D4:SetVersion(AddonName, 136048, "1.1.31")
+	D4:SetVersion(AddonName, 136048, "1.1.32")
 	local settingname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
 	MIPOSettings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPOSettings.panel.name = settingname

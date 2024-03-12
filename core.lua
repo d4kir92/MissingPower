@@ -82,7 +82,12 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		OOM:ClearAllPoints()
 		OOM:SetPoint("TOPLEFT", obtn, "TOPLEFT", 0, -obtn:GetHeight())
 		OOM.texture = OOM:CreateTexture("OOM.texture", "ARTWORK")
-		OOM.texture:SetColorTexture(color.r, color.g, color.b, color.a)
+		if OOM.texture.SetColorTexture then
+			OOM.texture:SetColorTexture(color.r, color.g, color.b, color.a)
+		else
+			OOM.texture:SetTexture(color.r, color.g, color.b, color.a)
+		end
+
 		OOM.texture:SetAllPoints(OOM)
 		OOM:SetFrameStrata("BACKGROUND")
 		OOM.OldHide = OOM.OldHide or OOM.Hide
@@ -571,7 +576,12 @@ function MissingPower:ShowOOM(init, from)
 						end
 
 						if OOM.texture ~= nil then
-							OOM.texture:SetColorTexture(color.r, color.g, color.b)
+							if OOM.texture.SetColorTexture then
+								OOM.texture:SetColorTexture(color.r, color.g, color.b)
+							else
+								OOM.texture:SetTexture(color.r, color.g, color.b)
+							end
+
 							if MissingPower:GetConfig("customcolor", false) then
 								OOMAmountCounter.text:SetTextColor(MissingPower:GetConfig("ccolr", 0), MissingPower:GetConfig("ccolg", 0), MissingPower:GetConfig("ccolb", 0))
 							else
@@ -666,9 +676,14 @@ function MissingPower:Think()
 		)
 	end
 
-	if power ~= UnitPower("PLAYER") or mana ~= UnitPower("PLAYER", Enum.PowerType.Mana) then
+	local enum = 0
+	if Enum and Enum.PowerType and Enum.PowerType.Mana then
+		enum = Enum.PowerType.Mana
+	end
+
+	if power ~= UnitPower("PLAYER") or mana ~= UnitPower("PLAYER", enum) then
 		power = UnitPower("PLAYER")
-		mana = UnitPower("PLAYER", Enum.PowerType.Mana)
+		mana = UnitPower("PLAYER", enum)
 		MissingPower:ShowOOM(nil, "Think")
 	end
 
