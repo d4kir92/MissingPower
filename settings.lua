@@ -1,26 +1,8 @@
 -- By D4KiR
 local AddonName, MissingPower = ...
-local BuildNr = select(4, GetBuildInfo())
-local Build = "CLASSIC"
-if BuildNr >= 100000 then
-	Build = "RETAIL"
-elseif BuildNr > 29999 then
-	Build = "WRATH"
-elseif BuildNr > 19999 then
-	Build = "TBC"
-end
-
-function D4:GetWoWBuildNr()
-	return BuildNr
-end
-
-function D4:GetWoWBuild()
-	return Build
-end
-
 local MIPOSettings = {}
 function MissingPower:InitSetting()
-	D4:SetVersion(AddonName, 136048, "1.1.33")
+	D4:SetVersion(AddonName, 136048, "1.1.34")
 	local settingname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
 	MIPOSettings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPOSettings.panel.name = settingname
