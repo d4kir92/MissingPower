@@ -10,17 +10,17 @@ elseif BuildNr > 19999 then
 	Build = "TBC"
 end
 
-function MissingPower:GetWoWBuildNr()
+function D4:GetWoWBuildNr()
 	return BuildNr
 end
 
-function MissingPower:GetWoWBuild()
+function D4:GetWoWBuild()
 	return Build
 end
 
 local MIPOSettings = {}
 function MissingPower:InitSetting()
-	D4:SetVersion(AddonName, 136048, "1.1.32")
+	D4:SetVersion(AddonName, 136048, "1.1.33")
 	local settingname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
 	MIPOSettings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPOSettings.panel.name = settingname
@@ -161,7 +161,7 @@ function MissingPower:InitSetting()
 	)
 
 	Y = Y - BR
-	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
+	if D4:GetWoWBuild() == "CLASSIC" or D4:GetWoWBuild() == "TBC" then
 		local settings_showtickbar = {}
 		settings_showtickbar.name = "showtickbar"
 		settings_showtickbar.parent = MIPOSettings.panel

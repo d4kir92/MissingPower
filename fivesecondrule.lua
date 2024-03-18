@@ -1,6 +1,6 @@
 -- FSR
 local _, MissingPower = ...
-if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
+if D4:GetWoWBuild() == "CLASSIC" or D4:GetWoWBuild() == "TBC" then
 	local wOnce = true
 	local tick = 0.01
 	local now = GetTime()
