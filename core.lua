@@ -627,8 +627,6 @@ function MissingPower:ShowOOM(init, from)
 					OOMAmountCounter.text:SetSize(OOM:GetWidth(), OOM:GetWidth())
 					OOMAmountCounter.text:ClearAllPoints()
 					OOMAmountCounter.text:SetPoint("CENTER", ABTN, anchor, offsetX, offsetY)
-					OOMAmountCounter.text:SetJustifyH("CENTER")
-					OOMAmountCounter.text:SetJustifyV("CENTER")
 					if from == "Settings:fontanchor1" or from == "Settings:textoffset" then
 						local oldText = OOMAmountCounter.text:GetText()
 						OOMAmountCounter.text:SetText("TEST")
