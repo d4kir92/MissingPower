@@ -2,7 +2,7 @@
 local AddonName, MissingPower = ...
 local MIPOSettings = {}
 function MissingPower:InitSetting()
-	D4:SetVersion(AddonName, 136048, "1.1.42")
+	D4:SetVersion(AddonName, 136048, "1.1.43")
 	local settingname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
 	MIPOSettings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPOSettings.panel.name = settingname
@@ -233,5 +233,9 @@ function MissingPower:InitSetting()
 	settings_displayiflowerthanx.dbvalue = "displayiflowerthanx"
 	MissingPower:OldCreateSlider(settings_displayiflowerthanx, "   [0 = unlimited]")
 	Y = Y - BR
-	InterfaceOptions_AddCategory(MIPOSettings.panel)
+	if InterfaceOptions_AddCategory then
+		InterfaceOptions_AddCategory(MIPOSettings.panel)
+	else
+		print("MissingPower InterfaceOptions_AddCategory MISSING")
+	end
 end

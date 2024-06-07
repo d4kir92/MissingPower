@@ -262,10 +262,10 @@ function MissingPower:ShowOOM(init, from)
 						id = GetMacroSpell(id)
 					end
 
-					name, _, _, _, _, _, spellId = GetSpellInfo(id)
+					name, _, _, _, _, _, spellId = D4:GetSpellInfo(id)
 					if string.find(ab.name, "StanceButton") and not string.find(ab.name, "MAIStanceButton") and id ~= nil then
 						_, _, _, id = GetShapeshiftFormInfo(ab.nr)
-						name, _, _, _, _, _, spellId = GetSpellInfo(id)
+						name, _, _, _, _, _, spellId = D4:GetSpellInfo(id)
 					end
 
 					local cost = -1
@@ -314,10 +314,10 @@ function MissingPower:ShowOOM(init, from)
 					id = GetMacroSpell(id)
 				end
 
-				name, _, _, _, _, _, spellId = GetSpellInfo(id)
+				name, _, _, _, _, _, spellId = D4:GetSpellInfo(id)
 				if string.find(ab.name, "StanceButton") and not string.find(ab.name, "MAIStanceButton") and id ~= nil then
 					_, _, _, id = GetShapeshiftFormInfo(ab.nr)
-					name, _, _, _, _, _, spellId = GetSpellInfo(id)
+					name, _, _, _, _, _, spellId = D4:GetSpellInfo(id)
 				end
 
 				local ph = 0

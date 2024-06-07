@@ -29,7 +29,7 @@ if D4:GetWoWBuild() == "CLASSIC" or D4:GetWoWBuild() == "TBC" then
 			enermax = UnitPowerMax("player", Enum.PowerType.Energy)
 			if unit == "player" and event == "UNIT_SPELLCAST_SUCCEEDED" and oldmana ~= mana then
 				oldmana = mana
-				--local name, rank, icon, castTime, minRange, maxRange = GetSpellInfo(b)
+				--local name, rank, icon, castTime, minRange, maxRange = D4:GetSpellInfo(b)
 				local costs = GetSpellPowerCost(b)
 				if costs[1] ~= nil and costs[1].cost > 0 then
 					max = fsr
