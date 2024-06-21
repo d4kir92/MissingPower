@@ -102,7 +102,7 @@ function D4:CreateSlider(tab)
     if struct then
         slider.Text:SetText(string.format(struct, tab.value))
     else
-        print("[D4] missing format string:", tab.key)
+        D4:MSG("[D4] missing format string:", tab.key)
     end
 
     slider:SetMinMaxValues(tab.vmin, tab.vmax)
@@ -125,7 +125,7 @@ function D4:CreateSlider(tab)
             if struct2 then
                 slider.Text:SetText(string.format(struct2, val))
             else
-                print("[D4] Missing format string:", tab.key)
+                D4:MSG("[D4] Missing format string:", tab.key)
             end
         end
     )

@@ -2,7 +2,7 @@
 local AddonName, MissingPower = ...
 local MIPOSettings = {}
 function MissingPower:InitSetting()
-	MissingPower:SetVersion(AddonName, 136048, "1.1.51")
+	MissingPower:SetVersion(AddonName, 136048, "1.1.52")
 	local settingname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
 	MIPOSettings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPOSettings.panel.name = settingname
