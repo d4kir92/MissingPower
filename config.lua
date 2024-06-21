@@ -1,5 +1,6 @@
 -- By D4KiR
 local _, MissingPower = ...
+MissingPower:SetAddonOutput("MissingPower", 136048)
 function MissingPower:GetConfig(str, val)
 	MIPO = MIPO or {}
 	MIPOPC = MIPOPC or {}

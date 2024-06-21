@@ -262,10 +262,10 @@ function MissingPower:ShowOOM(init, from)
 						id = GetMacroSpell(id)
 					end
 
-					name, _, _, _, _, _, spellId = D4:GetSpellInfo(id)
+					name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
 					if string.find(ab.name, "StanceButton") and not string.find(ab.name, "MAIStanceButton") and id ~= nil then
 						_, _, _, id = GetShapeshiftFormInfo(ab.nr)
-						name, _, _, _, _, _, spellId = D4:GetSpellInfo(id)
+						name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
 					end
 
 					local cost = -1
@@ -314,10 +314,10 @@ function MissingPower:ShowOOM(init, from)
 					id = GetMacroSpell(id)
 				end
 
-				name, _, _, _, _, _, spellId = D4:GetSpellInfo(id)
+				name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
 				if string.find(ab.name, "StanceButton") and not string.find(ab.name, "MAIStanceButton") and id ~= nil then
 					_, _, _, id = GetShapeshiftFormInfo(ab.nr)
-					name, _, _, _, _, _, spellId = D4:GetSpellInfo(id)
+					name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
 				end
 
 				local ph = 0
@@ -569,9 +569,9 @@ function MissingPower:ShowOOM(init, from)
 							end
 						elseif typ > 0 and typ ~= 5 and typ ~= 7 and typ ~= 10 and typ ~= 12 and typ ~= 15 and typ ~= 16 and typ < 20 then
 							local _, englishClass, _ = UnitClass("player")
-							print("[MissingPower] Send this to the Developer: [POWERTYP]: " .. typ .. " Class: " .. englishClass .. " WoW-Version: " .. tostring(D4:GetWoWBuild()) .. " UnitPowerType: " .. UnitPowerType("PLAYER"))
+							MissingPower:MSG("Send this to the Developer: [POWERTYP]: " .. typ .. " Class: " .. englishClass .. " WoW-Version: " .. tostring(MissingPower:GetWoWBuild()) .. " UnitPowerType: " .. UnitPowerType("PLAYER"))
 							if Enum.PowerType[typ] then
-								print(Enum.PowerType[typ])
+								MissingPower:MSG(Enum.PowerType[typ])
 							end
 						end
 

@@ -4,7 +4,7 @@
 ## Interface-Cata: 40400
 ## Interface: 100207, 110000
 
-## Version: 1.1.50
+## Version: 1.1.51
 ## Title: MissingPower by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Show for each spell how much power is missing
 ## Author: D4KiR
@@ -19,7 +19,6 @@ libs\D4Lib\D4Lib.xml
 
 config.lua
 
-libs\LIB_output.lua
 libs\LIB_math.lua
 libs\LIB_design.lua
 

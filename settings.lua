@@ -2,7 +2,7 @@
 local AddonName, MissingPower = ...
 local MIPOSettings = {}
 function MissingPower:InitSetting()
-	D4:SetVersion(AddonName, 136048, "1.1.50")
+	MissingPower:SetVersion(AddonName, 136048, "1.1.51")
 	local settingname = "MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t"
 	MIPOSettings.panel = CreateFrame("Frame", settingname, UIParent)
 	MIPOSettings.panel.name = settingname
@@ -143,7 +143,7 @@ function MissingPower:InitSetting()
 	)
 
 	Y = Y - BR
-	if D4:GetWoWBuild() == "CLASSIC" or D4:GetWoWBuild() == "TBC" then
+	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
 		local settings_showtickbar = {}
 		settings_showtickbar.name = "showtickbar"
 		settings_showtickbar.parent = MIPOSettings.panel
@@ -236,6 +236,6 @@ function MissingPower:InitSetting()
 	if InterfaceOptions_AddCategory then
 		InterfaceOptions_AddCategory(MIPOSettings.panel)
 	else
-		print("MissingPower InterfaceOptions_AddCategory MISSING")
+		MissingPower:MSG("InterfaceOptions_AddCategory MISSING")
 	end
 end

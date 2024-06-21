@@ -2,7 +2,7 @@ local _, MissingPower = ...
 C_Timer.After(
 	5,
 	function()
-		if (D4:GetWoWBuild() == "CLASSIC" or D4:GetWoWBuild() == "TBC") and MissingPower:GetConfig("showhealthreg", false) then
+		if (MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC") and MissingPower:GetConfig("showhealthreg", false) then
 			local hb = PlayerFrameHealthBar
 			if ElvUF_Player ~= nil and ElvUF_Player:IsShown() then
 				hb = ElvUF_Player.Health
