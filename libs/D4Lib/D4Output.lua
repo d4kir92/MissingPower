@@ -7,5 +7,5 @@ function D4:SetAddonOutput(name, icon)
 end
 
 function D4:MSG(...)
-    print(string.format("[|cFFA0A0FF%s|r |T%s:0:0:0:0|t]", nam, ico), ...)
+    print(string.format("|cFFFFFF00[|r|cFFA0A0FF%s|r |T%s:0:0:0:0|t|cFFFFFF00]|r", nam, ico), ...)
 end
