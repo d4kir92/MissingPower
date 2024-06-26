@@ -205,6 +205,13 @@ function MissingPower:GetOffsetXY(anchor, offset, sw, sh)
 	return x, y
 end
 
+function MissingPower:GetSpellPowerCost(spellId)
+	if spellId == nil then return nil end
+	local GetSpellPowerCost = GetSpellPowerCost or C_Spell and C_Spell.GetSpellPowerCost
+
+	return GetSpellPowerCost(spellId)
+end
+
 function MissingPower:ShowOOM(init, from)
 	if init then
 		loaded = true
@@ -270,7 +277,7 @@ function MissingPower:ShowOOM(init, from)
 
 					local cost = -1
 					if name then
-						local costs = GetSpellPowerCost(spellId)
+						local costs = MissingPower:GetSpellPowerCost(spellId)
 						if costs ~= nil and costs[1] ~= nil and (at == "spell" or at == "macro") then
 							local ptid, _ = UnitPowerType("PLAYER")
 							cost = costs[1].cost
@@ -327,7 +334,7 @@ function MissingPower:ShowOOM(init, from)
 				local regen = 0
 				local amount = 0
 				if name then
-					local costs = GetSpellPowerCost(spellId)
+					local costs = MissingPower:GetSpellPowerCost(spellId)
 					if costs ~= nil and costs[1] ~= nil and (at == "spell" or at == "macro") then
 						local ptid, _ = UnitPowerType("PLAYER")
 						cost = costs[1].cost

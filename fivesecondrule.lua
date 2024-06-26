@@ -30,7 +30,7 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 			if unit == "player" and event == "UNIT_SPELLCAST_SUCCEEDED" and oldmana ~= mana then
 				oldmana = mana
 				--local name, rank, icon, castTime, minRange, maxRange = MissingPower:GetSpellInfo(b)
-				local costs = GetSpellPowerCost(b)
+				local costs = MissingPower:GetSpellPowerCost(b)
 				if costs[1] ~= nil and costs[1].cost > 0 then
 					max = fsr
 					gain = false
