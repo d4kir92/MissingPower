@@ -110,6 +110,15 @@ function D4:GetSpellInfo(spellID)
     return nil
 end
 
+function D4:IsSpellInRange(spellID, spellType, unit)
+    if spellID == nil then return nil end
+    if IsSpellInRange then return IsSpellInRange(spellID, spellType, unit) end
+    if C_Spell and C_Spell.IsSpellInRange then return C_Spell.IsSpellInRange(spellID, spellType, unit) end
+    D4:MSG("[D4][IsSpellInRange] FAILED")
+
+    return nil
+end
+
 function D4:GetMouseFocus()
     if GetMouseFoci then return GetMouseFoci() end
     if GetMouseFocus then return GetMouseFocus() end
