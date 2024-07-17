@@ -1,19 +1,16 @@
 -- ruRU Russian
 local _, MissingPower = ...
-function MissingPower:Lang_ruRU()
-	local lang = MissingPower:GetLangTab()
-	lang.hideoverlap = "Скрыть Нахлест"
-	lang.shownextready = "Показать след. готовность"
-	lang.showamountcounter = "Показать счетчик"
-	lang.poweralpha = "Прозрачность полосы ресурса: VALUE"
-	lang.decimals = "Десятичные дроби: VALUE"
-	lang.fontsize = "Размер шрифта: VALUE"
-	lang.fontx = "Позиция X: VALUE"
-	lang.fonty = "Позиция Y: VALUE"
-	lang.showtickbar = "Показать галочку"
-	lang.customcolor = "Custom Color"
-	lang.ccolr = "Color Red: VALUE"
-	lang.ccolg = "Color Green: VALUE"
-	lang.ccolb = "Color Blue: VALUE"
-	lang.displayiflowerthanx = "Display if lower than VALUE"
-end
+MissingPower:AddTrans("ruRU", "hideoverlap", "Скрыть Нахлест")
+MissingPower:AddTrans("ruRU", "shownextready", "Показать след. готовность")
+MissingPower:AddTrans("ruRU", "showamountcounter", "Показать счетчик")
+MissingPower:AddTrans("ruRU", "poweralpha", "Прозрачность полосы ресурса: %s")
+MissingPower:AddTrans("ruRU", "decimals", "Десятичные дроби: %s")
+MissingPower:AddTrans("ruRU", "fontsize", "Размер шрифта: %s")
+MissingPower:AddTrans("ruRU", "fontx", "Позиция X: %s")
+MissingPower:AddTrans("ruRU", "fonty", "Позиция Y: %s")
+MissingPower:AddTrans("ruRU", "showtickbar", "Показать галочку")
+MissingPower:AddTrans("ruRU", "customcolor", "Custom Color")
+MissingPower:AddTrans("ruRU", "ccolr", "Color Red: %s")
+MissingPower:AddTrans("ruRU", "ccolg", "Color Green: %s")
+MissingPower:AddTrans("ruRU", "ccolb", "Color Blue: %s")
+MissingPower:AddTrans("ruRU", "displayiflowerthanx", "Display if lower than %s")

@@ -1,24 +1,26 @@
 -- enUS English
 local _, MissingPower = ...
-function MissingPower:Lang_enUS()
-	local lang = MissingPower:GetLangTab()
-	lang.hideoverlap = "Hide Overlap"
-	lang.shownextready = "Show Next Ready"
-	lang.showamountcounter = "Show counter"
-	lang.poweralpha = "Power - Alpha"
-	lang.decimals = "Decimals"
-	lang.fontsize = "FontSize"
-	lang.fontx = "Position X"
-	lang.fonty = "Position Y"
-	lang.fontanchor = "Text-Anchor"
-	lang.textoffset = "Text-Offset"
-	lang.textoffsetx = "Text-Offset X"
-	lang.textoffsety = "Text-Offset Y"
-	lang.showtickbar = "Show Tickbar"
-	lang.customcolor = "Custom Color"
-	lang.ccolr = "Color Red"
-	lang.ccolg = "Color Green"
-	lang.ccolb = "Color Blue"
-	lang.displayiflowerthanx = "Display if lower than"
-	lang.showhealthreg = "Show Health Regeneration"
-end
+MissingPower:AddTrans("enUS", "hideoverlap", "Hide Overlap")
+MissingPower:AddTrans("enUS", "shownextready", "Show Next Ready")
+MissingPower:AddTrans("enUS", "showamountcounter", "Show counter")
+MissingPower:AddTrans("enUS", "poweralpha", "Power - Alpha: %s")
+MissingPower:AddTrans("enUS", "decimals", "Decimals: %s")
+MissingPower:AddTrans("enUS", "fontsize", "FontSize: %s")
+MissingPower:AddTrans("enUS", "fontx", "Position X")
+MissingPower:AddTrans("enUS", "fonty", "Position Y")
+MissingPower:AddTrans("enUS", "fontanchor", "Text-Anchor: %s")
+MissingPower:AddTrans("enUS", "textoffset", "Text-Offset: %s")
+MissingPower:AddTrans("enUS", "textoffsetx", "Text-Offset X: %s")
+MissingPower:AddTrans("enUS", "textoffsety", "Text-Offset Y: %s")
+MissingPower:AddTrans("enUS", "showtickbar", "Show Tickbar")
+MissingPower:AddTrans("enUS", "customcolor", "Custom Color")
+MissingPower:AddTrans("enUS", "ccolr", "Color Red: %s")
+MissingPower:AddTrans("enUS", "ccolg", "Color Green: %s")
+MissingPower:AddTrans("enUS", "ccolb", "Color Blue: %s")
+MissingPower:AddTrans("enUS", "displayiflowerthanx", "Display if lower than: %s")
+MissingPower:AddTrans("enUS", "showhealthreg", "Show Health Regeneration")
+MissingPower:AddTrans("enUS", "GENERAL", "General")
+MissingPower:AddTrans("enUS", "DESIGN", "Design")
+MissingPower:AddTrans("enUS", "TEXT", "Text")
+MissingPower:AddTrans("enUS", "COLORS", "Colors")
+MissingPower:AddTrans("enUS", "MMBTN", "Show Minimap Button")

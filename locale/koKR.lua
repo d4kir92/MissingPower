@@ -1,19 +1,16 @@
 -- koKR Korean
 local _, MissingPower = ...
-function MissingPower:Lang_koKR()
-	local lang = MissingPower:GetLangTab()
-	lang.hideoverlap = "오버랩 숨김"
-	lang.shownextready = "다음 틱에 준비되는 주문 보기 (깜빡임)"
-	lang.showamountcounter = "몇번 사용이 가능한지 표시"
-	lang.poweralpha = "채워지는 정도를 보여줄 투명도: VALUE"
-	lang.decimals = "소수점을 몇자리까지 보여줄까요?: VALUE"
-	lang.fontsize = "글자 크기: VALUE"
-	lang.fontx = "가로 위치: VALUE"
-	lang.fonty = "세로 위치: VALUE"
-	lang.showtickbar = "Show Tickbar"
-	lang.customcolor = "Custom Color"
-	lang.ccolr = "Color Red: VALUE"
-	lang.ccolg = "Color Green: VALUE"
-	lang.ccolb = "Color Blue: VALUE"
-	lang.displayiflowerthanx = "Display if lower than VALUE"
-end
+MissingPower:AddTrans("koKR", "hideoverlap", "오버랩 숨김")
+MissingPower:AddTrans("koKR", "shownextready", "다음 틱에 준비되는 주문 보기 (깜빡임)")
+MissingPower:AddTrans("koKR", "showamountcounter", "몇번 사용이 가능한지 표시")
+MissingPower:AddTrans("koKR", "poweralpha", "채워지는 정도를 보여줄 투명도: %s")
+MissingPower:AddTrans("koKR", "decimals", "소수점을 몇자리까지 보여줄까요?: %s")
+MissingPower:AddTrans("koKR", "fontsize", "글자 크기: %s")
+MissingPower:AddTrans("koKR", "fontx", "가로 위치: %s")
+MissingPower:AddTrans("koKR", "fonty", "세로 위치: %s")
+MissingPower:AddTrans("koKR", "showtickbar", "Show Tickbar")
+MissingPower:AddTrans("koKR", "customcolor", "Custom Color")
+MissingPower:AddTrans("koKR", "ccolr", "Color Red: %s")
+MissingPower:AddTrans("koKR", "ccolg", "Color Green: %s")
+MissingPower:AddTrans("koKR", "ccolb", "Color Blue: %s")
+MissingPower:AddTrans("koKR", "displayiflowerthanx", "Display if lower than %s")

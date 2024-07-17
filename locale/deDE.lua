@@ -1,24 +1,26 @@
 -- deDE German Deutsch
 local _, MissingPower = ...
-function MissingPower:Lang_deDE()
-	local lang = MissingPower:GetLangTab()
-	lang.hideoverlap = "Überlappen verstecken"
-	lang.shownextready = "Nächste Fertig anzeigen"
-	lang.showamountcounter = "Zähler anzeigen"
-	lang.poweralpha = "Macht - Alpha"
-	lang.decimals = "Dezimalstellen"
-	lang.fontsize = "Schriftgröße"
-	lang.fontx = "Position X"
-	lang.fonty = "Position Y"
-	lang.fontanchor = "Text-Anker"
-	lang.textoffset = "Text-Abstand"
-	lang.textoffsetx = "Text-Abstand X"
-	lang.textoffsety = "Text-Abstand Y"
-	lang.showtickbar = "Tickbar anzeigen"
-	lang.customcolor = "Benutzerdefinierte Farbe"
-	lang.ccolr = "Farbe Rot"
-	lang.ccolg = "Farbe Grün"
-	lang.ccolb = "Farbe Blau"
-	lang.displayiflowerthanx = "Anzeigen, wenn niedriger als"
-	lang.showhealthreg = "Gesundheitsregeneration anzeigen"
-end
+MissingPower:AddTrans("deDE", "hideoverlap", "Überlappen verstecken")
+MissingPower:AddTrans("deDE", "shownextready", "Nächste Fertig anzeigen")
+MissingPower:AddTrans("deDE", "showamountcounter", "Zähler anzeigen")
+MissingPower:AddTrans("deDE", "poweralpha", "Macht - Alpha: %s")
+MissingPower:AddTrans("deDE", "decimals", "Dezimalstellen: %s")
+MissingPower:AddTrans("deDE", "fontsize", "Schriftgröße: %s")
+MissingPower:AddTrans("deDE", "fontx", "Position X: %s")
+MissingPower:AddTrans("deDE", "fonty", "Position Y: %s")
+MissingPower:AddTrans("deDE", "fontanchor", "Text-Anker: %s")
+MissingPower:AddTrans("deDE", "textoffset", "Text-Abstand: %s")
+MissingPower:AddTrans("deDE", "textoffsetx", "Text-Abstand X: %s")
+MissingPower:AddTrans("deDE", "textoffsety", "Text-Abstand Y: %s")
+MissingPower:AddTrans("deDE", "showtickbar", "Tickbar anzeigen")
+MissingPower:AddTrans("deDE", "customcolor", "Benutzerdefinierte Farbe")
+MissingPower:AddTrans("deDE", "ccolr", "Farbe Rot: %s")
+MissingPower:AddTrans("deDE", "ccolg", "Farbe Grün: %s")
+MissingPower:AddTrans("deDE", "ccolb", "Farbe Blau: %s")
+MissingPower:AddTrans("deDE", "displayiflowerthanx", "Anzeigen, wenn niedriger als: %s")
+MissingPower:AddTrans("deDE", "showhealthreg", "Gesundheitsregeneration anzeigen")
+MissingPower:AddTrans("deDE", "GENERAL", "Allgemein")
+MissingPower:AddTrans("deDE", "DESIGN", "Design")
+MissingPower:AddTrans("deDE", "TEXT", "Text")
+MissingPower:AddTrans("deDE", "COLORS", "Farben")
+MissingPower:AddTrans("deDE", "MMBTN", "Minimapknopf anzeigen")

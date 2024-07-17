@@ -124,6 +124,7 @@ function D4:CreateSlider(tab)
         "OnValueChanged",
         function(sel, val)
             val = string.format("%." .. tab.decimals .. "f", val)
+            print(tab.decimals)
             if tab.funcV then
                 tab:funcV(val)
             end

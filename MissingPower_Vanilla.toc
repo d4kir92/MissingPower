@@ -1,5 +1,5 @@
 ## Interface: 11503
-## Version: 1.1.55
+## Version: 1.2.0
 ## Title: MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Show for each spell how much power is missing
 ## Author: D4KiR
@@ -22,7 +22,6 @@ locale\koKR.lua
 locale\ruRU.lua
 locale\zhCN.lua
 locale\zhTW.lua
-libs\LIB_lang.lua
 
 settings.lua
 

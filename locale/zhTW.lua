@@ -1,19 +1,16 @@
 -- zhTW Traditional Chinese
 local _, MissingPower = ...
-function MissingPower:Lang_zhTW()
-	local lang = MissingPower:GetLangTab()
-	lang.hideoverlap = "隱藏重疊"
-	lang.shownextready = "顯示下一次準備"
-	lang.showamountcounter = "顯示計數器"
-	lang.poweralpha = "能量 - 透明度: VALUE"
-	lang.decimals = "小數點: VALUE"
-	lang.fontsize = "字體大小: VALUE"
-	lang.fontx = "位置 X: VALUE"
-	lang.fonty = "位置 Y: VALUE"
-	lang.showtickbar = "顯示刻度條"
-	lang.customcolor = "Custom Color"
-	lang.ccolr = "Color Red: VALUE"
-	lang.ccolg = "Color Green: VALUE"
-	lang.ccolb = "Color Blue: VALUE"
-	lang.displayiflowerthanx = "Display if lower than VALUE"
-end
+MissingPower:AddTrans("zhTW", "hideoverlap", "隱藏重疊")
+MissingPower:AddTrans("zhTW", "shownextready", "顯示下一次準備")
+MissingPower:AddTrans("zhTW", "showamountcounter", "顯示計數器")
+MissingPower:AddTrans("zhTW", "poweralpha", "能量 - 透明度: %s")
+MissingPower:AddTrans("zhTW", "decimals", "小數點: %s")
+MissingPower:AddTrans("zhTW", "fontsize", "字體大小: %s")
+MissingPower:AddTrans("zhTW", "fontx", "位置 X: %s")
+MissingPower:AddTrans("zhTW", "fonty", "位置 Y: %s")
+MissingPower:AddTrans("zhTW", "showtickbar", "顯示刻度條")
+MissingPower:AddTrans("zhTW", "customcolor", "Custom Color")
+MissingPower:AddTrans("zhTW", "ccolr", "Color Red: %s")
+MissingPower:AddTrans("zhTW", "ccolg", "Color Green: %s")
+MissingPower:AddTrans("zhTW", "ccolb", "Color Blue: %s")
+MissingPower:AddTrans("zhTW", "displayiflowerthanx", "Display if lower than %s")
