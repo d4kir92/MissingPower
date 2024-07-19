@@ -612,7 +612,7 @@ function MissingPower:ShowOOM(init, from)
 					if decimals == 0 or amount > 99 then
 						amo = SpecialRound(amount, 0)
 					else
-						amo = format("%." .. decimals .. "f", SpecialRound(amount, decimals))
+						amo = format("%." .. string.format("%.0f", decimals) .. "f", SpecialRound(amount, decimals))
 					end
 
 					if MissingPower:GetConfig("displayiflowerthanx", 10) > 0 then
