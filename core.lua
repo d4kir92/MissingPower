@@ -218,7 +218,7 @@ function MissingPower:ShowOOM(init, from)
 	end
 
 	if loaded then
-		if setup and not InCombatLockdown() then
+		if setup then
 			setup = false
 			for _, ab in pairs(MIPOActionBars) do
 				for i = 1, 120 do
