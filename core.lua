@@ -615,8 +615,8 @@ function MissingPower:ShowOOM(init, from)
 						amo = format("%." .. string.format("%.0f", decimals) .. "f", SpecialRound(amount, decimals))
 					end
 
-					if MissingPower:GetConfig("displayiflowerthanx", 10) > 0 then
-						if amount < MissingPower:GetConfig("displayiflowerthanx", 10) then
+					if tonumber(MissingPower:GetConfig("displayiflowerthanx", 10)) > 0 then
+						if amount < tonumber(MissingPower:GetConfig("displayiflowerthanx", 10)) then
 							OOMAmountCounter.text:SetText(amo)
 						else
 							OOMAmountCounter.text:SetText("")
