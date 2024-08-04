@@ -14,14 +14,14 @@ end
 
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
-	MissingPower:SetVersion(AddonName, 136048, "0.4.35")
+	MissingPower:SetVersion(AddonName, 136048, "1.2.6")
 	mp_settings = MissingPower:CreateFrame(
 		{
 			["name"] = "MissingPower",
 			["pTab"] = {"CENTER"},
 			["sw"] = 520,
 			["sh"] = 520,
-			["title"] = format("MissingPower |T136048:16:16:0:0|t v|cff3FC7EB%s", "0.4.35")
+			["title"] = format("MissingPower |T136048:16:16:0:0|t v|cff3FC7EB%s", "1.2.6")
 		}
 	)
 
@@ -76,7 +76,7 @@ function MissingPower:InitSetting()
 			["name"] = "MissingPower",
 			["icon"] = 136048,
 			["dbtab"] = MIPOPC,
-			["vTT"] = {"MissingPower", "Leftclick - Toggle Settings", "Shift + Rightclick - Hide Minimap Icon"},
+			["vTT"] = {{"MissingPower |T136048:16:16:0:0|t", "v|cff3FC7EB1.2.6"}, {"Leftclick", "Toggle Settings"}, {"Rightclick", "Hide Minimap Icon"}},
 			["funcL"] = function()
 				MissingPower:ToggleSettings()
 			end,
