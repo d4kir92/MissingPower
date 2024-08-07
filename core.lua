@@ -177,7 +177,7 @@ function MissingPower:GetAnchor(id)
 	return anchorTab[id]
 end
 
-function MissingPower:HideOOM(btnname)
+function MissingPower:HideOOM(btnname, from)
 	local OOM = _G[btnname]
 	OOM:SetHeight(0.1)
 	OOM:Hide(true)
@@ -243,7 +243,7 @@ function MissingPower:ShowOOM(init, from)
 								MissingPower:UpdateUi("ID CHANGE")
 							end
 
-							C_Timer.After(0.5, obtn.ActionChanged)
+							C_Timer.After(0.1, obtn.ActionChanged)
 						end
 
 						obtn.ActionChanged()
@@ -265,7 +265,7 @@ function MissingPower:ShowOOM(init, from)
 					local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action)
 					local name = nil
 					local spellId = nil
-					if at == "macro" then
+					if at == "macro" and GetMacroSpell(id) then
 						id = GetMacroSpell(id)
 					end
 
@@ -294,7 +294,7 @@ function MissingPower:ShowOOM(init, from)
 					if cost >= 0 then
 						MIPOActionButtons[btnname] = ActionButtons[btnname]
 					else
-						MissingPower:HideOOM(btnname)
+						MissingPower:HideOOM(btnname, "No Costs")
 						local OOMAmountCounter = _G[btnname .. "AmountCounter"]
 						if OOMAmountCounter and OOMAmountCounter.text then
 							OOMAmountCounter.text:SetText("")
@@ -317,7 +317,7 @@ function MissingPower:ShowOOM(init, from)
 				local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action)
 				local name = nil
 				local spellId = nil
-				if at == "macro" then
+				if at == "macro" and GetMacroSpell(id) then
 					id = GetMacroSpell(id)
 				end
 
@@ -641,7 +641,7 @@ function MissingPower:ShowOOM(init, from)
 					end
 
 					if p <= 0 then
-						MissingPower:HideOOM(btnname)
+						MissingPower:HideOOM(btnname, "No P")
 					else
 						OOM:Show(true)
 						OOM:SetFrameStrata(ABTN:GetFrameStrata())
@@ -660,7 +660,7 @@ function MissingPower:ShowOOM(init, from)
 						end
 					end
 				else
-					MissingPower:HideOOM(btnname)
+					MissingPower:HideOOM(btnname, "Invalid")
 				end
 			end
 		end
@@ -762,7 +762,7 @@ local function OnEvent(self, event, unit, powertype, ...)
 			)
 		else
 			C_Timer.After(
-				0.001,
+				0.01,
 				function()
 					MissingPower:ShowOOM(nil, "ELSE: " .. event)
 				end
