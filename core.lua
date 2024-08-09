@@ -336,17 +336,13 @@ function MissingPower:ShowOOM(init, from)
 				if name then
 					local costs = MissingPower:GetSpellPowerCost(spellId)
 					if costs ~= nil and costs[1] ~= nil and (at == "spell" or at == "macro") then
-						local ptid, _ = UnitPowerType("PLAYER")
 						cost = costs[1].cost
 						typ = costs[1].type
-						if costs[2] ~= nil and costs[2].type == ptid and costs[2].cost ~= 0 then
-							cost = costs[2].cost
-							typ = costs[2].type
-						end
-
-						if costs[3] ~= nil and costs[3].type == ptid and costs[3].cost ~= 0 then
-							cost = costs[3].cost
-							typ = costs[3].type
+						for i, c in pairs(costs) do
+							if c and UnitPower("player", c.type) > 0 and c.cost ~= 0 then
+								cost = c.cost
+								typ = c.type
+							end
 						end
 
 						-- COLOR
@@ -674,7 +670,7 @@ function MissingPower:Think()
 	if lastSF ~= GetShapeshiftForm() then
 		lastSF = GetShapeshiftForm()
 		C_Timer.After(
-			0.01,
+			0.05,
 			function()
 				MissingPower:UpdateUi("SHAPESHIFT")
 			end
@@ -755,14 +751,14 @@ local function OnEvent(self, event, unit, powertype, ...)
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
 			C_Timer.After(
-				0.01,
+				0.05,
 				function()
 					MissingPower:UpdateUi("ACTIONBAR_PAGE_CHANGED")
 				end
 			)
 		else
 			C_Timer.After(
-				0.01,
+				0.05,
 				function()
 					MissingPower:ShowOOM(nil, "ELSE: " .. event)
 				end
