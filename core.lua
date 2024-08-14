@@ -666,13 +666,24 @@ end
 local power = -1
 local mana = -1
 local lastSF = 0
+local lastMount = false
 function MissingPower:Think()
 	if lastSF ~= GetShapeshiftForm() then
 		lastSF = GetShapeshiftForm()
 		C_Timer.After(
-			0.05,
+			0.1,
 			function()
 				MissingPower:UpdateUi("SHAPESHIFT")
+			end
+		)
+	end
+
+	if IsMounted and lastMount ~= IsMounted() then
+		lastMount = IsMounted()
+		C_Timer.After(
+			0.1,
+			function()
+				MissingPower:UpdateUi("MOUNTED")
 			end
 		)
 	end
@@ -702,6 +713,7 @@ frame:RegisterEvent("ACTIONBAR_PAGE_CHANGED")
 --frame:RegisterEvent("SPELL_UPDATE_USABLE")
 frame:RegisterEvent("MODIFIER_STATE_CHANGED")
 --frame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- SPAMS
+frame:RegisterEvent("PLAYER_GAINS_VEHICLE_DATA")
 local MPLoaded = false
 hooksecurefunc(
 	"PickupAction",
