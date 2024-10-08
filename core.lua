@@ -253,7 +253,6 @@ function MissingPower:ShowOOM(init, from)
 			end
 
 			ready = true
-			MissingPower:InitSetting()
 			MissingPower:ShowOOM(nil, "SETUP")
 		elseif ready then
 			if UnitInVehicle and UnitInVehicle("PLAYER") then return end
@@ -753,6 +752,7 @@ hooksecurefunc(
 
 local function OnEvent(self, event, unit, powertype, ...)
 	if event == "PLAYER_ENTERING_WORLD" and not MPLoaded then
+		MissingPower:InitSetting()
 		MPLoaded = true
 		C_Timer.After(
 			1,

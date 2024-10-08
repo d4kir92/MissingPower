@@ -14,14 +14,14 @@ end
 
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
-	MissingPower:SetVersion(AddonName, 136048, "1.2.14")
+	MissingPower:SetVersion(AddonName, 136048, "1.2.15")
 	mp_settings = MissingPower:CreateFrame(
 		{
 			["name"] = "MissingPower",
 			["pTab"] = {"CENTER"},
 			["sw"] = 520,
 			["sh"] = 520,
-			["title"] = format("MissingPower |T136048:16:16:0:0|t v|cff3FC7EB%s", "1.2.14")
+			["title"] = format("MissingPower |T136048:16:16:0:0|t v|cff3FC7EB%s", "1.2.15")
 		}
 	)
 
@@ -214,33 +214,28 @@ function MissingPower:InitSetting()
 		end
 	)
 
-	C_Timer.After(
-		0,
-		function()
-			MissingPower:CreateMinimapButton(
-				{
-					["name"] = "MissingPower",
-					["icon"] = 136048,
-					["dbtab"] = MIPOPC,
-					["vTT"] = {{"MissingPower |T136048:16:16:0:0|t", "v|cff3FC7EB1.2.14"}, {"Leftclick", "Toggle Settings"}, {"Rightclick", "Hide Minimap Icon"}},
-					["funcL"] = function()
-						MissingPower:ToggleSettings()
-					end,
-					["funcR"] = function()
-						MissingPower:SV(MIPOPC, "MMBTN", false)
-						MissingPower:MSG("Minimap Button is now hidden.")
-						MissingPower:HideMMBtn("MissingPower")
-					end,
-				}
-			)
-
-			if MissingPower:GV(MIPOPC, "MMBTN", true) then
-				MissingPower:ShowMMBtn("MissingPower")
-			else
+	MissingPower:CreateMinimapButton(
+		{
+			["name"] = "MissingPower",
+			["icon"] = 136048,
+			["dbtab"] = MIPOPC,
+			["vTT"] = {{"MissingPower |T136048:16:16:0:0|t", "v|cff3FC7EB1.2.15"}, {"Leftclick", "Toggle Settings"}, {"Rightclick", "Hide Minimap Icon"}},
+			["funcL"] = function()
+				MissingPower:ToggleSettings()
+			end,
+			["funcR"] = function()
+				MissingPower:SV(MIPOPC, "MMBTN", false)
+				MissingPower:MSG("Minimap Button is now hidden.")
 				MissingPower:HideMMBtn("MissingPower")
-			end
-		end
+			end,
+		}
 	)
+
+	if MissingPower:GV(MIPOPC, "MMBTN", true) then
+		MissingPower:ShowMMBtn("MissingPower")
+	else
+		MissingPower:HideMMBtn("MissingPower")
+	end
 
 	MissingPower:AddSlash("mp", MissingPower.ToggleSettings)
 	MissingPower:AddSlash("MissingPower", MissingPower.ToggleSettings)
