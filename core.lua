@@ -113,7 +113,7 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		OOMAmountCounter:ClearAllPoints()
 		OOMAmountCounter:SetPoint("CENTER", obtn, "CENTER", 0, 0)
 		OOMAmountCounter.text = OOMAmountCounter:CreateFontString(nil, "ARTWORK")
-		OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MissingPower:GetConfig("fontsize", 12), "OUTLINE")
+		OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, tonumber(MissingPower:GetConfig("fontsize", 12)), "OUTLINE")
 		OOMAmountCounter.text:SetText("")
 		OOMAmountCounter.text:SetTextColor(1, 1, 1, 0.9)
 		OOMAmountCounter.text:SetPoint("CENTER", obtn, "CENTER", 0, 0)
@@ -308,12 +308,16 @@ function MissingPower:ShowOOM(init, from)
 				local OOM = _G[btnname]
 				local OOMAmountCounter = _G[btnname .. "AmountCounter"]
 				OOM:Hide(true)
-				if MissingPower:GetConfig("fontsize", 12) < 6 then
+				if type(MissingPower:GetConfig("fontsize", 12)) ~= "number" then
+					MissingPower:SV(MIPOPC, "fontsize", tonumber(MissingPower:GetConfig("fontsize", 12)))
+				end
+
+				if tonumber(MissingPower:GetConfig("fontsize", 12)) < 6 then
 					MissingPower:SV(MIPOPC, "fontsize", 6)
 				end
 
-				if OOMAmountCounter.text.fs ~= MissingPower:GetConfig("fontsize", 12) then
-					OOMAmountCounter.text.fs = MissingPower:GetConfig("fontsize", 12)
+				if OOMAmountCounter.text.fs ~= tonumber(MissingPower:GetConfig("fontsize", 12)) then
+					OOMAmountCounter.text.fs = tonumber(MissingPower:GetConfig("fontsize", 12))
 					OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MissingPower:GetConfig("fontsize", 12), "OUTLINE")
 				end
 
