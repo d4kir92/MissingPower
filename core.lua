@@ -308,6 +308,10 @@ function MissingPower:ShowOOM(init, from)
 				local OOM = _G[btnname]
 				local OOMAmountCounter = _G[btnname .. "AmountCounter"]
 				OOM:Hide(true)
+				if MissingPower:GetConfig("fontsize", 12) < 6 then
+					MissingPower:SV(MIPOPC, "fontsize", 6)
+				end
+
 				if OOMAmountCounter.text.fs ~= MissingPower:GetConfig("fontsize", 12) then
 					OOMAmountCounter.text.fs = MissingPower:GetConfig("fontsize", 12)
 					OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, MissingPower:GetConfig("fontsize", 12), "OUTLINE")
