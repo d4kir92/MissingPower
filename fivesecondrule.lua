@@ -16,7 +16,7 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 	local ener = 0
 	local enermax = 0
 	local frame = CreateFrame("FRAME")
-	frame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+	MissingPower:RegisterEvent(frame, "UNIT_SPELLCAST_SUCCEEDED", "player")
 	local tex = frame:CreateTexture(nil, "BACKGROUND")
 	tex:SetAllPoints()
 	tex:SetColorTexture(1, 1, 1, 0)

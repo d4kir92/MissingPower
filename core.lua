@@ -711,16 +711,16 @@ end
 
 MissingPower:Think()
 local frame = CreateFrame("FRAME")
-frame:RegisterEvent("PLAYER_ENTERING_WORLD")
---frame:RegisterEvent("UPDATE_SHAPESHIFT_FORM") -- spams in tbc
-frame:RegisterEvent("SPELLS_CHANGED")
-frame:RegisterEvent("UNIT_SPELLCAST_START")
---frame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED")
-frame:RegisterEvent("ACTIONBAR_PAGE_CHANGED")
---frame:RegisterEvent("SPELL_UPDATE_USABLE")
-frame:RegisterEvent("MODIFIER_STATE_CHANGED")
---frame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- SPAMS
-frame:RegisterEvent("PLAYER_GAINS_VEHICLE_DATA")
+MissingPower:RegisterEvent(frame, "PLAYER_ENTERING_WORLD")
+--MissingPower:RegisterEvent(frame,"UPDATE_SHAPESHIFT_FORM", "player") -- spams in tbc
+MissingPower:RegisterEvent(frame, "SPELLS_CHANGED")
+MissingPower:RegisterEvent(frame, "UNIT_SPELLCAST_START", "player")
+--MissingPower:RegisterEvent(frame,"CURRENT_SPELL_CAST_CHANGED", "player")
+MissingPower:RegisterEvent(frame, "ACTIONBAR_PAGE_CHANGED")
+MissingPower:RegisterEvent(frame, "SPELL_UPDATE_USABLE")
+MissingPower:RegisterEvent(frame, "MODIFIER_STATE_CHANGED")
+--MissingPower:RegisterEvent(frame,"ACTIONBAR_SLOT_CHANGED", "player") -- SPAMS
+MissingPower:RegisterEvent(frame, "PLAYER_GAINS_VEHICLE_DATA", "player")
 local MPLoaded = false
 hooksecurefunc(
 	"PickupAction",
@@ -789,8 +789,8 @@ end
 
 frame:SetScript("OnEvent", OnEvent)
 local frame2 = CreateFrame("FRAME")
-frame2:RegisterEvent("UNIT_POWER_UPDATE")
---frame2:RegisterEvent("UNIT_POWER_FREQUENT")
+MissingPower:RegisterEvent(frame2, "UNIT_POWER_UPDATE", "player")
+--MissingPower:RegisterEvent(frame2, "UNIT_POWER_FREQUENT", "player")
 local function OnEvent2(self, event, unit, powertype, ...)
 	if event == "UNIT_POWER_UPDATE" and unit == "player" and ready then
 		MissingPower:ShowOOM(nil, "UNIT_POWER_UPDATE")
