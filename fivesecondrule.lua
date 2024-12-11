@@ -1,5 +1,50 @@
 -- FSR
 local _, MissingPower = ...
+local function CreateSwingTimer(name, y, cr, cg, cb)
+	local SwingTimer = CreateFrame("Frame", name, UIParent)
+	SwingTimer:SetSize(200, 20)
+	SwingTimer:SetPoint("CENTER", UIParent, "CENTER", 0, y)
+	SwingTimer:Hide()
+	SwingTimer.bg = SwingTimer:CreateTexture(nil, "BACKGROUND")
+	SwingTimer.bg:SetAllPoints(true)
+	SwingTimer.bg:SetColorTexture(0.1, 0.1, 0.1, 0.8)
+	SwingTimer.bar = SwingTimer:CreateTexture(nil, "ARTWORK")
+	SwingTimer.bar:SetPoint("LEFT", SwingTimer, "LEFT", 0, 0)
+	SwingTimer.bar:SetSize(200, 20)
+	SwingTimer.bar:SetColorTexture(cr, cg, cb, 1)
+	SwingTimer.text = SwingTimer:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+	SwingTimer.text:SetPoint("CENTER", SwingTimer, "CENTER", 0, 0)
+	SwingTimer.text:SetText("Swing Timer")
+	local startTime = 0
+	local swingDuration = 0
+	local isSwinging = false
+	local function UpdateSwingTimer(self, elapsed)
+		if not isSwinging then return end
+		local remaining = (startTime + swingDuration) - GetTime()
+		if remaining <= 0 then
+			SwingTimer:Hide()
+			isSwinging = false
+
+			return
+		end
+
+		local progress = remaining / swingDuration
+		SwingTimer.bar:SetWidth(200 * progress)
+		SwingTimer.text:SetText(string.format("%.1f", remaining))
+	end
+
+	SwingTimer:SetScript("OnUpdate", UpdateSwingTimer)
+	function SwingTimer:StartTimer(duration)
+		if duration == nil then return end
+		swingDuration = duration
+		startTime = GetTime()
+		isSwinging = true
+		SwingTimer:Show()
+	end
+
+	return SwingTimer
+end
+
 if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
 	if true then
 		local lastMb = nil
@@ -252,61 +297,38 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		)
 	end
 
-	if MissingPower:GetConfig("showprimaryswingtimer", true) then
-		local SwingTimer = CreateFrame("Frame", "SwingTimerFrame", UIParent)
-		SwingTimer:SetSize(200, 20) -- Width, Height
-		SwingTimer:SetPoint("CENTER", UIParent, "CENTER", 0, -200) -- Position
-		SwingTimer:Hide()
-		-- Background Bar
-		SwingTimer.bg = SwingTimer:CreateTexture(nil, "BACKGROUND")
-		SwingTimer.bg:SetAllPoints(true)
-		SwingTimer.bg:SetColorTexture(0.1, 0.1, 0.1, 0.8) -- Dark Gray
-		-- Foreground Bar (Progress)
-		SwingTimer.bar = SwingTimer:CreateTexture(nil, "ARTWORK")
-		SwingTimer.bar:SetPoint("LEFT", SwingTimer, "LEFT", 0, 0)
-		SwingTimer.bar:SetSize(200, 20)
-		SwingTimer.bar:SetColorTexture(0.8, 0.1, 0.1, 1) -- Red
-		-- Text for Timer
-		SwingTimer.text = SwingTimer:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-		SwingTimer.text:SetPoint("CENTER", SwingTimer, "CENTER", 0, 0)
-		SwingTimer.text:SetText("Swing Timer")
-		local startTime = 0
-		local swingDuration = 0
-		local isSwinging = false
-		local function UpdateSwingTimer(self, elapsed)
-			if not isSwinging then return end
-			local remaining = (startTime + swingDuration) - GetTime()
-			if remaining <= 0 then
-				SwingTimer:Hide()
-				isSwinging = false
-
-				return
-			end
-
-			-- Update bar width
-			local progress = remaining / swingDuration
-			SwingTimer.bar:SetWidth(200 * progress)
-			-- Update text
-			SwingTimer.text:SetText(string.format("%.1f", remaining))
-		end
-
-		SwingTimer:SetScript("OnUpdate", UpdateSwingTimer)
-		local function StartSwingTimer(duration)
-			swingDuration = duration
-			startTime = GetTime()
-			isSwinging = true
-			SwingTimer:Show()
-		end
-
-		SwingTimer:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		SwingTimer:SetScript(
+	if MissingPower:GetConfig("showswingtimer", true) then
+		local SwingTimerPrimary = CreateSwingTimer("SwingTimerPrimary", -200, 1, 0, 0)
+		local SwingTimerSecondary = CreateSwingTimer("SwingTimerSecondary", -222, 0, 1, 0)
+		local SwingTimerRanged = CreateSwingTimer("SwingTimerRanged", -244, 0, 0, 1)
+		local SwingTimerLogic = CreateFrame("Frame")
+		SwingTimerLogic:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		SwingTimerLogic:SetScript(
 			"OnEvent",
 			function(self, event, ...)
 				if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-					local _, subevent, _, sourceGUID, _, _, _, _, _, _, _, spellID = CombatLogGetCurrentEventInfo()
-					if sourceGUID == UnitGUID("player") and (subevent == "SWING_DAMAGE" or subevent == "SWING_MISSED") then
-						local weaponSpeed = UnitAttackSpeed("player")
-						StartSwingTimer(weaponSpeed)
+					local _, subevent, _, sourceGUID, _, _, _, _, _, _, _, spellId = CombatLogGetCurrentEventInfo()
+					if sourceGUID == UnitGUID("player") then
+						if subevent == "SWING_DAMAGE" then
+							local _, _, _, _, _, _, _, _, _, is_offhand = select(12, CombatLogGetCurrentEventInfo())
+							local weaponSpeed, weaponSpeed2 = UnitAttackSpeed("player")
+							if is_offhand then
+								SwingTimerSecondary:StartTimer(weaponSpeed2)
+							else
+								SwingTimerPrimary:StartTimer(weaponSpeed)
+							end
+						elseif subevent == "SWING_MISSED" then
+							local _, is_offhand = select(12, CombatLogGetCurrentEventInfo())
+							local weaponSpeed, weaponSpeed2 = UnitAttackSpeed("player")
+							if is_offhand then
+								SwingTimerSecondary:StartTimer(weaponSpeed2)
+							else
+								SwingTimerPrimary:StartTimer(weaponSpeed)
+							end
+						elseif spellId == 75 and subevent == "SPELL_CAST_SUCCESS" then
+							local speed, _, _, _, _ = UnitRangedDamage("player")
+							SwingTimerRanged:StartTimer(speed)
+						end
 					end
 				end
 			end
