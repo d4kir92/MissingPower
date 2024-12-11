@@ -39,7 +39,7 @@ function MissingPower:InitSetting()
 	MissingPower:AppendCategory("GENERAL")
 	MissingPower:AppendCheckbox(
 		"MMBTN",
-		true,
+		MissingPower:GetWoWBuild() ~= "RETAIL",
 		function(sel, checked)
 			if checked then
 				MissingPower:ShowMMBtn("MissingPower")
@@ -49,7 +49,7 @@ function MissingPower:InitSetting()
 		end
 	)
 
-	MissingPower:AppendCategory("DESIGN")
+	MissingPower:AppendCategory("POWERCOST")
 	MissingPower:AppendCheckbox(
 		"hideoverlap",
 		true,
@@ -65,24 +65,6 @@ function MissingPower:InitSetting()
 			MissingPower:UpdateUi("showamountcounter")
 		end
 	)
-
-	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
-		MissingPower:AppendCheckbox(
-			"showtickbar",
-			true,
-			function()
-				MissingPower:UpdateUi("showtickbar")
-			end
-		)
-
-		MissingPower:AppendCheckbox(
-			"showhealthreg",
-			false,
-			function()
-				MissingPower:UpdateUi("showhealthreg")
-			end
-		)
-	end
 
 	MissingPower:AppendSlider(
 		"poweralpha",
@@ -108,7 +90,6 @@ function MissingPower:InitSetting()
 		end
 	)
 
-	MissingPower:AppendCategory("TEXT")
 	MissingPower:AppendSlider(
 		"decimals",
 		1,
@@ -169,7 +150,6 @@ function MissingPower:InitSetting()
 		end
 	)
 
-	MissingPower:AppendCategory("COLORS")
 	MissingPower:AppendCheckbox(
 		"customcolor",
 		false,
@@ -214,6 +194,31 @@ function MissingPower:InitSetting()
 		end
 	)
 
+	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
+		MissingPower:AppendCategory("Five Second Rule (5SR)")
+		MissingPower:AppendCheckbox(
+			"showtickbar",
+			true,
+			function()
+				MissingPower:UpdateUi("showtickbar")
+			end
+		)
+
+		MissingPower:AppendCategory("HEALTHREGEN")
+		MissingPower:AppendCheckbox(
+			"showhealthreg",
+			false,
+			function()
+				MissingPower:UpdateUi("showhealthreg")
+			end
+		)
+
+		MissingPower:AppendCategory("ENERGYTICKS")
+		MissingPower:AppendCheckbox("showenergyticks", true)
+		MissingPower:AppendCategory("SWINGTIMERS")
+		MissingPower:AppendCheckbox("showprimaryswingtimer", true)
+	end
+
 	MissingPower:CreateMinimapButton(
 		{
 			["name"] = "MissingPower",
@@ -231,7 +236,7 @@ function MissingPower:InitSetting()
 		}
 	)
 
-	if MissingPower:GV(MIPOPC, "MMBTN", true) then
+	if MissingPower:GV(MIPOPC, "MMBTN", MissingPower:GetWoWBuild() ~= "RETAIL") then
 		MissingPower:ShowMMBtn("MissingPower")
 	else
 		MissingPower:HideMMBtn("MissingPower")

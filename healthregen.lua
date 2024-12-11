@@ -61,8 +61,8 @@ C_Timer.After(
 
 			local f = CreateFrame("FRAME")
 			MissingPower:RegisterEvent(f, "UNIT_HEALTH", "player")
-			MissingPower:RegisterEvent(f, "PLAYER_REGEN_ENABLED", "player")
-			MissingPower:RegisterEvent(f, "PLAYER_REGEN_DISABLED", "player")
+			MissingPower:RegisterEvent(f, "PLAYER_REGEN_ENABLED")
+			MissingPower:RegisterEvent(f, "PLAYER_REGEN_DISABLED")
 			f:SetScript("OnEvent", OnEvent)
 		end
 	end
