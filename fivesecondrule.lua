@@ -306,6 +306,14 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		SwingTimerLogic:SetScript(
 			"OnEvent",
 			function(self, event, ...)
+				if MissingPower:GetConfig("showswingtimer", true) == false then
+					SwingTimerPrimary:Hide()
+					SwingTimerSecondary:Hide()
+					SwingTimerRanged:Hide()
+
+					return
+				end
+
 				if event == "COMBAT_LOG_EVENT_UNFILTERED" then
 					local _, subevent, _, sourceGUID, _, _, _, _, _, _, _, spellId = CombatLogGetCurrentEventInfo()
 					if sourceGUID == UnitGUID("player") then
@@ -313,20 +321,25 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 							local _, _, _, _, _, _, _, _, _, is_offhand = select(12, CombatLogGetCurrentEventInfo())
 							local weaponSpeed, weaponSpeed2 = UnitAttackSpeed("player")
 							if is_offhand then
+								SwingTimerSecondary:Show()
 								SwingTimerSecondary:StartTimer(weaponSpeed2)
 							else
+								SwingTimerPrimary:Show()
 								SwingTimerPrimary:StartTimer(weaponSpeed)
 							end
 						elseif subevent == "SWING_MISSED" then
 							local _, is_offhand = select(12, CombatLogGetCurrentEventInfo())
 							local weaponSpeed, weaponSpeed2 = UnitAttackSpeed("player")
 							if is_offhand then
+								SwingTimerSecondary:Show()
 								SwingTimerSecondary:StartTimer(weaponSpeed2)
 							else
+								SwingTimerPrimary:Show()
 								SwingTimerPrimary:StartTimer(weaponSpeed)
 							end
 						elseif spellId == 75 and subevent == "SPELL_CAST_SUCCESS" then
 							local speed, _, _, _, _ = UnitRangedDamage("player")
+							SwingTimerRanged:Show()
 							SwingTimerRanged:StartTimer(speed)
 						end
 					end

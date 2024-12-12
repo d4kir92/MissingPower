@@ -4,7 +4,7 @@
 ## Interface-Cata: 40401
 ## Interface: 110002, 110005, 110007
 
-## Version: 1.2.24
+## Version: 1.2.25
 ## Title: MissingPower by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Show for each spell how much power is missing
 ## Author: D4KiR
