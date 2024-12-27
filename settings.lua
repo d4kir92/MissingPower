@@ -14,14 +14,14 @@ end
 
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
-	MissingPower:SetVersion(AddonName, 136048, "1.2.25")
+	MissingPower:SetVersion(AddonName, 136048, "1.2.26")
 	mp_settings = MissingPower:CreateFrame(
 		{
 			["name"] = "MissingPower",
 			["pTab"] = {"CENTER"},
 			["sw"] = 520,
 			["sh"] = 520,
-			["title"] = format("MissingPower |T136048:16:16:0:0|t v|cff3FC7EB%s", "1.2.25")
+			["title"] = format("MissingPower |T136048:16:16:0:0|t v|cff3FC7EB%s", "1.2.26")
 		}
 	)
 
@@ -204,6 +204,7 @@ function MissingPower:InitSetting()
 			end
 		)
 
+		MissingPower:AppendCheckbox("showtickbarbg", true)
 		MissingPower:AppendCategory("HEALTHREGEN")
 		MissingPower:AppendCheckbox(
 			"showhealthreg",
@@ -215,8 +216,9 @@ function MissingPower:InitSetting()
 
 		MissingPower:AppendCategory("ENERGYTICKS")
 		MissingPower:AppendCheckbox("showenergyticks", true)
+		MissingPower:AppendCheckbox("showenergyticksbg", true)
 		MissingPower:AppendCategory("SWINGTIMERS")
-		MissingPower:AppendCheckbox("showswingtimer", true)
+		MissingPower:AppendCheckbox("showswingtimer", false)
 	end
 
 	MissingPower:CreateMinimapButton(
@@ -224,7 +226,7 @@ function MissingPower:InitSetting()
 			["name"] = "MissingPower",
 			["icon"] = 136048,
 			["dbtab"] = MIPOPC,
-			["vTT"] = {{"MissingPower |T136048:16:16:0:0|t", "v|cff3FC7EB1.2.25"}, {"Leftclick", "Toggle Settings"}, {"Rightclick", "Hide Minimap Icon"}},
+			["vTT"] = {{"MissingPower |T136048:16:16:0:0|t", "v|cff3FC7EB1.2.26"}, {"Leftclick", "Toggle Settings"}, {"Rightclick", "Hide Minimap Icon"}},
 			["funcL"] = function()
 				MissingPower:ToggleSettings()
 			end,

@@ -87,7 +87,6 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		local glowBg = frame:CreateTexture(nil, "OVERLAY")
 		glowBg:SetDrawLayer("OVERLAY", 6)
 		glowBg:SetColorTexture(0, 0, 0, 1)
-		glowBg:SetWidth(3)
 		local glow = frame:CreateTexture(nil, "OVERLAY")
 		glow:SetDrawLayer("OVERLAY", 7)
 		glow:SetColorTexture(0.5, 0.5, 1, 1)
@@ -177,7 +176,14 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 					frame:SetHeight(mb:GetHeight()) -- * scale)--_G.UIParent:GetScale())
 					frame:SetWidth(mb:GetWidth()) -- * scale)--_G.UIParent:GetScale())
 					frame:SetPoint("LEFT", mb, "LEFT")
-					glowBg:SetPoint("RIGHT", frame, "RIGHT", 1, 0)
+					if MissingPower:GetConfig("showtickbarbg", true) then
+						glowBg:SetWidth(3)
+						glowBg:SetPoint("RIGHT", frame, "RIGHT", 1, 0)
+					else
+						glowBg:SetWidth(1)
+						glowBg:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
+					end
+
 					glow:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
 					--tex:SetColorTexture(1, 1, 1, 0.8)
 					local newsize = mb:GetWidth() * percent
@@ -190,7 +196,7 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		C_Timer.NewTicker(tick, FSR_Think)
 	end
 
-	if MissingPower:GetConfig("showenergyticks", true) then
+	if true then
 		local EnergyTickTracker = CreateFrame("Frame")
 		EnergyTickTracker:RegisterEvent("UNIT_POWER_UPDATE")
 		EnergyTickTracker:RegisterEvent("PLAYER_LOGIN")
@@ -207,7 +213,6 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		local glowEnergyBg = progressBar:CreateTexture(nil, "OVERLAY")
 		glowEnergyBg:SetDrawLayer("OVERLAY", 6)
 		glowEnergyBg:SetColorTexture(0, 0, 0, 1)
-		glowEnergyBg:SetWidth(3)
 		local glowEnergy = progressBar:CreateTexture(nil, "OVERLAY")
 		glowEnergy:SetDrawLayer("OVERLAY", 7)
 		glowEnergy:SetColorTexture(1, 1, 0, 1)
@@ -216,7 +221,7 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		local lastEnergy = -1
 		local function OnUpdateHandler(self, elapsed)
 			local currentEnergyMax = UnitPowerMax("player", Enum.PowerType.Energy)
-			if currentEnergyMax <= 0 then
+			if MissingPower:GetConfig("showenergyticks", true) == false or currentEnergyMax <= 0 then
 				glowEnergy:Hide()
 				glowEnergyBg:Hide()
 
@@ -270,7 +275,14 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 				end
 
 				progressBar:SetWidth(progress)
-				glowEnergyBg:SetPoint("RIGHT", progressBar, "RIGHT", 1, 0)
+				if MissingPower:GetConfig("showenergyticksbg", true) then
+					glowEnergyBg:SetWidth(3)
+					glowEnergyBg:SetPoint("RIGHT", progressBar, "RIGHT", 1, 0)
+				else
+					glowEnergyBg:SetWidth(1)
+					glowEnergyBg:SetPoint("RIGHT", progressBar, "RIGHT", 0, 0)
+				end
+
 				glowEnergy:SetPoint("RIGHT", progressBar, "RIGHT", 0, 0)
 			end
 		end
@@ -297,7 +309,7 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		)
 	end
 
-	if MissingPower:GetConfig("showswingtimer", true) then
+	if true then
 		local SwingTimerPrimary = CreateSwingTimer("SwingTimerPrimary", -200, 1, 0, 0)
 		local SwingTimerSecondary = CreateSwingTimer("SwingTimerSecondary", -222, 0, 1, 0)
 		local SwingTimerRanged = CreateSwingTimer("SwingTimerRanged", -244, 0, 0, 1)
@@ -306,7 +318,7 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		SwingTimerLogic:SetScript(
 			"OnEvent",
 			function(self, event, ...)
-				if MissingPower:GetConfig("showswingtimer", true) == false then
+				if MissingPower:GetConfig("showswingtimer", false) == false or MissingPower:GetConfig("showswingtimer", true) == false then
 					SwingTimerPrimary:Hide()
 					SwingTimerSecondary:Hide()
 					SwingTimerRanged:Hide()
