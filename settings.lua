@@ -158,40 +158,14 @@ function MissingPower:InitSetting()
 		end
 	)
 
-	MissingPower:AppendSlider(
-		"ccolr",
-		1,
-		0,
-		1.0,
-		0.01,
-		2,
-		function()
-			MissingPower:UpdateUi("r")
-		end
-	)
-
-	MissingPower:AppendSlider(
-		"ccolg",
-		1,
-		0,
-		1.0,
-		0.01,
-		2,
-		function()
-			MissingPower:UpdateUi("g")
-		end
-	)
-
-	MissingPower:AppendSlider(
-		"ccolb",
-		1,
-		0,
-		1.0,
-		0.01,
-		2,
-		function()
-			MissingPower:UpdateUi("b")
-		end
+	MissingPower:AppendColorPicker(
+		"CMPCol",
+		{
+			["R"] = 1,
+			["G"] = 1,
+			["B"] = 1,
+			["A"] = 1
+		}, function() end, 5
 	)
 
 	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
@@ -204,7 +178,27 @@ function MissingPower:InitSetting()
 			end
 		)
 
+		MissingPower:AppendColorPicker(
+			"TickbarColor",
+			{
+				["R"] = 1,
+				["G"] = 1,
+				["B"] = 1,
+				["A"] = 1
+			}, function() end, 5
+		)
+
 		MissingPower:AppendCheckbox("showtickbarbg", true)
+		MissingPower:AppendColorPicker(
+			"TickbarBorderColor",
+			{
+				["R"] = 0,
+				["G"] = 0,
+				["B"] = 0,
+				["A"] = 1
+			}, function() end, 5
+		)
+
 		MissingPower:AppendCategory("HEALTHREGEN")
 		MissingPower:AppendCheckbox(
 			"showhealthreg",
@@ -216,7 +210,27 @@ function MissingPower:InitSetting()
 
 		MissingPower:AppendCategory("ENERGYTICKS")
 		MissingPower:AppendCheckbox("showenergyticks", true)
+		MissingPower:AppendColorPicker(
+			"EnergyTickbarColor",
+			{
+				["R"] = 1,
+				["G"] = 1,
+				["B"] = 1,
+				["A"] = 1
+			}, function() end, 5
+		)
+
 		MissingPower:AppendCheckbox("showenergyticksbg", true)
+		MissingPower:AppendColorPicker(
+			"EnergyTickbarBorderColor",
+			{
+				["R"] = 0,
+				["G"] = 0,
+				["B"] = 0,
+				["A"] = 1
+			}, function() end, 5
+		)
+
 		MissingPower:AppendCategory("SWINGTIMERS")
 		MissingPower:AppendCheckbox("showswingtimer", false)
 	end

@@ -86,10 +86,8 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		frame:SetFrameStrata("HIGH")
 		local glowBg = frame:CreateTexture(nil, "OVERLAY")
 		glowBg:SetDrawLayer("OVERLAY", 6)
-		glowBg:SetColorTexture(0, 0, 0, 1)
 		local glow = frame:CreateTexture(nil, "OVERLAY")
 		glow:SetDrawLayer("OVERLAY", 7)
-		glow:SetColorTexture(0.5, 0.5, 1, 1)
 		glow:SetWidth(1)
 		function FSR_Think()
 			now = GetTime()
@@ -172,6 +170,8 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 				if full then
 					frame:Hide()
 				else
+					glowBg:SetColorTexture(MissingPower:GetColor("TickbarBorderColor"))
+					glow:SetColorTexture(MissingPower:GetColor("TickbarColor"))
 					frame:SetParent(mb)
 					frame:SetHeight(mb:GetHeight()) -- * scale)--_G.UIParent:GetScale())
 					frame:SetWidth(mb:GetWidth()) -- * scale)--_G.UIParent:GetScale())
@@ -185,7 +185,6 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 					end
 
 					glow:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
-					--tex:SetColorTexture(1, 1, 1, 0.8)
 					local newsize = mb:GetWidth() * percent
 					frame:SetWidth(newsize)
 					frame:Show()
@@ -212,10 +211,8 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		progressBar:SetValue(0)
 		local glowEnergyBg = progressBar:CreateTexture(nil, "OVERLAY")
 		glowEnergyBg:SetDrawLayer("OVERLAY", 6)
-		glowEnergyBg:SetColorTexture(0, 0, 0, 1)
 		local glowEnergy = progressBar:CreateTexture(nil, "OVERLAY")
 		glowEnergy:SetDrawLayer("OVERLAY", 7)
-		glowEnergy:SetColorTexture(1, 1, 0, 1)
 		glowEnergy:SetWidth(1)
 		local lastMB = nil
 		local lastEnergy = -1
@@ -230,6 +227,8 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 
 			glowEnergy:Show()
 			glowEnergyBg:Show()
+			glowEnergyBg:SetColorTexture(MissingPower:GetColor("EnergyTickbarBorderColor"))
+			glowEnergy:SetColorTexture(MissingPower:GetColor("EnergyTickbarColor"))
 			local mb = PlayerFrameManaBar
 			if ElvUF_Player ~= nil and ElvUF_Player:IsShown() then
 				mb = ElvUF_Player.Power

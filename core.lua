@@ -593,7 +593,7 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							if MissingPower:GetConfig("customcolor", false) then
-								OOMAmountCounter.text:SetTextColor(MissingPower:GetConfig("ccolr", 0), MissingPower:GetConfig("ccolg", 0), MissingPower:GetConfig("ccolb", 0))
+								OOMAmountCounter.text:SetTextColor(MissingPower:GetColor("CMPCol"))
 							else
 								OOMAmountCounter.text:SetTextColor(color.r + 0.2, color.g + 0.2, color.b + 0.2)
 							end
