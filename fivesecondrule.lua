@@ -218,6 +218,14 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 		local lastEnergy = -1
 		local function OnUpdateHandler(self, elapsed)
 			local currentEnergyMax = UnitPowerMax("player", Enum.PowerType.Energy)
+			powerType, powerToken, altR, altG, altB = UnitPowerType("player")
+			if powerType ~= Enum.PowerType.Energy then
+				glowEnergy:Hide()
+				glowEnergyBg:Hide()
+
+				return
+			end
+
 			if MissingPower:GetConfig("showenergyticks", true) == false or currentEnergyMax <= 0 then
 				glowEnergy:Hide()
 				glowEnergyBg:Hide()
