@@ -1,13 +1,15 @@
 ## Interface: 20504
-## Version: 1.2.32
+## Version: 1.2.33
 ## Title: MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
 ## Notes: Show for each spell how much power is missing
 ## Author: D4KiR
+## X-Category: D4KiR
 ## DefaultState: enabled
 ## SavedVariables: MIPO
 ## SavedVariablesPerCharacter: MIPOPC
 ## X-Curse-Project-ID: 341275
 ## X-Wago-ID: RXKqO8Ny
+## IconTexture: 136048
 
 libs\D4Lib\D4Lib.xml
 
