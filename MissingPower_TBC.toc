@@ -1,6 +1,6 @@
 ## Interface: 20504
-## Version: 1.2.33
-## Title: MissingPower |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t 
+## Version: 1.2.34
+## Title: M|cff3FC7EBissing|rP|cff3FC7EBower|r |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t
 ## Notes: Show for each spell how much power is missing
 ## Author: D4KiR
 ## X-Category: D4KiR
