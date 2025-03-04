@@ -1,9 +1,10 @@
 ## Interface: 30403
-## Version: 1.2.34
+## Version: 1.2.35
 ## Title: M|cff3FC7EBissing|rP|cff3FC7EBower|r |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t
 ## Notes: Show for each spell how much power is missing
-## Author: D4KiR
-## X-Category: D4KiR
+## Author: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
+## Category: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
+## X-Category: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
 ## DefaultState: enabled
 ## SavedVariables: MIPO
 ## SavedVariablesPerCharacter: MIPOPC
