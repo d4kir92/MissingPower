@@ -14,7 +14,7 @@ end
 
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
-	MissingPower:SetVersion(136048, "1.2.35")
+	MissingPower:SetVersion(136048, "1.2.36")
 	mp_settings = MissingPower:CreateFrame(
 		{
 			["name"] = "MissingPower",
@@ -169,7 +169,7 @@ function MissingPower:InitSetting()
 	)
 
 	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
-		MissingPower:AppendCategory("Five Second Rule (5SR)")
+		MissingPower:AppendCategory("FIVESECONDRULE")
 		MissingPower:AppendCheckbox(
 			"showtickbar",
 			true,
