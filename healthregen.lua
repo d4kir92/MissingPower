@@ -35,7 +35,15 @@ C_Timer.After(
 				movingElement:SetSize(1, sh)
 				movingElement:ClearAllPoints()
 				movingElement:SetPoint("LEFT", hb, "LEFT", p * hb:GetWidth(), 0)
+				if MissingPower.DEBUG then
+					print("Timer12")
+				end
+
 				C_Timer.After(tickRate, UpdatePos)
+			end
+
+			if MissingPower.DEBUG then
+				print("Timer13")
 			end
 
 			C_Timer.After(tickRate, UpdatePos)

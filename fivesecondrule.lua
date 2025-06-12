@@ -192,6 +192,10 @@ if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC
 			end
 		end
 
+		if MissingPower.DEBUG then
+			print("Timer11")
+		end
+
 		C_Timer.NewTicker(tick, FSR_Think)
 	end
 

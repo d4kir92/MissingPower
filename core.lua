@@ -1,5 +1,6 @@
 -- By D4KiR
 local _, MissingPower = ...
+MissingPower.DEBUG = false
 --[[ ### CONFIG START ### ]]
 --
 local CONFIG = {}
@@ -212,6 +213,7 @@ function MissingPower:GetSpellPowerCost(spellId)
 	return GetSpellPowerCost(spellId)
 end
 
+local hookedBtns = {}
 function MissingPower:ShowOOM(init, from)
 	if init then
 		loaded = true
@@ -234,19 +236,29 @@ function MissingPower:ShowOOM(init, from)
 						local atype, aid = GetActionInfo(obtn.id)
 						obtn.actionType = atype
 						obtn.actionID = aid
-						function obtn:ActionChanged()
-							local actionType, actionID = GetActionInfo(obtn.id)
-							if obtn.id ~= obtn:GetID() or obtn.actionType ~= actionType or obtn.actionID ~= actionID then
-								obtn.id = obtn:GetID()
-								obtn.actionType = actionType
-								obtn.actionID = actionID
-								MissingPower:UpdateUi("ID CHANGE")
+						if hookedBtns[obtn] == nil then
+							hookedBtns[obtn] = true
+							hooksecurefunc(
+								obtn,
+								"SetID",
+								function()
+									obtn:ActionChanged()
+								end
+							)
+
+							function obtn:ActionChanged()
+								local actionType, actionID = GetActionInfo(obtn.id)
+								if obtn.id ~= obtn:GetID() or obtn.actionType ~= actionType or obtn.actionID ~= actionID then
+									obtn.id = obtn:GetID()
+									obtn.actionType = actionType
+									obtn.actionID = actionID
+									MissingPower:UpdateUi("ID CHANGE")
+								end
 							end
 
-							C_Timer.After(0.1, obtn.ActionChanged)
+							obtn.ActionChanged()
 						end
 
-						obtn.ActionChanged()
 						MissingPower:CreateOOM(obtn, NAME, i)
 					end
 				end
@@ -677,6 +689,10 @@ local lastMount = false
 function MissingPower:Think()
 	if lastSF ~= GetShapeshiftForm() then
 		lastSF = GetShapeshiftForm()
+		if MissingPower.DEBUG then
+			print("Timer2")
+		end
+
 		C_Timer.After(
 			0.1,
 			function()
@@ -687,6 +703,10 @@ function MissingPower:Think()
 
 	if IsMounted and lastMount ~= IsMounted() then
 		lastMount = IsMounted()
+		if MissingPower.DEBUG then
+			print("Timer3")
+		end
+
 		C_Timer.After(
 			0.1,
 			function()
@@ -706,7 +726,7 @@ function MissingPower:Think()
 		MissingPower:ShowOOM(nil, "Think")
 	end
 
-	C_Timer.After(0.1, MissingPower.Think)
+	C_Timer.After(0.15, MissingPower.Think)
 end
 
 MissingPower:Think()
@@ -725,6 +745,10 @@ local MPLoaded = false
 hooksecurefunc(
 	"PickupAction",
 	function(id)
+		if MissingPower.DEBUG then
+			print("Timer5")
+		end
+
 		C_Timer.After(
 			0.01,
 			function()
@@ -737,6 +761,10 @@ hooksecurefunc(
 hooksecurefunc(
 	"PlaceAction",
 	function(id)
+		if MissingPower.DEBUG then
+			print("Timer6")
+		end
+
 		C_Timer.After(
 			0.01,
 			function()
@@ -749,6 +777,10 @@ hooksecurefunc(
 hooksecurefunc(
 	"ClearCursor",
 	function(id)
+		if MissingPower.DEBUG then
+			print("Timer7")
+		end
+
 		C_Timer.After(
 			0.01,
 			function()
@@ -762,6 +794,10 @@ local function OnEvent(self, event, unit, powertype, ...)
 	if event == "PLAYER_ENTERING_WORLD" and not MPLoaded then
 		MissingPower:InitSetting()
 		MPLoaded = true
+		if MissingPower.DEBUG then
+			print("Timer8")
+		end
+
 		C_Timer.After(
 			1,
 			function()
@@ -770,6 +806,10 @@ local function OnEvent(self, event, unit, powertype, ...)
 		)
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
+			if MissingPower.DEBUG then
+				print("Timer9")
+			end
+
 			C_Timer.After(
 				0.05,
 				function()
@@ -777,6 +817,10 @@ local function OnEvent(self, event, unit, powertype, ...)
 				end
 			)
 		else
+			if MissingPower.DEBUG then
+				print("Timer10")
+			end
+
 			C_Timer.After(
 				0.05,
 				function()
