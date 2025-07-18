@@ -693,11 +693,11 @@ function MissingPower:Think()
 			print("Timer2")
 		end
 
-		C_Timer.After(
+		MissingPower:After(
 			0.1,
 			function()
 				MissingPower:UpdateUi("SHAPESHIFT")
-			end
+			end, "SHAPESHIFT"
 		)
 	end
 
@@ -707,11 +707,11 @@ function MissingPower:Think()
 			print("Timer3")
 		end
 
-		C_Timer.After(
+		MissingPower:After(
 			0.1,
 			function()
 				MissingPower:UpdateUi("MOUNTED")
-			end
+			end, "MOUNTED"
 		)
 	end
 
@@ -726,7 +726,7 @@ function MissingPower:Think()
 		MissingPower:ShowOOM(nil, "Think")
 	end
 
-	C_Timer.After(0.15, MissingPower.Think)
+	MissingPower:After(0.15, MissingPower.Think, "MissingPower Think")
 end
 
 MissingPower:Think()
@@ -749,11 +749,11 @@ hooksecurefunc(
 			print("Timer5")
 		end
 
-		C_Timer.After(
+		MissingPower:After(
 			0.01,
 			function()
 				MissingPower:UpdateUi("PickupAction")
-			end
+			end, "PickupAction"
 		)
 	end
 )
@@ -765,11 +765,11 @@ hooksecurefunc(
 			print("Timer6")
 		end
 
-		C_Timer.After(
+		MissingPower:After(
 			0.01,
 			function()
 				MissingPower:UpdateUi("PlaceAction")
-			end
+			end, "PlaceAction"
 		)
 	end
 )
@@ -781,11 +781,11 @@ hooksecurefunc(
 			print("Timer7")
 		end
 
-		C_Timer.After(
+		MissingPower:After(
 			0.01,
 			function()
 				MissingPower:UpdateUi("ClearCursor")
-			end
+			end, "ClearCursor"
 		)
 	end
 )
@@ -798,11 +798,11 @@ local function OnEvent(self, event, unit, powertype, ...)
 			print("Timer8")
 		end
 
-		C_Timer.After(
+		MissingPower:After(
 			1,
 			function()
 				MissingPower:UpdateUi("PLAYER_ENTERING_WORLD", true)
-			end
+			end, "PLAYER_ENTERING_WORLD"
 		)
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
@@ -810,22 +810,22 @@ local function OnEvent(self, event, unit, powertype, ...)
 				print("Timer9")
 			end
 
-			C_Timer.After(
+			MissingPower:After(
 				0.05,
 				function()
 					MissingPower:UpdateUi("ACTIONBAR_PAGE_CHANGED")
-				end
+				end, "ACTIONBAR_PAGE_CHANGED"
 			)
 		else
 			if MissingPower.DEBUG then
 				print("Timer10")
 			end
 
-			C_Timer.After(
+			MissingPower:After(
 				0.05,
 				function()
 					MissingPower:ShowOOM(nil, "ELSE: " .. event)
-				end
+				end, "ACTIONBAR_PAGE_CHANGED"
 			)
 		end
 	end
@@ -842,3 +842,24 @@ local function OnEvent2(self, event, unit, powertype, ...)
 end
 
 frame2:SetScript("OnEvent", OnEvent2)
+if false then
+	C_Timer.After(
+		1,
+		function()
+			MissingPower:SetDebug(true)
+			MissingPower:DrawDebug(
+				"MissingPower DrawDebug",
+				function()
+					local text = ""
+					for i, v in pairs(MissingPower:GetCountAfter()) do
+						if v > 100 then
+							text = text .. i .. ": " .. v .. "\n"
+						end
+					end
+
+					return text
+				end, 14, 1440, 1440, "CENTER", UIParent, "CENTER", 400, 0
+			)
+		end
+	)
+end

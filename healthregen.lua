@@ -1,5 +1,5 @@
 local _, MissingPower = ...
-C_Timer.After(
+MissingPower:After(
 	5,
 	function()
 		if (MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC") and MissingPower:GetConfig("showhealthreg", false) then
@@ -39,14 +39,14 @@ C_Timer.After(
 					print("Timer12")
 				end
 
-				C_Timer.After(tickRate, UpdatePos)
+				MissingPower:After(tickRate, UpdatePos, "UpdatePos2")
 			end
 
 			if MissingPower.DEBUG then
 				print("Timer13")
 			end
 
-			C_Timer.After(tickRate, UpdatePos)
+			MissingPower:After(tickRate, UpdatePos, "UpdatePos1")
 			local function OnEvent(self, event, ...)
 				if event == "PLAYER_REGEN_ENABLED" then
 					p = 0
@@ -73,5 +73,5 @@ C_Timer.After(
 			MissingPower:RegisterEvent(f, "PLAYER_REGEN_DISABLED")
 			f:SetScript("OnEvent", OnEvent)
 		end
-	end
+	end, "healthRegen"
 )
