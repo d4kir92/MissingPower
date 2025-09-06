@@ -1,17 +1,30 @@
 local _, MissingPower = ...
+function MissingPower:GetHealthBar()
+	local PlayerFrameHealthBar = getglobal("PlayerFrameHealthBar")
+	local ElvUF_Player = getglobal("ElvUF_Player")
+	local SUFUnitplayer = getglobal("SUFUnitplayer")
+	local XPerl_PlayerstatsFramehealthBar = getglobal("XPerl_PlayerstatsFramehealthBar")
+	local hb = PlayerFrameHealthBar
+	if ElvUF_Player ~= nil and ElvUF_Player:IsShown() then
+		hb = ElvUF_Player.Health
+	elseif SUFUnitplayer ~= nil and SUFUnitplayer:IsShown() then
+		hb = SUFUnitplayer.healthBar
+	elseif XPerl_PlayerstatsFramehealthBar ~= nil and XPerl_PlayerstatsFramehealthBar:IsShown() then
+		hb = XPerl_PlayerstatsFramehealthBar
+	end
+
+	if hb == nil then
+		hb = PlayerFrameHealthBar
+	end
+
+	return hb
+end
+
 MissingPower:After(
 	5,
 	function()
 		if (MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC") and MissingPower:GetConfig("showhealthreg", false) then
-			local hb = PlayerFrameHealthBar
-			if ElvUF_Player ~= nil and ElvUF_Player:IsShown() then
-				hb = ElvUF_Player.Health
-			elseif SUFUnitplayer ~= nil and SUFUnitplayer:IsShown() then
-				hb = SUFUnitplayer.healthBar
-			elseif XPerl_PlayerstatsFramehealthBar ~= nil and XPerl_PlayerstatsFramehealthBar:IsShown() then
-				hb = XPerl_PlayerstatsFramehealthBar
-			end
-
+			local hb = MissingPower:GetHealthBar()
 			local hpReg = 1.66
 			local tickRate = 0.01
 			local p = 0

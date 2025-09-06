@@ -43,6 +43,8 @@ function MissingPower:GetActionFromButton(button, action)
 	end
 
 	local abslot = nil
+	local ActionButton_GetPagedID = getglobal("ActionButton_GetPagedID")
+	local ActionButton_CalculateAction = getglobal("ActionButton_CalculateAction")
 	if ActionButton_GetPagedID and ActionButton_CalculateAction then
 		abslot = action or button.action or button:GetAttribute("action") or ActionButton_GetPagedID(button) or ActionButton_CalculateAction(button) or 0
 	else
@@ -206,13 +208,6 @@ function MissingPower:GetOffsetXY(anchor, offset, sw, sh)
 	return x, y
 end
 
-function MissingPower:GetSpellPowerCost(spellId)
-	if spellId == nil then return nil end
-	local GetSpellPowerCost = GetSpellPowerCost or C_Spell and C_Spell.GetSpellPowerCost
-
-	return GetSpellPowerCost(spellId)
-end
-
 local hookedBtns = {}
 function MissingPower:ShowOOM(init, from)
 	if init then
@@ -256,7 +251,7 @@ function MissingPower:ShowOOM(init, from)
 								end
 							end
 
-							obtn.ActionChanged()
+							obtn:ActionChanged()
 						end
 
 						MissingPower:CreateOOM(obtn, NAME, i)
@@ -276,7 +271,7 @@ function MissingPower:ShowOOM(init, from)
 					local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action)
 					local name = nil
 					local spellId = nil
-					if at == "macro" and GetMacroSpell(id) then
+					if id and at == "macro" and GetMacroSpell(id) then
 						id = GetMacroSpell(id)
 					end
 
@@ -336,7 +331,7 @@ function MissingPower:ShowOOM(init, from)
 				local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action)
 				local name = nil
 				local spellId = nil
-				if at == "macro" and GetMacroSpell(id) then
+				if id and at == "macro" and GetMacroSpell(id) then
 					id = GetMacroSpell(id)
 				end
 
@@ -461,7 +456,7 @@ function MissingPower:ShowOOM(init, from)
 							else
 								amount = 0
 							end
-						elseif typ == Enum.PowerType.RunicPower or typ == Enum.PowerType.Runic_Power then
+						elseif typ == Enum.PowerType.RunicPower or typ == Enum.PowerType.RunicPower then
 							color.r = r
 							color.g = g
 							color.b = b
@@ -605,7 +600,7 @@ function MissingPower:ShowOOM(init, from)
 							end
 
 							if MissingPower:GetConfig("customcolor", false) then
-								OOMAmountCounter.text:SetTextColor(MissingPower:GetColor("CMPCol"))
+								OOMAmountCounter.text:SetTextColor(MissingPower:GetColor("CMPCol", "CMPCol"))
 							else
 								OOMAmountCounter.text:SetTextColor(color.r + 0.2, color.g + 0.2, color.b + 0.2)
 							end
@@ -627,7 +622,7 @@ function MissingPower:ShowOOM(init, from)
 					if decimals == 0 or amount > 99 then
 						amo = SpecialRound(amount, 0)
 					else
-						amo = format("%." .. string.format("%.0f", decimals) .. "f", SpecialRound(amount, decimals))
+						amo = tonumber(format("%." .. string.format("%.0f", decimals) .. "f", SpecialRound(amount, decimals))) or 0
 					end
 
 					if tonumber(MissingPower:GetConfig("displayiflowerthanx", 10)) > 0 then
