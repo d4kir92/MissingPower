@@ -689,10 +689,6 @@ local lastMount = false
 function MissingPower:Think()
 	if lastSF ~= GetShapeshiftForm() then
 		lastSF = GetShapeshiftForm()
-		if MissingPower.DEBUG then
-			print("Timer2")
-		end
-
 		MissingPower:After(
 			0.1,
 			function()
@@ -703,10 +699,6 @@ function MissingPower:Think()
 
 	if IsMounted and lastMount ~= IsMounted() then
 		lastMount = IsMounted()
-		if MissingPower.DEBUG then
-			print("Timer3")
-		end
-
 		MissingPower:After(
 			0.1,
 			function()
@@ -725,8 +717,6 @@ function MissingPower:Think()
 		mana = UnitPower("PLAYER", enum)
 		MissingPower:ShowOOM(nil, "Think")
 	end
-
-	MissingPower:After(0.15, MissingPower.Think, "MissingPower Think")
 end
 
 MissingPower:Think()
@@ -745,10 +735,6 @@ local MPLoaded = false
 hooksecurefunc(
 	"PickupAction",
 	function(id)
-		if MissingPower.DEBUG then
-			print("Timer5")
-		end
-
 		MissingPower:After(
 			0.01,
 			function()
@@ -761,10 +747,6 @@ hooksecurefunc(
 hooksecurefunc(
 	"PlaceAction",
 	function(id)
-		if MissingPower.DEBUG then
-			print("Timer6")
-		end
-
 		MissingPower:After(
 			0.01,
 			function()
@@ -777,10 +759,6 @@ hooksecurefunc(
 hooksecurefunc(
 	"ClearCursor",
 	function(id)
-		if MissingPower.DEBUG then
-			print("Timer7")
-		end
-
 		MissingPower:After(
 			0.01,
 			function()
@@ -794,10 +772,6 @@ local function OnEvent(self, event, unit, powertype, ...)
 	if event == "PLAYER_ENTERING_WORLD" and not MPLoaded then
 		MissingPower:InitSetting()
 		MPLoaded = true
-		if MissingPower.DEBUG then
-			print("Timer8")
-		end
-
 		MissingPower:After(
 			1,
 			function()
@@ -806,10 +780,6 @@ local function OnEvent(self, event, unit, powertype, ...)
 		)
 	elseif MPLoaded then
 		if event == "ACTIONBAR_PAGE_CHANGED" then
-			if MissingPower.DEBUG then
-				print("Timer9")
-			end
-
 			MissingPower:After(
 				0.05,
 				function()
@@ -817,10 +787,6 @@ local function OnEvent(self, event, unit, powertype, ...)
 				end, "ACTIONBAR_PAGE_CHANGED"
 			)
 		else
-			if MissingPower.DEBUG then
-				print("Timer10")
-			end
-
 			MissingPower:After(
 				0.05,
 				function()
@@ -842,8 +808,8 @@ local function OnEvent2(self, event, unit, powertype, ...)
 end
 
 frame2:SetScript("OnEvent", OnEvent2)
-if false then
-	C_Timer.After(
+if true then
+	MissingPower:After(
 		1,
 		function()
 			MissingPower:SetDebug(true)
@@ -860,6 +826,6 @@ if false then
 					return text
 				end, 14, 1440, 1440, "CENTER", UIParent, "CENTER", 400, 0
 			)
-		end
+		end, "DEBUG"
 	)
 end

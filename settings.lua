@@ -1,6 +1,5 @@
 -- By D4KiR
-local AddonName, MissingPower = ...
-local MIPOSettings = {}
+local _, MissingPower = ...
 local mp_settings = {}
 function MissingPower:ToggleSettings()
 	if mp_settings then
@@ -15,7 +14,7 @@ end
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
 	MissingPower:SetVersion(136048, "1.2.43")
-	mp_settings = MissingPower:CreateFrame(
+	mp_settings = MissingPower:CreateWindow(
 		{
 			["name"] = "MissingPower",
 			["pTab"] = {"CENTER"},

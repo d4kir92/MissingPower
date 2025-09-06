@@ -1,11 +1,16 @@
 local _, D4 = ...
+local GetLocale = getglobal("GetLocale")
 local initRealms = false
 local initRealmLangs = false
 local missingRealmNameOnce = true
 local missingRealms = {}
 local realms = {}
 local missingRealmLangs = {}
-local region = GetCurrentRegion()
+local region = GetCurrentRegion and GetCurrentRegion() or 1
+local withoutSpaces = {}
+local realmLangs = {}
+local missingRegionOnce = true
+local missingWoWBuildOnce = true
 local regions = {
     ["US"] = 1,
     ["KR"] = 2,
@@ -30,8 +35,6 @@ local function IsKoreanLetters(str)
 end
 
 local function InitRealms()
-    local missingRegionOnce = true
-    local missingWoWBuildOnce = true
     if D4:GetWoWBuild() == "RETAIL" then
         if region == regions["US"] then
             if GetLocale() == "enUS" then
@@ -5871,7 +5874,7 @@ local function InitRealms()
                 realms["密斯莱尔"] = "美国西部"
                 realms["尤亚姆巴"] = "大洋洲"
                 realms["帕格"] = "美国东部"
-                realms["怀特迈恩"] = "美国西部"
+                realms["怀特迈恩"] = "���国西部"
                 realms["怒炉"] = "美国西部"
                 realms["曼科里克"] = "美国东部"
                 realms["格罗布鲁斯"] = "美国西部"
@@ -7128,7 +7131,6 @@ local function InitRealms()
         end
     end
 
-    local withoutSpaces = {}
     for name, val in pairs(realms) do
         if string.find(name, "-", 1, true) ~= nil then
             withoutSpaces[name:gsub("-", "")] = val
@@ -7150,6 +7152,7 @@ function D4:GetRealmLang(realmName)
         InitRealms()
     end
 
+    if GetLocale() == "" then return "" end
     if not (GetLocale() == "enUS" or GetLocale() == "deDE" or GetLocale() == "koKR" or GetLocale() == "zhTW") then return "" end
     if realmName == nil then
         if missingRealmNameOnce then
@@ -7187,7 +7190,6 @@ function D4:GetRealmLang(realmName)
 end
 
 local function InitRealmLangs()
-    local realmLangs = {}
     --[[ deDE ]]
     realmLangs["Deutsch"] = "deDE"
     realmLangs["German"] = "deDE"
@@ -7300,4 +7302,9 @@ function D4:GetRealmFlag(realmName)
     end
 
     return realmLangs[realmLang]
+end
+
+function D4:LoadRealms()
+    InitRealms()
+    InitRealmLangs()
 end

@@ -35,15 +35,7 @@ MissingPower:After(
 				movingElement:SetSize(1, sh)
 				movingElement:ClearAllPoints()
 				movingElement:SetPoint("LEFT", hb, "LEFT", p * hb:GetWidth(), 0)
-				if MissingPower.DEBUG then
-					print("Timer12")
-				end
-
 				MissingPower:After(tickRate, UpdatePos, "UpdatePos2")
-			end
-
-			if MissingPower.DEBUG then
-				print("Timer13")
 			end
 
 			MissingPower:After(tickRate, UpdatePos, "UpdatePos1")
