@@ -803,7 +803,7 @@ local function OnEvent2(self, event, unit, powertype, ...)
 end
 
 frame2:SetScript("OnEvent", OnEvent2)
-if true then
+if false then
 	MissingPower:After(
 		1,
 		function()
