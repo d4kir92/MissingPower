@@ -109,7 +109,7 @@ MissingPower:After(
 							oldmana = mana
 							--local name, rank, icon, castTime, minRange, maxRange = MissingPower:GetSpellInfo(b)
 							local costs = MissingPower:GetSpellPowerCost(b)
-							if costs[1] ~= nil and costs[1].cost > 0 then
+							if costs and costs[1] ~= nil and costs[1].cost > 0 then
 								max = fsr
 								gain = false
 								nexttick = now + fsr

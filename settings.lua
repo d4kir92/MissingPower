@@ -13,7 +13,7 @@ end
 
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
-	MissingPower:SetVersion(136048, "1.2.45")
+	MissingPower:SetVersion(136048, "1.2.46")
 	mp_settings = MissingPower:CreateWindow(
 		{
 			["name"] = "MissingPower",
