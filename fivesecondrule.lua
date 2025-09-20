@@ -214,7 +214,6 @@ MissingPower:After(
 			if true then
 				local EnergyTickTracker = CreateFrame("Frame")
 				EnergyTickTracker:RegisterEvent("UNIT_POWER_UPDATE")
-				EnergyTickTracker:RegisterEvent("PLAYER_LOGIN")
 				local lastTickTime = GetTime()
 				local tickInterval = 2
 				local playerUnit = "player"
@@ -296,9 +295,7 @@ MissingPower:After(
 				EnergyTickTracker:SetScript(
 					"OnEvent",
 					function(self, event, unit, powerType, ...)
-						if event == "PLAYER_LOGIN" then
-							InitializeTracker()
-						elseif event == "UNIT_POWER_UPDATE" and unit == playerUnit and powerType == "ENERGY" then
+						if event == "UNIT_POWER_UPDATE" and unit == playerUnit and powerType == "ENERGY" then
 							local currentEnergy = UnitPower("player", Enum.PowerType.Energy)
 							if lastEnergy < currentEnergy then
 								lastTickTime = GetTime()
@@ -308,6 +305,8 @@ MissingPower:After(
 						end
 					end
 				)
+
+				InitializeTracker()
 			end
 
 			if true then
