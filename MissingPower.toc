@@ -2,10 +2,10 @@
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30300, 30403
 ## Interface-Cata: 40402
-## Interface-Mists: 50500
+## Interface-Mists: 50501
 ## Interface: 110200
 
-## Version: 1.2.47
+## Version: 1.2.48
 ## Title: M|cff3FC7EBissing|rP|cff3FC7EBower|r |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t
 ## Notes: Show for each spell how much power is missing
 ## Notes-ruRU: Показывает, как часто Вы можете произносить заклинание
