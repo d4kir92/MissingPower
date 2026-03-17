@@ -13,14 +13,14 @@ end
 
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
-	MissingPower:SetVersion(136048, "1.2.61")
+	MissingPower:SetVersion(136048, "1.2.62")
 	mp_settings = MissingPower:CreateWindow(
 		{
 			["name"] = "MissingPower",
 			["pTab"] = {"CENTER"},
 			["sw"] = 520,
 			["sh"] = 520,
-			["title"] = format("|T136048:16:16:0:0|t M|cff3FC7EBissing|rP|cff3FC7EBower|r v|cff3FC7EB%s", MissingPower:GetVersion())
+			["title"] = format("|T136048:16:16:0:0|t Missing|rPower|r v%s", MissingPower:GetVersion())
 		}
 	)
 
@@ -239,7 +239,7 @@ function MissingPower:InitSetting()
 			["name"] = "MissingPower",
 			["icon"] = 136048,
 			["dbtab"] = MIPOPC,
-			["vTT"] = {{"|T136048:16:16:0:0|t M|cff3FC7EBissing|rP|cff3FC7EBower|r", "v|cff3FC7EB" .. MissingPower:GetVersion()}, {MissingPower:Trans("LID_LEFTCLICK"), MissingPower:Trans("LID_OPENSETTINGS")}, {MissingPower:Trans("LID_RIGHTCLICK"), MissingPower:Trans("LID_HIDEMINIMAPBUTTON")}},
+			["vTT"] = {{"|T136048:16:16:0:0|t Missing|rPower|r", "v" .. MissingPower:GetVersion()}, {MissingPower:Trans("LID_LEFTCLICK"), MissingPower:Trans("LID_OPENSETTINGS")}, {MissingPower:Trans("LID_RIGHTCLICK"), MissingPower:Trans("LID_HIDEMINIMAPBUTTON")}},
 			["funcL"] = function()
 				MissingPower:ToggleSettings()
 			end,

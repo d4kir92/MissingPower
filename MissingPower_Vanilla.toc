@@ -1,11 +1,20 @@
 ## Interface: 11508
-## Version: 1.2.61
-## Title: M|cff3FC7EBissing|rP|cff3FC7EBower|r |T136048:16:16:0:0|t by |cff3FC7EBD4KiR |T132115:16:16:0:0|t
+## Version: 1.2.62
+## Title: MissingPower |T136048:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: Show for each spell how much power is missing
 ## Notes-ruRU: Показывает, как часто Вы можете произносить заклинание
-## Author: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
-## Category: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
-## X-Category: D|cff3FC7EB4KiR |T132115:16:16:0:0|t
+## Author: D4KiR |T132115:16:16:0:0|t
+## Category: Action Bars
+## Category-deDE: Aktionsleisten
+## Category-esES: Barras de acción
+## Category-esMX: Barras de acción
+## Category-frFR: Barres d’action
+## Category-itIT: Barre delle azioni
+## Category-koKR: 액션 바
+## Category-ptBR: Barras de ação
+## Category-ruRU: Панели команд
+## Category-zhCN: 动作条
+## Category-zhTW: 快捷列
 ## DefaultState: enabled
 ## SavedVariables: MIPO
 ## SavedVariablesPerCharacter: MIPOPC
