@@ -3,9 +3,8 @@
 ## Interface-Wrath: 30300, 30403
 ## Interface-Cata: 40402
 ## Interface-Mists: 50503
-## Interface: 110207
 
-## Version: 1.2.62
+## Version: 1.2.63
 ## Title: MissingPower by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: Show for each spell how much power is missing
 ## Notes-ruRU: Показывает, как часто Вы можете произносить заклинание
