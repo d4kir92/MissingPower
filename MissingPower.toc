@@ -4,7 +4,7 @@
 ## Interface-Cata: 40402
 ## Interface-Mists: 50503
 
-## Version: 1.2.63
+## Version: 1.2.64
 ## Title: MissingPower by |cff55d2ffD4KiR |T132115:16:16:0:0|t
 ## Notes: Show for each spell how much power is missing
 ## Notes-ruRU: Показывает, как часто Вы можете произносить заклинание
