@@ -164,8 +164,6 @@ MissingPower:After(
 				-- Cache config lookups for this tick
 				local showTickBar = MissingPower:GetConfig("showtickbar", true)
 				local showTickBarBg = MissingPower:GetConfig("showtickbarbg", true)
-				local tickbarBorderColor = MissingPower:GetColor("TickbarBorderColor", "TickbarBorderColor")
-				local tickbarColor = MissingPower:GetColor("TickbarColor", "TickbarColor")
 				if showTickBar == false then
 					full = true
 				end
@@ -181,8 +179,8 @@ MissingPower:After(
 					if full then
 						frame:Hide()
 					else
-						glowBg:SetColorTexture(tickbarBorderColor)
-						glow:SetColorTexture(tickbarColor)
+						glowBg:SetColorTexture(MissingPower:GetColor("TickbarBorderColor", "TickbarBorderColor"))
+						glow:SetColorTexture(MissingPower:GetColor("TickbarColor", "TickbarColor"))
 						frame:SetParent(mb)
 						frame:SetHeight(mb:GetHeight())
 						frame:SetWidth(mb:GetWidth())
