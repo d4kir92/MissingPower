@@ -2,14 +2,11 @@
 local _, MissingPower = ...
 MissingPower.DEBUG = false
 --[[ ### CONFIG START ### ]]
---
 local CONFIG = {}
 --[[ General ]]
---
 -- Time for start setup
 CONFIG.waittime = 2
 --[[ Transparency Fade ]]
---
 -- Minimum Transparency
 CONFIG.min = 0.1
 -- Maximum Transparency
@@ -19,12 +16,9 @@ CONFIG.dir = 0.1
 -- Transparency tick
 CONFIG.tick = 0.1
 --[[ ActionBars ]]
---
 local MIPOActionBars = {"ActionButton", "MultiBarBottomLeftButton", "MultiBarBottomRightButton", "MultiBarRightButton", "MultiBarLeftButton", "MultiBarBottomLeftActionButton", "MultiBarBottomRightActionButton", "MultiBarRightActionButton", "MultiBarLeftActionButton", "StanceButton", "AB", "DominosActionButton", "BT4", "ElvUI_Bar1Button", "ElvUI_Bar2Button", "ElvUI_Bar3Button", "ElvUI_Bar4Button", "ElvUI_Bar5Button", "ElvUI_Bar6Button", "ElvUI_StanceBar", "ActionBar1", "ActionBar2", "ActionBar3", "ActionBar4", "ActionBar5", "ActionBar6", "ActionBar7", "ActionBar8", "ActionBar9", "ActionBar10", "MAActionBar1", "MAActionBar2", "MAActionBar3", "MAActionBar4", "MAActionBar5", "MAActionBar6", "MAActionBar7", "MAActionBar8", "MAActionBar9", "MAActionBar10", "MAIStance", "MultiBar1", "MultiBar2", "MultiBar3", "MultiBar4", "MultiBar5", "MultiBar6", "MultiBar7", "MultiBar8", "MultiBar9", "MultiBar10", "DragonflightUIMultiactionBar1Button", "DragonflightUIMultiactionBar2Button", "DragonflightUIMultiactionBar3Button", "DragonflightUIMultiactionBar4Button", "DragonflightUIMultiactionBar5Button", "DragonflightUIMultiactionBar6Button", "DragonflightUIMultiactionBar7Button", "DragonflightUIMultiactionBar8Button"}
 --[[ ### CONFIG END ### ]]
---
 --[[ Functions, do not change, write me! ]]
---
 local setup = true
 local ready = false
 local ActionButtons = {}
@@ -34,16 +28,11 @@ color.r = 0.3
 color.g = 0.3
 color.b = 1.0
 color.a = 1
-
 -- Cached once after PLAYER_ENTERING_WORLD; false = "checked, not found"
 local _AB_GetPagedID = nil
 local _AB_CalculateAction = nil
-
 function MissingPower:GetActionFromButton(button, action)
-	if strfind(button:GetName(), "MAI") then
-		return button.sbsid or button.spellid, "spell"
-	end
-
+	if strfind(button:GetName(), "MAI") then return button.sbsid or button.spellid, "spell" end
 	if _AB_GetPagedID == nil then
 		_AB_GetPagedID = getglobal("ActionButton_GetPagedID") or false
 		_AB_CalculateAction = getglobal("ActionButton_CalculateAction") or false
@@ -60,6 +49,7 @@ function MissingPower:GetActionFromButton(button, action)
 		local at, id, _
 		if type(abslot) == "number" and HasAction(abslot) then
 			at, id, _ = GetActionInfo(abslot)
+
 			return id, at
 		end
 
@@ -149,8 +139,7 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		ActionButtons[BTNNAME].counterFrame = _G[BTNNAME .. "AmountCounter"]
 		ActionButtons[BTNNAME].nr = nr
 		-- Cache stance-button flag so string.find isn't called per-update
-		ActionButtons[BTNNAME].isStanceBtn = string.find(name, "StanceButton") ~= nil
-			and string.find(name, "MAIStanceButton") == nil
+		ActionButtons[BTNNAME].isStanceBtn = string.find(name, "StanceButton") ~= nil and string.find(name, "MAIStanceButton") == nil
 	end
 end
 
@@ -315,6 +304,7 @@ function MissingPower:ShowOOM(init, from)
 							g = MissingPower:MathC(pbc.g or g, 0.3, 1.0)
 							b = MissingPower:MathC(pbc.b or b, 0.3, 1.0)
 						end
+
 						ab.cachedR = r
 						ab.cachedG = g
 						ab.cachedB = b
@@ -334,10 +324,12 @@ function MissingPower:ShowOOM(init, from)
 				MissingPower:SV(MIPOPC, "fontsize", 12)
 				fontsize = 12
 			end
+
 			if fontsize < 6 then
 				MissingPower:SV(MIPOPC, "fontsize", 6)
 				fontsize = 6
 			end
+
 			local showamountcounter = MissingPower:GetConfig("showamountcounter", true)
 			local decimals = MissingPower:GetConfig("decimals", 1)
 			local displayiflowerthanx = tonumber(MissingPower:GetConfig("displayiflowerthanx", 10))
@@ -347,18 +339,15 @@ function MissingPower:ShowOOM(init, from)
 			local poweralpha = MissingPower:GetConfig("poweralpha", 0.7)
 			local hideoverlap = MissingPower:GetConfig("hideoverlap", true)
 			local customcolor = MissingPower:GetConfig("customcolor", false)
-
 			-- GetPowerRegen is the same for all buttons (one player), call once
 			local baseRegen = GetPowerRegen and GetPowerRegen() or 20
 			-- Pre-build decimal format string once per ShowOOM
 			local fmtStr = decimals > 0 and ("%." .. string.format("%.0f", decimals) .. "f") or nil
-
 			for btnname, ab in pairs(MIPOActionButtons) do
 				local ABTN = _G[ab.name]
 				local OOM = ab.btn
 				local OOMAmountCounter = ab.counterFrame
 				OOM:Hide(true)
-
 				if OOMAmountCounter.text.fs ~= fontsize then
 					OOMAmountCounter.text.fs = fontsize
 					OOMAmountCounter.text:SetFont(STANDARD_TEXT_FONT, fontsize, "OUTLINE")
@@ -370,20 +359,17 @@ function MissingPower:ShowOOM(init, from)
 				local r = ab.cachedR
 				local g = ab.cachedG
 				local b = ab.cachedB
-
 				local ph = 0
 				local p = 0
 				local regen = baseRegen
 				local amount = 0
-
 				if cost and cost > 0 then
 					local currentPower = UnitPower("player", typ)
-
 					if cost > currentPower then
 						p = currentPower / cost
 					end
-					amount = currentPower / cost
 
+					amount = currentPower / cost
 					if typ == Enum.PowerType.Mana then
 						regen = baseRegen * 2
 					elseif typ == Enum.PowerType.Rage or typ == Enum.PowerType.Focus then
@@ -474,14 +460,24 @@ function MissingPower:Think()
 	local sf = GetShapeshiftForm()
 	if lastSF ~= sf then
 		lastSF = sf
-		MissingPower:After(0.1, function() MissingPower:UpdateUi("SHAPESHIFT") end, "SHAPESHIFT")
+		MissingPower:After(
+			0.1,
+			function()
+				MissingPower:UpdateUi("SHAPESHIFT")
+			end, "SHAPESHIFT"
+		)
 	end
 
 	if IsMounted then
 		local mounted = IsMounted()
 		if lastMount ~= mounted then
 			lastMount = mounted
-			MissingPower:After(0.1, function() MissingPower:UpdateUi("MOUNTED") end, "MOUNTED")
+			MissingPower:After(
+				0.1,
+				function()
+					MissingPower:UpdateUi("MOUNTED")
+				end, "MOUNTED"
+			)
 		end
 	end
 
