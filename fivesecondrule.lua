@@ -123,6 +123,9 @@ MissingPower:After(
 			local glow = frame:CreateTexture(nil, "OVERLAY")
 			glow:SetDrawLayer("OVERLAY", 7)
 			glow:SetWidth(1)
+			local fsrCfgShowTickBar = MissingPower:GetConfig("showtickbar", true)
+			local fsrCfgShowTickBarBg = MissingPower:GetConfig("showtickbarbg", true)
+			local fsrCfgNextRefresh = 0
 			function MissingPower:FSR()
 				now = GetTime()
 				mana = UnitPower("player", Enum.PowerType.Mana)
@@ -133,14 +136,12 @@ MissingPower:After(
 					frame:Show()
 					if mana < manamax then
 						if gain then
-							-- GAIN MANA
 							if oldmana + 10 < mana or oldmana - 10 > mana or now >= nexttick then
 								oldmana = mana
 								max = mpt
 								nexttick = now + mpt
 							end
 						elseif not gain then
-							-- LOSE MANA
 							gain = true
 						end
 					else
@@ -161,10 +162,13 @@ MissingPower:After(
 					full = true
 				end
 
-				-- Cache config lookups for this tick
-				local showTickBar = MissingPower:GetConfig("showtickbar", true)
-				local showTickBarBg = MissingPower:GetConfig("showtickbarbg", true)
-				if showTickBar == false then
+				if now >= fsrCfgNextRefresh then
+					fsrCfgNextRefresh = now + 5
+					fsrCfgShowTickBar = MissingPower:GetConfig("showtickbar", true)
+					fsrCfgShowTickBarBg = MissingPower:GetConfig("showtickbarbg", true)
+				end
+
+				if fsrCfgShowTickBar == false then
 					full = true
 				end
 
@@ -185,7 +189,7 @@ MissingPower:After(
 						frame:SetHeight(mb:GetHeight())
 						frame:SetWidth(mb:GetWidth())
 						frame:SetPoint("LEFT", mb, "LEFT")
-						if showTickBarBg then
+						if fsrCfgShowTickBarBg then
 							glowBg:SetWidth(3)
 							glowBg:SetPoint("RIGHT", frame, "RIGHT", 1, 0)
 						else
@@ -229,6 +233,10 @@ MissingPower:After(
 			glowEnergy:SetWidth(1)
 			local lastMB = nil
 			local lastEnergy = -1
+			local euShowTicks = MissingPower:GetConfig("showenergyticks", true)
+			local euShowTicksBg = MissingPower:GetConfig("showenergyticksbg", true)
+			local euCfgRefreshAccum = 0
+			local euCfgRefreshInterval = 5
 			local function OnUpdateHandler(self, elapsed)
 				local currentEnergyMax = UnitPowerMax("player", Enum.PowerType.Energy)
 				local powerType = UnitPowerType("player")
@@ -239,10 +247,14 @@ MissingPower:After(
 					return
 				end
 
-				-- Cache config/color lookups for this frame
-				local showEnergyTicks = MissingPower:GetConfig("showenergyticks", true)
-				local showEnergyTicksBg = MissingPower:GetConfig("showenergyticksbg", true)
-				if showEnergyTicks == false or currentEnergyMax <= 0 then
+				euCfgRefreshAccum = euCfgRefreshAccum + elapsed
+				if euCfgRefreshAccum >= euCfgRefreshInterval then
+					euCfgRefreshAccum = 0
+					euShowTicks = MissingPower:GetConfig("showenergyticks", true)
+					euShowTicksBg = MissingPower:GetConfig("showenergyticksbg", true)
+				end
+
+				if euShowTicks == false or currentEnergyMax <= 0 then
 					glowEnergy:Hide()
 					glowEnergyBg:Hide()
 
@@ -275,7 +287,7 @@ MissingPower:After(
 					end
 
 					progressBar:SetWidth(progress)
-					if showEnergyTicksBg then
+					if euShowTicksBg then
 						glowEnergyBg:SetWidth(3)
 						glowEnergyBg:SetPoint("RIGHT", progressBar, "RIGHT", 1, 0)
 					else

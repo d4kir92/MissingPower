@@ -26,7 +26,7 @@ MissingPower:After(
 		if (MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC") and MissingPower:GetConfig("showhealthreg", false) then
 			local hb = MissingPower:GetHealthBar()
 			local hpReg = 1.66
-			local tickRate = 0.01
+			local tickRate = 0.05
 			local p = 0
 			local movingElement = CreateFrame("Frame", nil, hb)
 			movingElement:SetSize(10, 10)
