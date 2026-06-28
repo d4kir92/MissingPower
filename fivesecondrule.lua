@@ -15,7 +15,7 @@ function MissingPower:GetManaBar()
 		end
 	elseif SUFUnitplayer ~= nil and SUFUnitplayer:IsShown() then
 		mb = SUFUnitplayer.powerBar
-		if SUFUnitplayer == nil and wOnce then
+		if mb == nil and wOnce then
 			wOnce = false
 			MissingPower:MSG("ShadowUnitFrames Renamed PlayerFrame, please tell Missing Power Dev to fix it")
 		end
@@ -83,282 +83,280 @@ MissingPower:After(
 		end
 
 		if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
-			if true then
-				local lastMb = nil
-				local tick = 0.03
-				local now = GetTime()
-				local nexttick = now + 2
-				local oldmana = 0
-				local mpt = 2
-				local fsr = 5
-				local max = 2
-				local gain = true
-				local mana = 0
-				local manamax = 0
-				local frame = CreateFrame("FRAME")
-				MissingPower:RegisterEvent(frame, "UNIT_SPELLCAST_SUCCEEDED", "player")
-				local tex = frame:CreateTexture(nil, "BACKGROUND")
-				tex:SetAllPoints()
-				tex:SetColorTexture(1, 1, 1, 0)
-				local function eventHandler(self, event, unit, a, b, c, ...)
-					now = GetTime()
-					if event == "UNIT_SPELLCAST_SUCCEEDED" then
-						mana = UnitPower("player", Enum.PowerType.Mana)
-						manamax = UnitPowerMax("player", Enum.PowerType.Mana)
-						if unit == "player" and event == "UNIT_SPELLCAST_SUCCEEDED" and oldmana ~= mana then
-							oldmana = mana
-							--local name, rank, icon, castTime, minRange, maxRange = MissingPower:GetSpellInfo(b)
-							local costs = MissingPower:GetSpellPowerCost(b)
-							if costs and costs[1] ~= nil and costs[1].cost > 0 then
-								max = fsr
-								gain = false
-								nexttick = now + fsr
-							end
-						end
-					end
-				end
-
-				frame:SetScript("OnEvent", eventHandler)
-				frame:SetFrameStrata("HIGH")
-				local glowBg = frame:CreateTexture(nil, "OVERLAY")
-				glowBg:SetDrawLayer("OVERLAY", 6)
-				local glow = frame:CreateTexture(nil, "OVERLAY")
-				glow:SetDrawLayer("OVERLAY", 7)
-				glow:SetWidth(1)
-				function MissingPower:FSR()
-					now = GetTime()
+			local lastMb = nil
+			local tick = 0.03
+			local now = GetTime()
+			local nexttick = now + 2
+			local oldmana = 0
+			local mpt = 2
+			local fsr = 5
+			local max = 2
+			local gain = true
+			local mana = 0
+			local manamax = 0
+			local frame = CreateFrame("FRAME")
+			MissingPower:RegisterEvent(frame, "UNIT_SPELLCAST_SUCCEEDED", "player")
+			local tex = frame:CreateTexture(nil, "BACKGROUND")
+			tex:SetAllPoints()
+			tex:SetColorTexture(1, 1, 1, 0)
+			local function eventHandler(self, event, unit, a, b, c, ...)
+				now = GetTime()
+				if event == "UNIT_SPELLCAST_SUCCEEDED" then
 					mana = UnitPower("player", Enum.PowerType.Mana)
 					manamax = UnitPowerMax("player", Enum.PowerType.Mana)
-					local t = UnitPowerType("player")
-					local full = false
-					if t == Enum.PowerType.Mana then
-						frame:Show()
-						if mana < manamax then
-							if gain then
-								-- GAIN MANA
-								if oldmana + 10 < mana or oldmana - 10 > mana or now >= nexttick then
-									oldmana = mana
-									max = mpt
-									nexttick = now + mpt
-								end
-							elseif not gain then
-								-- LOSE MANA
-								gain = true
-							end
-							--max = mpt
-						else
-							full = true
-						end
-					else
-						frame:Hide()
-					end
-
-					local percent = 0
-					if max > 2 then
-						percent = (nexttick - now) / max
-					else
-						percent = (max - (nexttick - now)) / max
-					end
-
-					if percent > 1 then
-						full = true
-					end
-
-					if MissingPower:GetConfig("showtickbar", true) == false then
-						full = true
-					end
-
-					local mb = MissingPower:GetManaBar()
-					if lastMb ~= mb then
-						lastMb = mb
-						glowBg:SetHeight(mb:GetHeight())
-						glow:SetHeight(mb:GetHeight() - 2)
-					end
-
-					if mb then
-						if full then
-							frame:Hide()
-						else
-							glowBg:SetColorTexture(MissingPower:GetColor("TickbarBorderColor", "TickbarBorderColor"))
-							glow:SetColorTexture(MissingPower:GetColor("TickbarColor", "TickbarColor"))
-							frame:SetParent(mb)
-							frame:SetHeight(mb:GetHeight())
-							frame:SetWidth(mb:GetWidth())
-							frame:SetPoint("LEFT", mb, "LEFT")
-							if MissingPower:GetConfig("showtickbarbg", true) then
-								glowBg:SetWidth(3)
-								glowBg:SetPoint("RIGHT", frame, "RIGHT", 1, 0)
-							else
-								glowBg:SetWidth(1)
-								glowBg:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
-							end
-
-							glow:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
-							local newsize = mb:GetWidth() * percent
-							frame:SetWidth(newsize)
-							frame:Show()
+					if unit == "player" and oldmana ~= mana then
+						oldmana = mana
+						local costs = MissingPower:GetSpellPowerCost(b)
+						if costs and costs[1] ~= nil and costs[1].cost > 0 then
+							max = fsr
+							gain = false
+							nexttick = now + fsr
 						end
 					end
-
-					MissingPower:After(
-						tick,
-						function()
-							MissingPower:FSR()
-						end, "FSR"
-					)
 				end
-
-				MissingPower:FSR()
 			end
 
-			if true then
-				local EnergyTickTracker = CreateFrame("Frame")
-				EnergyTickTracker:RegisterEvent("UNIT_POWER_UPDATE")
-				local lastTickTime = GetTime()
-				local tickInterval = 2
-				local playerUnit = "player"
+			frame:SetScript("OnEvent", eventHandler)
+			frame:SetFrameStrata("HIGH")
+			local glowBg = frame:CreateTexture(nil, "OVERLAY")
+			glowBg:SetDrawLayer("OVERLAY", 6)
+			local glow = frame:CreateTexture(nil, "OVERLAY")
+			glow:SetDrawLayer("OVERLAY", 7)
+			glow:SetWidth(1)
+			function MissingPower:FSR()
+				now = GetTime()
+				mana = UnitPower("player", Enum.PowerType.Mana)
+				manamax = UnitPowerMax("player", Enum.PowerType.Mana)
+				local t = UnitPowerType("player")
+				local full = false
+				if t == Enum.PowerType.Mana then
+					frame:Show()
+					if mana < manamax then
+						if gain then
+							-- GAIN MANA
+							if oldmana + 10 < mana or oldmana - 10 > mana or now >= nexttick then
+								oldmana = mana
+								max = mpt
+								nexttick = now + mpt
+							end
+						elseif not gain then
+							-- LOSE MANA
+							gain = true
+						end
+					else
+						full = true
+					end
+				else
+					frame:Hide()
+				end
+
+				local percent = 0
+				if max > 2 then
+					percent = (nexttick - now) / max
+				else
+					percent = (max - (nexttick - now)) / max
+				end
+
+				if percent > 1 then
+					full = true
+				end
+
+				-- Cache config lookups for this tick
+				local showTickBar = MissingPower:GetConfig("showtickbar", true)
+				local showTickBarBg = MissingPower:GetConfig("showtickbarbg", true)
+				local tickbarBorderColor = MissingPower:GetColor("TickbarBorderColor", "TickbarBorderColor")
+				local tickbarColor = MissingPower:GetColor("TickbarColor", "TickbarColor")
+				if showTickBar == false then
+					full = true
+				end
+
 				local mb = MissingPower:GetManaBar()
-				local progressBar = CreateFrame("StatusBar", nil, mb)
-				progressBar:SetSize(118, 18)
-				progressBar:SetPoint("LEFT", mb, "LEFT")
-				progressBar:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
-				progressBar:SetStatusBarColor(0, 0, 0, 0)
-				progressBar:SetMinMaxValues(0, tickInterval)
-				progressBar:SetValue(0)
-				local glowEnergyBg = progressBar:CreateTexture(nil, "OVERLAY")
-				glowEnergyBg:SetDrawLayer("OVERLAY", 6)
-				local glowEnergy = progressBar:CreateTexture(nil, "OVERLAY")
-				glowEnergy:SetDrawLayer("OVERLAY", 7)
-				glowEnergy:SetWidth(1)
-				local lastMB = nil
-				local lastEnergy = -1
-				local function OnUpdateHandler(self, elapsed)
-					local currentEnergyMax = UnitPowerMax("player", Enum.PowerType.Energy)
-					local powerType = UnitPowerType("player")
-					if powerType ~= Enum.PowerType.Energy then
-						glowEnergy:Hide()
-						glowEnergyBg:Hide()
+				if lastMb ~= mb then
+					lastMb = mb
+					glowBg:SetHeight(mb:GetHeight())
+					glow:SetHeight(mb:GetHeight() - 2)
+				end
 
-						return
-					end
-
-					if MissingPower:GetConfig("showenergyticks", true) == false or currentEnergyMax <= 0 then
-						glowEnergy:Hide()
-						glowEnergyBg:Hide()
-
-						return
-					end
-
-					glowEnergy:Show()
-					glowEnergyBg:Show()
-					glowEnergyBg:SetColorTexture(MissingPower:GetColor("EnergyTickbarBorderColor", "EnergyTickbarBorderColor"))
-					glowEnergy:SetColorTexture(MissingPower:GetColor("EnergyTickbarColor", "EnergyTickbarColor"))
-					mb = MissingPower:GetManaBar()
-					if mb and lastMB ~= mb then
-						lastMB = mb
-						progressBar:SetParent(mb)
-						glowEnergy:SetHeight(mb:GetHeight() - 2)
-						glowEnergyBg:SetHeight(mb:GetHeight())
-					end
-
-					local currentTime = GetTime()
-					local timeSinceLastTick = currentTime - lastTickTime
-					if mb then
-						local progress = timeSinceLastTick * mb:GetWidth() / 2
-						if progress < 1 then
-							progress = 1
-						end
-
-						if progress >= mb:GetWidth() then
-							lastTickTime = GetTime()
-							progress = mb:GetWidth()
-						end
-
-						progressBar:SetWidth(progress)
-						if MissingPower:GetConfig("showenergyticksbg", true) then
-							glowEnergyBg:SetWidth(3)
-							glowEnergyBg:SetPoint("RIGHT", progressBar, "RIGHT", 1, 0)
+				if mb then
+					if full then
+						frame:Hide()
+					else
+						glowBg:SetColorTexture(tickbarBorderColor)
+						glow:SetColorTexture(tickbarColor)
+						frame:SetParent(mb)
+						frame:SetHeight(mb:GetHeight())
+						frame:SetWidth(mb:GetWidth())
+						frame:SetPoint("LEFT", mb, "LEFT")
+						if showTickBarBg then
+							glowBg:SetWidth(3)
+							glowBg:SetPoint("RIGHT", frame, "RIGHT", 1, 0)
 						else
-							glowEnergyBg:SetWidth(1)
-							glowEnergyBg:SetPoint("RIGHT", progressBar, "RIGHT", 0, 0)
+							glowBg:SetWidth(1)
+							glowBg:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
 						end
 
-						glowEnergy:SetPoint("RIGHT", progressBar, "RIGHT", 0, 0)
+						glow:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
+						local newsize = mb:GetWidth() * percent
+						frame:SetWidth(newsize)
+						frame:Show()
 					end
 				end
 
-				local function InitializeTracker()
-					lastTickTime = GetTime() - 0.45
-					progressBar:SetScript("OnUpdate", OnUpdateHandler)
-				end
-
-				EnergyTickTracker:SetScript(
-					"OnEvent",
-					function(self, event, unit, powerType, ...)
-						if event == "UNIT_POWER_UPDATE" and unit == playerUnit and powerType == "ENERGY" then
-							local currentEnergy = UnitPower("player", Enum.PowerType.Energy)
-							if lastEnergy < currentEnergy then
-								lastTickTime = GetTime()
-							end
-
-							lastEnergy = currentEnergy
-						end
-					end
+				MissingPower:After(
+					tick,
+					function()
+						MissingPower:FSR()
+					end, "FSR"
 				)
-
-				InitializeTracker()
 			end
 
-			if true then
-				local SwingTimerPrimary = CreateSwingTimer("SwingTimerPrimary", -200, 1, 0, 0)
-				local SwingTimerSecondary = CreateSwingTimer("SwingTimerSecondary", -222, 0, 1, 0)
-				local SwingTimerRanged = CreateSwingTimer("SwingTimerRanged", -244, 0, 0, 1)
-				local SwingTimerLogic = CreateFrame("Frame")
-				SwingTimerLogic:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-				SwingTimerLogic:SetScript(
-					"OnEvent",
-					function(self, event, ...)
-						if MissingPower:GetConfig("showswingtimer", false) == false or MissingPower:GetConfig("showswingtimer", true) == false then
-							SwingTimerPrimary:Hide()
-							SwingTimerSecondary:Hide()
-							SwingTimerRanged:Hide()
+			MissingPower:FSR()
+			local EnergyTickTracker = CreateFrame("Frame")
+			EnergyTickTracker:RegisterEvent("UNIT_POWER_UPDATE")
+			local lastTickTime = GetTime()
+			local tickInterval = 2
+			local playerUnit = "player"
+			local mb = MissingPower:GetManaBar()
+			local progressBar = CreateFrame("StatusBar", nil, mb)
+			progressBar:SetSize(118, 18)
+			progressBar:SetPoint("LEFT", mb, "LEFT")
+			progressBar:SetStatusBarTexture("Interface\\TARGETINGFRAME\\UI-StatusBar")
+			progressBar:SetStatusBarColor(0, 0, 0, 0)
+			progressBar:SetMinMaxValues(0, tickInterval)
+			progressBar:SetValue(0)
+			local glowEnergyBg = progressBar:CreateTexture(nil, "OVERLAY")
+			glowEnergyBg:SetDrawLayer("OVERLAY", 6)
+			local glowEnergy = progressBar:CreateTexture(nil, "OVERLAY")
+			glowEnergy:SetDrawLayer("OVERLAY", 7)
+			glowEnergy:SetWidth(1)
+			local lastMB = nil
+			local lastEnergy = -1
+			local function OnUpdateHandler(self, elapsed)
+				local currentEnergyMax = UnitPowerMax("player", Enum.PowerType.Energy)
+				local powerType = UnitPowerType("player")
+				if powerType ~= Enum.PowerType.Energy then
+					glowEnergy:Hide()
+					glowEnergyBg:Hide()
 
-							return
+					return
+				end
+
+				-- Cache config/color lookups for this frame
+				local showEnergyTicks = MissingPower:GetConfig("showenergyticks", true)
+				local showEnergyTicksBg = MissingPower:GetConfig("showenergyticksbg", true)
+				if showEnergyTicks == false or currentEnergyMax <= 0 then
+					glowEnergy:Hide()
+					glowEnergyBg:Hide()
+
+					return
+				end
+
+				glowEnergy:Show()
+				glowEnergyBg:Show()
+				glowEnergyBg:SetColorTexture(MissingPower:GetColor("EnergyTickbarBorderColor", "EnergyTickbarBorderColor"))
+				glowEnergy:SetColorTexture(MissingPower:GetColor("EnergyTickbarColor", "EnergyTickbarColor"))
+				mb = MissingPower:GetManaBar()
+				if mb and lastMB ~= mb then
+					lastMB = mb
+					progressBar:SetParent(mb)
+					glowEnergy:SetHeight(mb:GetHeight() - 2)
+					glowEnergyBg:SetHeight(mb:GetHeight())
+				end
+
+				local currentTime = GetTime()
+				local timeSinceLastTick = currentTime - lastTickTime
+				if mb then
+					local progress = timeSinceLastTick * mb:GetWidth() / 2
+					if progress < 1 then
+						progress = 1
+					end
+
+					if progress >= mb:GetWidth() then
+						lastTickTime = GetTime()
+						progress = mb:GetWidth()
+					end
+
+					progressBar:SetWidth(progress)
+					if showEnergyTicksBg then
+						glowEnergyBg:SetWidth(3)
+						glowEnergyBg:SetPoint("RIGHT", progressBar, "RIGHT", 1, 0)
+					else
+						glowEnergyBg:SetWidth(1)
+						glowEnergyBg:SetPoint("RIGHT", progressBar, "RIGHT", 0, 0)
+					end
+
+					glowEnergy:SetPoint("RIGHT", progressBar, "RIGHT", 0, 0)
+				end
+			end
+
+			local function InitializeTracker()
+				lastTickTime = GetTime() - 0.45
+				progressBar:SetScript("OnUpdate", OnUpdateHandler)
+			end
+
+			EnergyTickTracker:SetScript(
+				"OnEvent",
+				function(self, event, unit, powerType, ...)
+					if event == "UNIT_POWER_UPDATE" and unit == playerUnit and powerType == "ENERGY" then
+						local currentEnergy = UnitPower("player", Enum.PowerType.Energy)
+						if lastEnergy < currentEnergy then
+							lastTickTime = GetTime()
 						end
 
-						if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-							local _, subevent, _, sourceGUID, _, _, _, _, _, _, _, spellId = CombatLogGetCurrentEventInfo()
-							if sourceGUID == UnitGUID("player") then
-								if subevent == "SWING_DAMAGE" then
-									local _, _, _, _, _, _, _, _, _, is_offhand = select(12, CombatLogGetCurrentEventInfo())
-									local weaponSpeed, weaponSpeed2 = UnitAttackSpeed("player")
-									if is_offhand then
-										SwingTimerSecondary:Show()
-										SwingTimerSecondary:StartTimer(weaponSpeed2)
-									else
-										SwingTimerPrimary:Show()
-										SwingTimerPrimary:StartTimer(weaponSpeed)
-									end
-								elseif subevent == "SWING_MISSED" then
-									local _, is_offhand = select(12, CombatLogGetCurrentEventInfo())
-									local weaponSpeed, weaponSpeed2 = UnitAttackSpeed("player")
-									if is_offhand then
-										SwingTimerSecondary:Show()
-										SwingTimerSecondary:StartTimer(weaponSpeed2)
-									else
-										SwingTimerPrimary:Show()
-										SwingTimerPrimary:StartTimer(weaponSpeed)
-									end
-								elseif spellId == 75 and subevent == "SPELL_CAST_SUCCESS" then
-									local speed, _, _, _, _ = UnitRangedDamage("player")
-									SwingTimerRanged:Show()
-									SwingTimerRanged:StartTimer(speed)
+						lastEnergy = currentEnergy
+					end
+				end
+			)
+
+			InitializeTracker()
+			local SwingTimerPrimary = CreateSwingTimer("SwingTimerPrimary", -200, 1, 0, 0)
+			local SwingTimerSecondary = CreateSwingTimer("SwingTimerSecondary", -222, 0, 1, 0)
+			local SwingTimerRanged = CreateSwingTimer("SwingTimerRanged", -244, 0, 0, 1)
+			local SwingTimerLogic = CreateFrame("Frame")
+			SwingTimerLogic:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+			SwingTimerLogic:SetScript(
+				"OnEvent",
+				function(self, event, ...)
+					if MissingPower:GetConfig("showswingtimer", false) == false then
+						SwingTimerPrimary:Hide()
+						SwingTimerSecondary:Hide()
+						SwingTimerRanged:Hide()
+
+						return
+					end
+
+					if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+						local _, subevent, _, sourceGUID, _, _, _, _, _, _, _, spellId = CombatLogGetCurrentEventInfo()
+						if sourceGUID == UnitGUID("player") then
+							if subevent == "SWING_DAMAGE" then
+								local _, _, _, _, _, _, _, _, _, is_offhand = select(12, CombatLogGetCurrentEventInfo())
+								local weaponSpeed, weaponSpeed2 = UnitAttackSpeed("player")
+								if is_offhand then
+									SwingTimerSecondary:Show()
+									SwingTimerSecondary:StartTimer(weaponSpeed2)
+								else
+									SwingTimerPrimary:Show()
+									SwingTimerPrimary:StartTimer(weaponSpeed)
 								end
+							elseif subevent == "SWING_MISSED" then
+								local _, is_offhand = select(12, CombatLogGetCurrentEventInfo())
+								local weaponSpeed, weaponSpeed2 = UnitAttackSpeed("player")
+								if is_offhand then
+									SwingTimerSecondary:Show()
+									SwingTimerSecondary:StartTimer(weaponSpeed2)
+								else
+									SwingTimerPrimary:Show()
+									SwingTimerPrimary:StartTimer(weaponSpeed)
+								end
+							elseif spellId == 75 and subevent == "SPELL_CAST_SUCCESS" then
+								local speed, _, _, _, _ = UnitRangedDamage("player")
+								SwingTimerRanged:Show()
+								SwingTimerRanged:StartTimer(speed)
 							end
 						end
 					end
-				)
-			end
+				end
+			)
 		end
 	end, "FSR INIT"
 )
