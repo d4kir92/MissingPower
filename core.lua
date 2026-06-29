@@ -98,7 +98,7 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		OOM.OldShow = OOM.OldShow or OOM.Show
 		OOM.Show = function(sel, forced)
 			if forced == true then
-				sel:SetAlpha(MissingPower:GetConfig("poweralpha", 0.7))
+				sel:SetAlpha(0)
 			end
 		end
 
@@ -152,6 +152,7 @@ end
 local MIPOUpdate = true
 function MissingPower:UpdateUi(from, init)
 	MIPOUpdate = true -- Update
+	MissingPower:InvalidateConfigCache()
 	MissingPower:ShowOOM(init, from)
 end
 
@@ -302,27 +303,17 @@ function MissingPower:ShowOOM(init, from)
 				end
 			end
 
-			-- Read config once per ShowOOM call, not per button
-			local fontsize = tonumber(MissingPower:GetConfig("fontsize", 12))
-			if type(fontsize) ~= "number" then
-				MissingPower:SV(MIPOPC, "fontsize", 12)
-				fontsize = 12
-			end
-
-			if fontsize < 6 then
-				MissingPower:SV(MIPOPC, "fontsize", 6)
-				fontsize = 6
-			end
-
-			local showamountcounter = MissingPower:GetConfig("showamountcounter", true)
-			local decimals = MissingPower:GetConfig("decimals", 1)
-			local displayiflowerthanx = tonumber(MissingPower:GetConfig("displayiflowerthanx", 10))
-			local anchor = MissingPower:GetAnchor(MissingPower:GetConfig("fontanchor", 0))
-			local offsetX = MissingPower:GetConfig("textoffsetx", 0)
-			local offsetY = MissingPower:GetConfig("textoffsety", 0)
-			local poweralpha = MissingPower:GetConfig("poweralpha", 0.7)
-			local hideoverlap = MissingPower:GetConfig("hideoverlap", true)
-			local customcolor = MissingPower:GetConfig("customcolor", false)
+			local cfg = MissingPower:GetConfigCache()
+			local fontsize = cfg.fontsize
+			local showamountcounter = cfg.showamountcounter
+			local decimals = cfg.decimals
+			local displayiflowerthanx = cfg.displayiflowerthanx
+			local anchor = cfg.anchor
+			local offsetX = cfg.offsetX
+			local offsetY = cfg.offsetY
+			local poweralpha = cfg.poweralpha
+			local hideoverlap = cfg.hideoverlap
+			local customcolor = cfg.customcolor
 			local baseRegen = GetPowerRegen and GetPowerRegen() or 20
 			for btnname, ab in pairs(MIPOActionButtons) do
 				local ABTN = _G[ab.name]
