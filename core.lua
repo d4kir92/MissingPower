@@ -150,7 +150,7 @@ end
 local MIPOUpdate = true
 local pointsNeedReset = false
 local powerCache = {}
-local pendingRetry = {}
+local hasPendingSpells = false
 function MissingPower:UpdateUi(from, init)
 	MIPOUpdate = true
 	pointsNeedReset = true
@@ -322,10 +322,11 @@ function MissingPower:ShowOOM(init, from)
 								ab.cachedG = cachedG
 								ab.cachedB = cachedB
 								MIPOActionButtons[btnname] = ab
-								pendingRetry[btnname] = nil
 							else
 								ab.cachedCosts = nil
-								pendingRetry[btnname] = ab
+								if id and (at == "spell" or at == "macro") then
+									hasPendingSpells = true
+								end
 								MissingPower:HideOOM(btnname, "No Costs")
 								local OOMAmountCounter = _G[btnname .. "AmountCounter"]
 								if OOMAmountCounter and OOMAmountCounter.text then
@@ -334,67 +335,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 						end
 					end
-				end
-			end
-
-			if next(pendingRetry) ~= nil then
-				for btnname, ab in pairs(pendingRetry) do
-					local ABTN = ab.frameRef
-					local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action, ab.isMAI)
-					if id and at == "macro" then
-						local ms = GetMacroSpell(id)
-						if ms then
-							id = ms
-						end
-					end
-
-					local resolvedId = id
-					if ab.isStance and id ~= nil then
-						_, _, _, resolvedId = GetShapeshiftFormInfo(ab.nr)
-					end
-
-					local name, _, _, _, _, _, spellId
-					if ab.isStance then
-						name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(resolvedId)
-					else
-						name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
-					end
-
-					ab._lastResolvedId = resolvedId
-					ab._lastAt = at
-					if name and (at == "spell" or at == "macro") then
-						local costs = MissingPower:GetSpellPowerCost(spellId)
-						if costs ~= nil and costs[1] ~= nil then
-							local typ = costs[1].type
-							local pbc = PowerBarColor[typ]
-							local cachedR, cachedG, cachedB = 1.0, 1.0, 1.0
-							if pbc ~= nil then
-								cachedR = MissingPower:MathC(pbc.r or 1.0, 0.3, 1.0)
-								cachedG = MissingPower:MathC(pbc.g or 1.0, 0.3, 1.0)
-								cachedB = MissingPower:MathC(pbc.b or 1.0, 0.3, 1.0)
-							end
-
-							ab.cachedAt = at
-							ab.cachedSpellId = spellId
-							ab.cachedCosts = costs
-							ab.cachedR = cachedR
-							ab.cachedG = cachedG
-							ab.cachedB = cachedB
-							MIPOActionButtons[btnname] = ab
-							pendingRetry[btnname] = nil
-						end
-					end
-				end
-
-				if next(pendingRetry) ~= nil and not MissingPower._retryScheduled then
-					MissingPower._retryScheduled = true
-					MissingPower:After(
-						0.1,
-						function()
-							MissingPower._retryScheduled = false
-							MissingPower:ShowOOM(nil, "RETRY")
-						end, "MIPO_RETRY"
-					)
 				end
 			end
 
@@ -638,7 +578,12 @@ local function OnEvent(self, event, unit, powertype, ...)
 					0.05,
 					function()
 						MissingPower._elsePending = false
-						MissingPower:ShowOOM(nil, "ELSE")
+						if hasPendingSpells then
+							hasPendingSpells = false
+							MissingPower:UpdateUi("SPELL_PENDING")
+						else
+							MissingPower:ShowOOM(nil, "ELSE")
+						end
 					end, "MIPO_ELSE"
 				)
 			end
