@@ -455,91 +455,24 @@ function MissingPower:ShowOOM(init, from)
 	end
 end
 
-local power = -1
-local mana = -1
-local lastSF = 0
-local lastMount = false
-function MissingPower:Think()
-	if lastSF ~= GetShapeshiftForm() then
-		lastSF = GetShapeshiftForm()
-		MissingPower:After(
-			0.1,
-			function()
-				MissingPower:UpdateUi("SHAPESHIFT")
-			end, "SHAPESHIFT"
-		)
-	end
-
-	if IsMounted and lastMount ~= IsMounted() then
-		lastMount = IsMounted()
-		MissingPower:After(
-			0.1,
-			function()
-				MissingPower:UpdateUi("MOUNTED")
-			end, "MOUNTED"
-		)
-	end
-
-	local enum = 0
-	if Enum and Enum.PowerType and Enum.PowerType.Mana then
-		enum = Enum.PowerType.Mana
-	end
-
-	if power ~= UnitPower("PLAYER") or mana ~= UnitPower("PLAYER", enum) then
-		power = UnitPower("PLAYER")
-		mana = UnitPower("PLAYER", enum)
-		MissingPower:ShowOOM(nil, "Think")
-	end
-end
-
-MissingPower:Think()
 local frame = CreateFrame("FRAME")
 MissingPower:RegisterEvent(frame, "PLAYER_ENTERING_WORLD")
---MissingPower:RegisterEvent(frame,"UPDATE_SHAPESHIFT_FORM", "player") -- spams in tbc
 MissingPower:RegisterEvent(frame, "SPELLS_CHANGED")
 MissingPower:RegisterEvent(frame, "UNIT_SPELLCAST_START", "player")
---MissingPower:RegisterEvent(frame,"CURRENT_SPELL_CAST_CHANGED", "player")
 MissingPower:RegisterEvent(frame, "ACTIONBAR_PAGE_CHANGED")
 MissingPower:RegisterEvent(frame, "SPELL_UPDATE_USABLE")
 MissingPower:RegisterEvent(frame, "MODIFIER_STATE_CHANGED")
---MissingPower:RegisterEvent(frame,"ACTIONBAR_SLOT_CHANGED", "player") -- SPAMS
+MissingPower:RegisterEvent(frame, "ACTIONBAR_SLOT_CHANGED")
 MissingPower:RegisterEvent(frame, "PLAYER_GAINS_VEHICLE_DATA", "player")
+-- UPDATE_SHAPESHIFT_FORM spams in TBC, use only on other builds
+if MissingPower:GetWoWBuild() ~= "TBC" then
+	MissingPower:RegisterEvent(frame, "UPDATE_SHAPESHIFT_FORM")
+end
+-- PLAYER_MOUNT_CHANGED exists in Wrath and newer
+if MissingPower:GetWoWBuild() ~= "CLASSIC" and MissingPower:GetWoWBuild() ~= "TBC" then
+	MissingPower:RegisterEvent(frame, "PLAYER_MOUNT_CHANGED")
+end
 local MPLoaded = false
-hooksecurefunc(
-	"PickupAction",
-	function(id)
-		MissingPower:After(
-			0.01,
-			function()
-				MissingPower:UpdateUi("PickupAction")
-			end, "PickupAction"
-		)
-	end
-)
-
-hooksecurefunc(
-	"PlaceAction",
-	function(id)
-		MissingPower:After(
-			0.01,
-			function()
-				MissingPower:UpdateUi("PlaceAction")
-			end, "PlaceAction"
-		)
-	end
-)
-
-hooksecurefunc(
-	"ClearCursor",
-	function(id)
-		MissingPower:After(
-			0.01,
-			function()
-				MissingPower:UpdateUi("ClearCursor")
-			end, "ClearCursor"
-		)
-	end
-)
 
 local function OnEvent(self, event, unit, powertype, ...)
 	if event == "PLAYER_ENTERING_WORLD" and not MPLoaded then
@@ -559,6 +492,8 @@ local function OnEvent(self, event, unit, powertype, ...)
 					MissingPower:UpdateUi(event)
 				end, "ACTIONBAR_PAGE_CHANGED"
 			)
+		elseif event == "ACTIONBAR_SLOT_CHANGED" or event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_MOUNT_CHANGED" then
+			MissingPower:UpdateUi(event)
 		else
 			MissingPower:After(
 				0.05,
