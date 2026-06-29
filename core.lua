@@ -4,7 +4,6 @@ MissingPower.DEBUG = false
 local _ActionButton_GetPagedID
 local _ActionButton_CalculateAction
 local _actionBtnFuncsCached = false
-local _enumMana = (Enum and Enum.PowerType and Enum.PowerType.Mana) or 0
 -- ### CONFIG START ### 
 --
 local CONFIG = {}
@@ -143,13 +142,10 @@ function MissingPower:CreateOOM(obtn, name, nr)
 	end
 
 	if ActionButtons[BTNNAME] == nil then
-		ActionButtons[BTNNAME] = {
-			name    = name,
-			btn     = _G[BTNNAME],
-			oom     = _G[BTNNAME],
-			counter = _G[BTNNAME .. "AmountCounter"],
-			nr      = nr,
-		}
+		ActionButtons[BTNNAME] = {}
+		ActionButtons[BTNNAME].name = name
+		ActionButtons[BTNNAME].btn = _G[BTNNAME]
+		ActionButtons[BTNNAME].nr = nr
 	end
 end
 
@@ -275,7 +271,6 @@ function MissingPower:ShowOOM(init, from)
 			if MIPOUpdate then
 				MIPOUpdate = false
 				MIPOActionButtons = {}
-				local ptid = UnitPowerType("PLAYER")
 				for btnname, ab in pairs(ActionButtons) do
 					local ABTN = _G[ab.name]
 					local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action)
@@ -293,6 +288,7 @@ function MissingPower:ShowOOM(init, from)
 					if name then
 						local costs = MissingPower:GetSpellPowerCost(spellId)
 						if costs ~= nil and costs[1] ~= nil and (at == "spell" or at == "macro") then
+							local ptid = UnitPowerType("PLAYER")
 							cost = costs[1].cost
 							if costs[2] ~= nil and costs[2].type == ptid and costs[2].cost ~= 0 then
 								cost = costs[2].cost
@@ -308,9 +304,9 @@ function MissingPower:ShowOOM(init, from)
 						MIPOActionButtons[btnname] = ActionButtons[btnname]
 					else
 						MissingPower:HideOOM(btnname, "No Costs")
-						local counter = ab.counter
-						if counter and counter.text then
-							counter.text:SetText("")
+						local OOMAmountCounter = _G[btnname .. "AmountCounter"]
+						if OOMAmountCounter and OOMAmountCounter.text then
+							OOMAmountCounter.text:SetText("")
 						end
 					end
 				end
@@ -339,11 +335,10 @@ function MissingPower:ShowOOM(init, from)
 			local hideoverlap = MissingPower:GetConfig("hideoverlap", true)
 			local customcolor = MissingPower:GetConfig("customcolor", false)
 			local baseRegen = GetPowerRegen and GetPowerRegen() or 20
-			local isSettingsRefresh = from == "Settings:fontanchor1" or from == "Settings:textoffset"
 			for btnname, ab in pairs(MIPOActionButtons) do
 				local ABTN = _G[ab.name]
-				local OOM = ab.oom
-				local OOMAmountCounter = ab.counter
+				local OOM = _G[btnname]
+				local OOMAmountCounter = _G[btnname .. "AmountCounter"]
 				OOM:Hide(true)
 				if OOMAmountCounter.text.fs ~= fontsize then
 					OOMAmountCounter.text.fs = fontsize
@@ -398,7 +393,7 @@ function MissingPower:ShowOOM(init, from)
 						end
 
 						amount = cost > 0 and (currentPower / cost) or 0
-						if typ == _enumMana then
+						if typ == Enum.PowerType.Mana then
 							regen = baseRegen * 2
 						elseif typ == Enum.PowerType.Rage or typ == Enum.PowerType.Focus then
 							regen = baseRegen / -2
@@ -420,14 +415,10 @@ function MissingPower:ShowOOM(init, from)
 					end
 				end
 
+				OOMAmountCounter:ClearAllPoints()
+				OOMAmountCounter:SetPoint("CENTER", ABTN, "CENTER", 0, 0)
 				OOMAmountCounter:Show(true)
-				-- Strata only changes if the action button's strata changed
-				local strata = ABTN:GetFrameStrata()
-				local strataChanged = ab.lastStrata ~= strata
-				if strataChanged then
-					ab.lastStrata = strata
-					OOMAmountCounter:SetFrameStrata(strata)
-				end
+				OOMAmountCounter:SetFrameStrata(ABTN:GetFrameStrata())
 				if amount > 0 and at ~= nil and showamountcounter and (at == "spell" or at == "macro") then
 					OOMAmountCounter:SetAlpha(1)
 				else
@@ -451,18 +442,10 @@ function MissingPower:ShowOOM(init, from)
 					OOMAmountCounter.text:SetText(amo)
 				end
 
-				-- Only reposition text when anchor/offset settings change or button width changes
-				local btnW = ABTN:GetWidth()
-				if ab.lastW ~= btnW or ab.lastAnchor ~= anchor or ab.lastOffX ~= offsetX or ab.lastOffY ~= offsetY then
-					ab.lastW = btnW
-					ab.lastAnchor = anchor
-					ab.lastOffX = offsetX
-					ab.lastOffY = offsetY
-					OOMAmountCounter.text:SetSize(btnW, btnW)
-					OOMAmountCounter.text:ClearAllPoints()
-					OOMAmountCounter.text:SetPoint("CENTER", ABTN, anchor, offsetX, offsetY)
-				end
-				if isSettingsRefresh then
+				OOMAmountCounter.text:SetSize(OOM:GetWidth(), OOM:GetWidth())
+				OOMAmountCounter.text:ClearAllPoints()
+				OOMAmountCounter.text:SetPoint("CENTER", ABTN, anchor, offsetX, offsetY)
+				if from == "Settings:fontanchor1" or from == "Settings:textoffset" then
 					local oldText = OOMAmountCounter.text:GetText()
 					OOMAmountCounter.text:SetText("TEST")
 					OOMAmountCounter.text:SetText(oldText)
@@ -472,15 +455,14 @@ function MissingPower:ShowOOM(init, from)
 					MissingPower:HideOOM(btnname, "No P")
 				else
 					OOM:Show(true)
-					if strataChanged then
-						OOM:SetFrameStrata(strata)
-					end
+					OOM:SetFrameStrata(ABTN:GetFrameStrata())
 					OOM:SetAlpha(poweralpha)
 					local h = ABTN:GetHeight()
 					local y = h * p - h
 					OOM:ClearAllPoints()
 					OOM:SetPoint("TOPLEFT", ABTN, "TOPLEFT", 0, y)
 					OOM:SetHeight(h * p)
+					h = ABTN:GetHeight()
 					ph = h / cost * regen
 					y = y + ph
 					if y > 0 and hideoverlap then
@@ -498,22 +480,33 @@ local mana = -1
 local lastSF = 0
 local lastMount = false
 function MissingPower:Think()
-	local sf = GetShapeshiftForm()
-	if lastSF ~= sf then
-		lastSF = sf
-		MissingPower:After(0.1, function() MissingPower:UpdateUi("SHAPESHIFT") end, "SHAPESHIFT")
+	if lastSF ~= GetShapeshiftForm() then
+		lastSF = GetShapeshiftForm()
+		MissingPower:After(
+			0.1,
+			function()
+				MissingPower:UpdateUi("SHAPESHIFT")
+			end, "SHAPESHIFT"
+		)
 	end
 
-	if IsMounted then
-		local mounted = IsMounted()
-		if lastMount ~= mounted then
-			lastMount = mounted
-			MissingPower:After(0.1, function() MissingPower:UpdateUi("MOUNTED") end, "MOUNTED")
-		end
+	if IsMounted and lastMount ~= IsMounted() then
+		lastMount = IsMounted()
+		MissingPower:After(
+			0.1,
+			function()
+				MissingPower:UpdateUi("MOUNTED")
+			end, "MOUNTED"
+		)
+	end
+
+	local enum = 0
+	if Enum and Enum.PowerType and Enum.PowerType.Mana then
+		enum = Enum.PowerType.Mana
 	end
 
 	local curPower = UnitPower("PLAYER")
-	local curMana = UnitPower("PLAYER", _enumMana)
+	local curMana = UnitPower("PLAYER", enum)
 	if power ~= curPower or mana ~= curMana then
 		power = curPower
 		mana = curMana
