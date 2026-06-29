@@ -1,11 +1,23 @@
 -- FSR
 local _, MissingPower = ...
 local wOnce = true
+local _cachedPlayerFrameManaBar
+local _cachedElvUF_Player
+local _cachedSUFUnitplayer
+local _cachedXPerlManaBar
+local _manaBarFramesCached = false
 function MissingPower:GetManaBar()
-	local PlayerFrameManaBar = getglobal("PlayerFrameManaBar")
-	local ElvUF_Player = getglobal("ElvUF_Player")
-	local SUFUnitplayer = getglobal("SUFUnitplayer")
-	local XPerl_PlayerstatsFramemanaBar = getglobal("XPerl_PlayerstatsFramemanaBar")
+	if not _manaBarFramesCached then
+		_cachedPlayerFrameManaBar = getglobal("PlayerFrameManaBar")
+		_cachedElvUF_Player = getglobal("ElvUF_Player")
+		_cachedSUFUnitplayer = getglobal("SUFUnitplayer")
+		_cachedXPerlManaBar = getglobal("XPerl_PlayerstatsFramemanaBar")
+		_manaBarFramesCached = true
+	end
+	local PlayerFrameManaBar = _cachedPlayerFrameManaBar
+	local ElvUF_Player = _cachedElvUF_Player
+	local SUFUnitplayer = _cachedSUFUnitplayer
+	local XPerl_PlayerstatsFramemanaBar = _cachedXPerlManaBar
 	local mb = PlayerFrameManaBar
 	if ElvUF_Player ~= nil and ElvUF_Player:IsShown() then
 		mb = ElvUF_Player.Power
@@ -322,12 +334,19 @@ MissingPower:After(
 			local SwingTimerPrimary = CreateSwingTimer("SwingTimerPrimary", -200, 1, 0, 0)
 			local SwingTimerSecondary = CreateSwingTimer("SwingTimerSecondary", -222, 0, 1, 0)
 			local SwingTimerRanged = CreateSwingTimer("SwingTimerRanged", -244, 0, 0, 1)
+			local swingTimerEnabled = MissingPower:GetConfig("showswingtimer", false)
+			local swingTimerCfgNextRefresh = 0
 			local SwingTimerLogic = CreateFrame("Frame")
 			SwingTimerLogic:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 			SwingTimerLogic:SetScript(
 				"OnEvent",
 				function(self, event, ...)
-					if MissingPower:GetConfig("showswingtimer", false) == false then
+					local t = GetTime()
+					if t >= swingTimerCfgNextRefresh then
+						swingTimerCfgNextRefresh = t + 5
+						swingTimerEnabled = MissingPower:GetConfig("showswingtimer", false)
+					end
+					if swingTimerEnabled == false then
 						SwingTimerPrimary:Hide()
 						SwingTimerSecondary:Hide()
 						SwingTimerRanged:Hide()

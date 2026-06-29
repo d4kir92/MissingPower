@@ -62,7 +62,7 @@ function MissingPower:createF(tab)
 	tab.align = tab.align or "CENTER"
 	tab.text = tab.text or "Unnamed"
 	tab.textalign = tab.textalign or "CENTER"
-	tab.textsize = tab.textsize or tonumber(string.format("%.0f", tab.h * 0.69))
+	tab.textsize = tab.textsize or math.floor(tab.h * 0.69)
 	tab.parent = tab.parent or UIParent
 	local frame = CreateFrame("FRAME", tab.name, tab.parent)
 	frame:SetWidth(tab.w)
@@ -159,7 +159,7 @@ function MissingPower:CreateBar(tab)
 	local perc = 10
 	local amount = 100 / perc
 	for i = 1, amount - 1 do
-		bars.x = tonumber(string.format("%.0f", (bar.overlay:GetWidth() / amount) * i) - (bars.thickness / 2))
+		bars.x = math.floor((bar.overlay:GetWidth() / amount) * i) - (bars.thickness / 2)
 		bars.align = nil
 		bar.overlay[i] = MissingPower:CTexture(bar.overlay, bars)
 	end
@@ -186,7 +186,7 @@ function MissingPower:CreateBar(tab)
 			bar.overlay[i]:SetHeight(h)
 		end
 
-		bar.overlay.text:SetFont(STANDARD_TEXT_FONT, tonumber(string.format("%.0f", h * 0.69)), "OUTLINE")
+		bar.overlay.text:SetFont(STANDARD_TEXT_FONT, math.floor(h * 0.69), "OUTLINE")
 		--bar.overlay.text:SetTextHeight(tonumber(string.format("%.0f", h * 0.69)))
 	end
 
