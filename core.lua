@@ -1,9 +1,6 @@
 -- By D4KiR
 local _, MissingPower = ...
 MissingPower.DEBUG = false
-local _ActionButton_GetPagedID
-local _ActionButton_CalculateAction
-local _actionBtnFuncsCached = false
 -- ### CONFIG START ### 
 --
 local CONFIG = {}
@@ -41,13 +38,10 @@ function MissingPower:GetActionFromButton(button, action)
 	end
 
 	local abslot = nil
-	if not _actionBtnFuncsCached then
-		_ActionButton_GetPagedID = getglobal("ActionButton_GetPagedID")
-		_ActionButton_CalculateAction = getglobal("ActionButton_CalculateAction")
-		_actionBtnFuncsCached = true
-	end
-	if _ActionButton_GetPagedID and _ActionButton_CalculateAction then
-		abslot = action or button.action or button:GetAttribute("action") or _ActionButton_GetPagedID(button) or _ActionButton_CalculateAction(button) or 0
+	local ActionButton_GetPagedID = getglobal("ActionButton_GetPagedID")
+	local ActionButton_CalculateAction = getglobal("ActionButton_CalculateAction")
+	if ActionButton_GetPagedID and ActionButton_CalculateAction then
+		abslot = action or button.action or button:GetAttribute("action") or ActionButton_GetPagedID(button) or ActionButton_CalculateAction(button) or 0
 	else
 		abslot = action or button.action or button:GetAttribute("action") or 0
 	end
@@ -256,10 +250,6 @@ function MissingPower:ShowOOM(init, from)
 						end
 
 						MissingPower:CreateOOM(obtn, NAME, i)
-						local OOMName = NAME .. "OOM"
-						if ActionButtons[OOMName] then
-							ActionButtons[OOMName].isStance = string.find(NAME, "StanceButton") and not string.find(NAME, "MAIStanceButton")
-						end
 					end
 				end
 			end
@@ -279,7 +269,7 @@ function MissingPower:ShowOOM(init, from)
 					end
 
 					local name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
-					if ab.isStance and id ~= nil then
+					if string.find(ab.name, "StanceButton") and not string.find(ab.name, "MAIStanceButton") and id ~= nil then
 						_, _, _, id = GetShapeshiftFormInfo(ab.nr)
 						name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
 					end
@@ -326,7 +316,6 @@ function MissingPower:ShowOOM(init, from)
 
 			local showamountcounter = MissingPower:GetConfig("showamountcounter", true)
 			local decimals = MissingPower:GetConfig("decimals", 1)
-			local decimalsFmt = "%." .. math.floor(decimals) .. "f"
 			local displayiflowerthanx = tonumber(MissingPower:GetConfig("displayiflowerthanx", 10))
 			local anchor = MissingPower:GetAnchor(MissingPower:GetConfig("fontanchor", 0))
 			local offsetX = MissingPower:GetConfig("textoffsetx", 0)
@@ -351,7 +340,7 @@ function MissingPower:ShowOOM(init, from)
 				end
 
 				local name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
-				if ab.isStance and id ~= nil then
+				if string.find(ab.name, "StanceButton") and not string.find(ab.name, "MAIStanceButton") and id ~= nil then
 					_, _, _, id = GetShapeshiftFormInfo(ab.nr)
 					name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
 				end
@@ -429,7 +418,7 @@ function MissingPower:ShowOOM(init, from)
 				if decimals == 0 or amount > 99 then
 					amo = SpecialRound(amount, 0)
 				else
-					amo = tonumber(format(decimalsFmt, SpecialRound(amount, decimals))) or 0
+					amo = tonumber(format("%." .. string.format("%.0f", decimals) .. "f", SpecialRound(amount, decimals))) or 0
 				end
 
 				if displayiflowerthanx > 0 then
@@ -505,11 +494,9 @@ function MissingPower:Think()
 		enum = Enum.PowerType.Mana
 	end
 
-	local curPower = UnitPower("PLAYER")
-	local curMana = UnitPower("PLAYER", enum)
-	if power ~= curPower or mana ~= curMana then
-		power = curPower
-		mana = curMana
+	if power ~= UnitPower("PLAYER") or mana ~= UnitPower("PLAYER", enum) then
+		power = UnitPower("PLAYER")
+		mana = UnitPower("PLAYER", enum)
 		MissingPower:ShowOOM(nil, "Think")
 	end
 end

@@ -1,5 +1,4 @@
 local _, D4 = ...
-local d4_isMouseDown = {}
 local deg, atan2 = math.deg, math.atan2
 local rad, cos, sin, sqrt, max, min = math.rad, math.cos, math.sin, math.sqrt, math.max, math.min
 local mmShapes = {
@@ -125,7 +124,7 @@ function D4:CreateMinimapButton(params)
         btn:SetScript(
             "OnDragStart",
             function(sel)
-                d4_isMouseDown[sel] = true
+                sel.isMouseDown = true
                 sel:SetScript(
                     "OnUpdate",
                     function(se)
@@ -154,7 +153,7 @@ function D4:CreateMinimapButton(params)
             "OnDragStop",
             function(sel)
                 sel:SetScript("OnUpdate", nil)
-                d4_isMouseDown[sel] = false
+                sel.isMouseDown = false
             end
         )
     end
@@ -181,7 +180,7 @@ function D4:CreateMinimapButton(params)
     btn:SetScript(
         "OnClick",
         function(sel, btnName)
-            if d4_isMouseDown[sel] then return end
+            if sel.isMouseDown then return end
             if btnName == "LeftButton" and IsShiftKeyDown() and params.funcSL then
                 params:funcSL()
             elseif btnName == "RightButton" and IsShiftKeyDown() and params.funcSR then
