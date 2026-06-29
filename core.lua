@@ -1,25 +1,13 @@
 -- By D4KiR
 local _, MissingPower = ...
 MissingPower.DEBUG = false
--- ### CONFIG START ### 
---
 local CONFIG = {}
--- General 
--- Time for start setup
 CONFIG.waittime = 2
--- Transparency Fade 
--- Minimum Transparency
 CONFIG.min = 0.1
--- Maximum Transparency
 CONFIG.max = 0.9
--- Transparency distance
 CONFIG.dir = 0.1
--- Transparency tick
 CONFIG.tick = 0.1
--- ActionBars 
 local MIPOActionBars = {"ActionButton", "MultiBarBottomLeftButton", "MultiBarBottomRightButton", "MultiBarRightButton", "MultiBarLeftButton", "MultiBarBottomLeftActionButton", "MultiBarBottomRightActionButton", "MultiBarRightActionButton", "MultiBarLeftActionButton", "StanceButton", "AB", "DominosActionButton", "BT4", "ElvUI_Bar1Button", "ElvUI_Bar2Button", "ElvUI_Bar3Button", "ElvUI_Bar4Button", "ElvUI_Bar5Button", "ElvUI_Bar6Button", "ElvUI_StanceBar", "ActionBar1", "ActionBar2", "ActionBar3", "ActionBar4", "ActionBar5", "ActionBar6", "ActionBar7", "ActionBar8", "ActionBar9", "ActionBar10", "MAActionBar1", "MAActionBar2", "MAActionBar3", "MAActionBar4", "MAActionBar5", "MAActionBar6", "MAActionBar7", "MAActionBar8", "MAActionBar9", "MAActionBar10", "MAIStance", "MultiBar1", "MultiBar2", "MultiBar3", "MultiBar4", "MultiBar5", "MultiBar6", "MultiBar7", "MultiBar8", "MultiBar9", "MultiBar10", "DragonflightUIMultiactionBar1Button", "DragonflightUIMultiactionBar2Button", "DragonflightUIMultiactionBar3Button", "DragonflightUIMultiactionBar4Button", "DragonflightUIMultiactionBar5Button", "DragonflightUIMultiactionBar6Button", "DragonflightUIMultiactionBar7Button", "DragonflightUIMultiactionBar8Button"}
--- ### CONFIG END ### 
--- Functions, do not change, write me! 
 local setup = true
 local ready = false
 local ActionButtons = {}
@@ -72,7 +60,6 @@ local loaded = false
 function MissingPower:CreateOOM(obtn, name, nr)
 	local BTNNAME = name .. "OOM"
 	if _G[BTNNAME] == nil then
-		-- OOM
 		_G[BTNNAME] = CreateFrame("FRAME", BTNNAME, obtn)
 		local OOM = _G[BTNNAME]
 		OOM:SetWidth(obtn:GetWidth())
@@ -102,7 +89,6 @@ function MissingPower:CreateOOM(obtn, name, nr)
 			end
 		end
 
-		-- AmountCounter
 		local BTNNAMEAMOUNTCOUNTER = BTNNAME .. "AmountCounter"
 		_G[BTNNAMEAMOUNTCOUNTER] = CreateFrame("FRAME", BTNNAMEAMOUNTCOUNTER, obtn)
 		local OOMAmountCounter = _G[BTNNAMEAMOUNTCOUNTER]
@@ -281,9 +267,6 @@ function MissingPower:ShowOOM(init, from)
 				for btnname, ab in pairs(ActionButtons) do
 					local ABTN = ab.frameRef
 					local btnSlot = ABTN._state_action or ABTN.action
-					-- skip GetActionFromButton entirely if slot unchanged AND we already
-					-- resolved a valid cost for it (avoid getting stuck on transient nil
-					-- spell info right after a page switch / login)
 					if btnSlot == ab._lastBtnSlot and ab.cachedCosts ~= nil then
 						MIPOActionButtons[btnname] = ab
 					else
@@ -301,7 +284,6 @@ function MissingPower:ShowOOM(init, from)
 							_, _, _, resolvedId = GetShapeshiftFormInfo(ab.nr)
 						end
 
-						-- skip expensive GetSpellInfo/GetSpellPowerCost if spell unchanged
 						if resolvedId == ab._lastResolvedId and at == ab._lastAt and ab.cachedCosts ~= nil then
 							MIPOActionButtons[btnname] = ab
 						else
@@ -343,8 +325,6 @@ function MissingPower:ShowOOM(init, from)
 								pendingRetry[btnname] = nil
 							else
 								ab.cachedCosts = nil
-								-- spell info may not be ready yet (transient nil right after
-								-- a page change / login); retry cheaply on later ShowOOM calls
 								pendingRetry[btnname] = ab
 								MissingPower:HideOOM(btnname, "No Costs")
 								local OOMAmountCounter = _G[btnname .. "AmountCounter"]
@@ -354,7 +334,6 @@ function MissingPower:ShowOOM(init, from)
 							end
 						end
 					end
-					-- btnSlot cache check
 				end
 			end
 
@@ -451,7 +430,6 @@ function MissingPower:ShowOOM(init, from)
 			local CMPColB = cfg.CMPColB
 			local CMPColA = cfg.CMPColA
 			local baseRegen = GetPowerRegen and GetPowerRegen() or 20
-			-- reuse table to avoid GC pressure; wipe before each render pass
 			for k in next, powerCache do
 				powerCache[k] = nil
 			end
@@ -611,12 +589,10 @@ MissingPower:RegisterEvent(frame, "SPELL_UPDATE_USABLE")
 MissingPower:RegisterEvent(frame, "MODIFIER_STATE_CHANGED")
 MissingPower:RegisterEvent(frame, "ACTIONBAR_SLOT_CHANGED")
 MissingPower:RegisterEvent(frame, "PLAYER_GAINS_VEHICLE_DATA", "player")
--- UPDATE_SHAPESHIFT_FORM spams in TBC, use only on other builds
 if MissingPower:GetWoWBuild() ~= "TBC" then
 	MissingPower:RegisterEvent(frame, "UPDATE_SHAPESHIFT_FORM")
 end
 
--- PLAYER_MOUNT_CHANGED exists in Wrath and newer
 if MissingPower:GetWoWBuild() ~= "CLASSIC" and MissingPower:GetWoWBuild() ~= "TBC" then
 	MissingPower:RegisterEvent(frame, "PLAYER_MOUNT_CHANGED")
 end
