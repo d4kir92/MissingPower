@@ -1,3 +1,4 @@
+-- By D4KiR
 local _, MissingPower = ...
 function MissingPower:GetHealthBar()
 	local PlayerFrameHealthBar = getglobal("PlayerFrameHealthBar")
@@ -39,20 +40,24 @@ MissingPower:After(
 			glow:SetWidth(1)
 			glow:SetAllPoints(movingElement)
 			local accumulator = 0
-			movingElement:SetScript("OnUpdate", function(self, elapsed)
-				accumulator = accumulator + elapsed
-				if accumulator < tickRate then return end
-				accumulator = accumulator - tickRate
-				p = p + tickRate / hpReg
-				if p > 1 then
-					p = 0
-				end
+			movingElement:SetScript(
+				"OnUpdate",
+				function(self, elapsed)
+					accumulator = accumulator + elapsed
+					if accumulator < tickRate then return end
+					accumulator = accumulator - tickRate
+					p = p + tickRate / hpReg
+					if p > 1 then
+						p = 0
+					end
 
-				local _, sh = hb:GetSize()
-				movingElement:SetSize(1, sh)
-				movingElement:ClearAllPoints()
-				movingElement:SetPoint("LEFT", hb, "LEFT", p * hb:GetWidth(), 0)
-			end)
+					local _, sh = hb:GetSize()
+					movingElement:SetSize(1, sh)
+					movingElement:ClearAllPoints()
+					movingElement:SetPoint("LEFT", hb, "LEFT", p * hb:GetWidth(), 0)
+				end
+			)
+
 			local function OnEvent(self, event, ...)
 				if event == "PLAYER_REGEN_ENABLED" then
 					p = 0

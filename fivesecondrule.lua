@@ -1,4 +1,4 @@
--- FSR
+-- By D4KiR
 local _, MissingPower = ...
 local wOnce = true
 local _PlayerFrameManaBar = getglobal("PlayerFrameManaBar")
@@ -130,95 +130,107 @@ MissingPower:After(
 			local fsrCfgShowTickBar = MissingPower:GetConfig("showtickbar", true)
 			local fsrCfgShowTickBarBg = MissingPower:GetConfig("showtickbarbg", true)
 			local fsrColorBg = {MissingPower:GetColor("TickbarBorderColor", "TickbarBorderColor")}
-			local fsrColor   = {MissingPower:GetColor("TickbarColor", "TickbarColor")}
+			local fsrColor = {MissingPower:GetColor("TickbarColor", "TickbarColor")}
 			local fsrColorDirty = true
-			hooksecurefunc(MissingPower, "InvalidateConfigCache", function()
-				fsrCfgShowTickBar = MissingPower:GetConfig("showtickbar", true)
-				fsrCfgShowTickBarBg = MissingPower:GetConfig("showtickbarbg", true)
-				fsrColorBg = {MissingPower:GetColor("TickbarBorderColor", "TickbarBorderColor")}
-				fsrColor   = {MissingPower:GetColor("TickbarColor", "TickbarColor")}
-				lastMb = nil -- force layout re-apply on next frame
-				fsrColorDirty = true
-			end)
+			hooksecurefunc(
+				MissingPower,
+				"InvalidateConfigCache",
+				function()
+					fsrCfgShowTickBar = MissingPower:GetConfig("showtickbar", true)
+					fsrCfgShowTickBarBg = MissingPower:GetConfig("showtickbarbg", true)
+					fsrColorBg = {MissingPower:GetColor("TickbarBorderColor", "TickbarBorderColor")}
+					fsrColor = {MissingPower:GetColor("TickbarColor", "TickbarColor")}
+					lastMb = nil
+					fsrColorDirty = true
+				end
+			)
+
 			local fsrDriver = CreateFrame("FRAME")
 			fsrDriver:Show()
 			local fsrAccum = 0
-			local fsrAccum = 0
-			fsrDriver:SetScript("OnUpdate", function(self, elapsed)
-				fsrAccum = fsrAccum + elapsed
-				if fsrAccum < 0.03 then return end
-				fsrAccum = fsrAccum - 0.03
-				now = GetTime()
-				if cachedPowerType ~= Enum.PowerType.Mana then
-					frame:Hide()
-					return
-				end
-				mana = UnitPower("player", Enum.PowerType.Mana)
-				manamax = UnitPowerMax("player", Enum.PowerType.Mana)
-				local full = false
-				frame:Show()
-				if mana < manamax then
-					if gain then
-						if oldmana + 10 < mana or oldmana - 10 > mana or now >= nexttick then
-							oldmana = mana
-							max = mpt
-							nexttick = now + mpt
-						end
-					elseif not gain then
-						gain = true
-					end
-				else
-					full = true
-				end
-
-				local percent = 0
-				if max > 2 then
-					percent = (nexttick - now) / max
-				else
-					percent = (max - (nexttick - now)) / max
-				end
-
-				if percent > 1 or fsrCfgShowTickBar == false then
-					full = true
-				end
-
-				local mb = MissingPower:GetManaBar()
-				if lastMb ~= mb then
-					lastMb = mb
-					local mbH = mb:GetHeight()
-					glowBg:SetHeight(mbH)
-					glow:SetHeight(mbH - 2)
-					frame:SetParent(mb)
-					frame:SetHeight(mbH)
-					frame:SetPoint("LEFT", mb, "LEFT")
-					glow:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
-					if fsrCfgShowTickBarBg then
-						glowBg:SetWidth(3)
-						glowBg:SetPoint("RIGHT", frame, "RIGHT", 1, 0)
-					else
-						glowBg:SetWidth(1)
-						glowBg:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
-					end
-				end
-
-				if mb then
-					if full then
+			fsrDriver:SetScript(
+				"OnUpdate",
+				function(self, elapsed)
+					fsrAccum = fsrAccum + elapsed
+					if fsrAccum < 0.03 then return end
+					fsrAccum = fsrAccum - 0.03
+					now = GetTime()
+					if cachedPowerType ~= Enum.PowerType.Mana then
 						frame:Hide()
+
+						return
+					end
+
+					mana = UnitPower("player", Enum.PowerType.Mana)
+					manamax = UnitPowerMax("player", Enum.PowerType.Mana)
+					local full = false
+					frame:Show()
+					if mana < manamax then
+						if gain then
+							if oldmana + 10 < mana or oldmana - 10 > mana or now >= nexttick then
+								oldmana = mana
+								max = mpt
+								nexttick = now + mpt
+							end
+						elseif not gain then
+							gain = true
+						end
 					else
-						if fsrColorDirty then
-							fsrColorDirty = false
-							glowBg:SetColorTexture(fsrColorBg[1], fsrColorBg[2], fsrColorBg[3], fsrColorBg[4])
-							glow:SetColorTexture(fsrColor[1], fsrColor[2], fsrColor[3], fsrColor[4])
+						full = true
+					end
+
+					local percent = 0
+					if max > 2 then
+						percent = (nexttick - now) / max
+					else
+						percent = (max - (nexttick - now)) / max
+					end
+
+					if percent > 1 or fsrCfgShowTickBar == false then
+						full = true
+					end
+
+					local mb = MissingPower:GetManaBar()
+					if lastMb ~= mb then
+						lastMb = mb
+						local mbH = mb:GetHeight()
+						glowBg:SetHeight(mbH)
+						glow:SetHeight(mbH - 2)
+						frame:SetParent(mb)
+						frame:SetHeight(mbH)
+						frame:SetPoint("LEFT", mb, "LEFT")
+						glow:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
+						if fsrCfgShowTickBarBg then
+							glowBg:SetWidth(3)
+							glowBg:SetPoint("RIGHT", frame, "RIGHT", 1, 0)
+						else
+							glowBg:SetWidth(1)
+							glowBg:SetPoint("RIGHT", frame, "RIGHT", 0, 0)
 						end
-						local newW = mb:GetWidth() * percent
-						if frame._lastW ~= newW then
-							frame._lastW = newW
-							frame:SetWidth(newW)
+					end
+
+					if mb then
+						if full then
+							frame:Hide()
+						else
+							if fsrColorDirty then
+								fsrColorDirty = false
+								glowBg:SetColorTexture(fsrColorBg[1], fsrColorBg[2], fsrColorBg[3], fsrColorBg[4])
+								glow:SetColorTexture(fsrColor[1], fsrColor[2], fsrColor[3], fsrColor[4])
+							end
+
+							local newW = mb:GetWidth() * percent
+							if frame._lastW ~= newW then
+								frame._lastW = newW
+								frame:SetWidth(newW)
+							end
+
+							frame:Show()
 						end
-						frame:Show()
 					end
 				end
-			end)
+			)
+
 			local EnergyTickTracker = CreateFrame("Frame")
 			EnergyTickTracker:RegisterUnitEvent("UNIT_POWER_UPDATE", "player")
 			local lastTickTime = GetTime()
@@ -242,16 +254,21 @@ MissingPower:After(
 			local euShowTicks = MissingPower:GetConfig("showenergyticks", true)
 			local euShowTicksBg = MissingPower:GetConfig("showenergyticksbg", true)
 			local euColorBg = {MissingPower:GetColor("EnergyTickbarBorderColor", "EnergyTickbarBorderColor")}
-			local euColor   = {MissingPower:GetColor("EnergyTickbarColor", "EnergyTickbarColor")}
+			local euColor = {MissingPower:GetColor("EnergyTickbarColor", "EnergyTickbarColor")}
 			local euColorDirty = true
-			hooksecurefunc(MissingPower, "InvalidateConfigCache", function()
-				euShowTicks = MissingPower:GetConfig("showenergyticks", true)
-				euShowTicksBg = MissingPower:GetConfig("showenergyticksbg", true)
-				euColorBg = {MissingPower:GetColor("EnergyTickbarBorderColor", "EnergyTickbarBorderColor")}
-				euColor   = {MissingPower:GetColor("EnergyTickbarColor", "EnergyTickbarColor")}
-				lastMB = nil -- force SetPoint re-apply on next frame
-				euColorDirty = true
-			end)
+			hooksecurefunc(
+				MissingPower,
+				"InvalidateConfigCache",
+				function()
+					euShowTicks = MissingPower:GetConfig("showenergyticks", true)
+					euShowTicksBg = MissingPower:GetConfig("showenergyticksbg", true)
+					euColorBg = {MissingPower:GetColor("EnergyTickbarBorderColor", "EnergyTickbarBorderColor")}
+					euColor = {MissingPower:GetColor("EnergyTickbarColor", "EnergyTickbarColor")}
+					lastMB = nil
+					euColorDirty = true
+				end
+			)
+
 			local euAccum = 0
 			local function OnUpdateHandler(self, elapsed)
 				euAccum = euAccum + elapsed
@@ -279,6 +296,7 @@ MissingPower:After(
 					glowEnergyBg:SetColorTexture(euColorBg[1], euColorBg[2], euColorBg[3], euColorBg[4])
 					glowEnergy:SetColorTexture(euColor[1], euColor[2], euColor[3], euColor[4])
 				end
+
 				mb = MissingPower:GetManaBar()
 				if mb and lastMB ~= mb then
 					lastMB = mb
@@ -337,9 +355,14 @@ MissingPower:After(
 			local SwingTimerSecondary = CreateSwingTimer("SwingTimerSecondary", -222, 0, 1, 0)
 			local SwingTimerRanged = CreateSwingTimer("SwingTimerRanged", -244, 0, 0, 1)
 			local swingTimerEnabled = MissingPower:GetConfig("showswingtimer", false)
-			hooksecurefunc(MissingPower, "InvalidateConfigCache", function()
-				swingTimerEnabled = MissingPower:GetConfig("showswingtimer", false)
-			end)
+			hooksecurefunc(
+				MissingPower,
+				"InvalidateConfigCache",
+				function()
+					swingTimerEnabled = MissingPower:GetConfig("showswingtimer", false)
+				end
+			)
+
 			local playerGUID = UnitGUID("player")
 			local SwingTimerLogic = CreateFrame("Frame")
 			SwingTimerLogic:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
