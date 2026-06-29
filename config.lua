@@ -39,6 +39,11 @@ function MissingPower:GetConfigCache()
 	configCache.poweralpha        = MissingPower:GetConfig("poweralpha", 0.7)
 	configCache.hideoverlap       = MissingPower:GetConfig("hideoverlap", true)
 	configCache.customcolor       = MissingPower:GetConfig("customcolor", false)
+	local cr, cg, cb, ca = MissingPower:GetColor("CMPCol", "CMPCol")
+	configCache.CMPColR = cr
+	configCache.CMPColG = cg
+	configCache.CMPColB = cb
+	configCache.CMPColA = ca
 	configCacheValid = true
 	return configCache
 end
