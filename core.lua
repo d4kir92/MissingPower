@@ -301,7 +301,7 @@ function MissingPower:ShowOOM(init, from)
 							local cachedR, cachedG, cachedB = 1.0, 1.0, 1.0
 							if name and (at == "spell" or at == "macro") then
 								local costs = MissingPower:GetSpellPowerCost(spellId)
-								if costs ~= nil and costs[1] ~= nil then
+								if costs ~= nil and costs[1] ~= nil and costs[1].cost > 0 then
 									hasCost = true
 									cachedCosts = costs
 									local typ = costs[1].type
