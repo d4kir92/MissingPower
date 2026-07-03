@@ -1,12 +1,11 @@
 -- By D4KiR
 local _, MissingPower = ...
 local wOnce = true
-local _PlayerFrameManaBar = getglobal("PlayerFrameManaBar")
-local _ElvUF_Player = getglobal("ElvUF_Player")
-local _SUFUnitplayer = getglobal("SUFUnitplayer")
-local _XPerl_PlayerstatsFramemanaBar = getglobal("XPerl_PlayerstatsFramemanaBar")
 function MissingPower:GetManaBar()
-	local mb = _PlayerFrameManaBar
+	local mb = getglobal("PlayerFrameManaBar")
+	local _ElvUF_Player = getglobal("ElvUF_Player")
+	local _SUFUnitplayer = getglobal("SUFUnitplayer")
+	local _XPerl_PlayerstatsFramemanaBar = getglobal("XPerl_PlayerstatsFramemanaBar")
 	if _ElvUF_Player ~= nil and _ElvUF_Player:IsShown() then
 		mb = _ElvUF_Player.Power
 		if mb == nil and wOnce then
@@ -28,7 +27,7 @@ function MissingPower:GetManaBar()
 	end
 
 	if mb == nil then
-		mb = _PlayerFrameManaBar
+		mb = getglobal("PlayerFrameManaBar")
 	end
 
 	return mb
@@ -84,7 +83,6 @@ MissingPower:After(
 
 		if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
 			local lastMb = nil
-			local tick = 0.03
 			local now = GetTime()
 			local nexttick = now + 2
 			local oldmana = 0
