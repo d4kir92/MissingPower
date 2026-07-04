@@ -266,72 +266,67 @@ function MissingPower:ShowOOM(init, from)
 				MIPOActionButtons = {}
 				for btnname, ab in pairs(ActionButtons) do
 					local ABTN = ab.frameRef
-					local btnSlot = ABTN._state_action or ABTN.action
-					if btnSlot == ab._lastBtnSlot and ab.cachedCosts ~= nil then
+					local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action, ab.isMAI)
+					if id and at == "macro" then
+						local ms = GetMacroSpell(id)
+						if ms then
+							id = ms
+						end
+					end
+
+					local resolvedId = id
+					if ab.isStance and id ~= nil then
+						_, _, _, resolvedId = GetShapeshiftFormInfo(ab.nr)
+					end
+
+					if resolvedId == ab._lastResolvedId and at == ab._lastAt and ab.cachedCosts ~= nil then
 						MIPOActionButtons[btnname] = ab
 					else
-						ab._lastBtnSlot = btnSlot
-						local id, at = MissingPower:GetActionFromButton(ABTN, ABTN._state_action, ab.isMAI)
-						if id and at == "macro" then
-							local ms = GetMacroSpell(id)
-							if ms then
-								id = ms
+						ab._lastResolvedId = resolvedId
+						ab._lastAt = at
+						local name, _, _, _, _, _, spellId
+						if ab.isStance then
+							name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(resolvedId)
+						else
+							name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
+						end
+
+						local hasCost = false
+						local cachedCosts = nil
+						local cachedR, cachedG, cachedB = 1.0, 1.0, 1.0
+						if name and (at == "spell" or at == "macro") then
+							local costs = MissingPower:GetSpellPowerCost(spellId)
+							if costs ~= nil and costs[1] ~= nil and costs[1].cost > 0 then
+								hasCost = true
+								cachedCosts = costs
+								local typ = costs[1].type
+								local pbc = PowerBarColor[typ]
+								if pbc ~= nil then
+									cachedR = MissingPower:MathC(pbc.r or 1.0, 0.3, 1.0)
+									cachedG = MissingPower:MathC(pbc.g or 1.0, 0.3, 1.0)
+									cachedB = MissingPower:MathC(pbc.b or 1.0, 0.3, 1.0)
+								end
 							end
 						end
 
-						local resolvedId = id
-						if ab.isStance and id ~= nil then
-							_, _, _, resolvedId = GetShapeshiftFormInfo(ab.nr)
-						end
-
-						if resolvedId == ab._lastResolvedId and at == ab._lastAt and ab.cachedCosts ~= nil then
+						if hasCost then
+							ab.cachedAt = at
+							ab.cachedSpellId = spellId
+							ab.cachedCosts = cachedCosts
+							ab.cachedR = cachedR
+							ab.cachedG = cachedG
+							ab.cachedB = cachedB
 							MIPOActionButtons[btnname] = ab
 						else
-							ab._lastResolvedId = resolvedId
-							ab._lastAt = at
-							local name, _, _, _, _, _, spellId
-							if ab.isStance then
-								name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(resolvedId)
-							else
-								name, _, _, _, _, _, spellId = MissingPower:GetSpellInfo(id)
+							ab.cachedCosts = nil
+							if id and (at == "spell" or at == "macro") then
+								hasPendingSpells = true
 							end
 
-							local hasCost = false
-							local cachedCosts = nil
-							local cachedR, cachedG, cachedB = 1.0, 1.0, 1.0
-							if name and (at == "spell" or at == "macro") then
-								local costs = MissingPower:GetSpellPowerCost(spellId)
-								if costs ~= nil and costs[1] ~= nil and costs[1].cost > 0 then
-									hasCost = true
-									cachedCosts = costs
-									local typ = costs[1].type
-									local pbc = PowerBarColor[typ]
-									if pbc ~= nil then
-										cachedR = MissingPower:MathC(pbc.r or 1.0, 0.3, 1.0)
-										cachedG = MissingPower:MathC(pbc.g or 1.0, 0.3, 1.0)
-										cachedB = MissingPower:MathC(pbc.b or 1.0, 0.3, 1.0)
-									end
-								end
-							end
-
-							if hasCost then
-								ab.cachedAt = at
-								ab.cachedSpellId = spellId
-								ab.cachedCosts = cachedCosts
-								ab.cachedR = cachedR
-								ab.cachedG = cachedG
-								ab.cachedB = cachedB
-								MIPOActionButtons[btnname] = ab
-							else
-								ab.cachedCosts = nil
-								if id and (at == "spell" or at == "macro") then
-									hasPendingSpells = true
-								end
-								MissingPower:HideOOM(btnname, "No Costs")
-								local OOMAmountCounter = _G[btnname .. "AmountCounter"]
-								if OOMAmountCounter and OOMAmountCounter.text then
-									OOMAmountCounter.text:SetText("")
-								end
+							MissingPower:HideOOM(btnname, "No Costs")
+							local OOMAmountCounter = _G[btnname .. "AmountCounter"]
+							if OOMAmountCounter and OOMAmountCounter.text then
+								OOMAmountCounter.text:SetText("")
 							end
 						end
 					end
