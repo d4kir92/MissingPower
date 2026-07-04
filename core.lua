@@ -427,17 +427,19 @@ function MissingPower:ShowOOM(init, from)
 					OOMAmountCounter:ClearAllPoints()
 					OOMAmountCounter:SetPoint("CENTER", ABTN, "CENTER", 0, 0)
 					OOMAmountCounter:Show(true)
+					ab.lastCounterAlpha = nil
 					OOMAmountCounter:SetFrameStrata(ABTN:GetFrameStrata())
 				end
 
-				local wantCounterAlpha = (amount > 0 and showamountcounter) and 1 or 0
+				local amo = SpecialRound(amount, (decimals == 0 or amount > 99) and 0 or decimals)
+				local wantText = (displayiflowerthanx <= 0 or amount < displayiflowerthanx) and amo or ""
+
+				local wantCounterAlpha = (amount > 0 and showamountcounter and amo ~= 0) and 1 or 0
 				if ab.lastCounterAlpha ~= wantCounterAlpha then
 					ab.lastCounterAlpha = wantCounterAlpha
 					OOMAmountCounter:SetAlpha(wantCounterAlpha)
 				end
 
-				local amo = SpecialRound(amount, (decimals == 0 or amount > 99) and 0 or decimals)
-				local wantText = (displayiflowerthanx <= 0 or amount < displayiflowerthanx) and amo or ""
 				if ab.lastText ~= wantText then
 					ab.lastText = wantText
 					OOMAmountCounter.text:SetText(wantText)
