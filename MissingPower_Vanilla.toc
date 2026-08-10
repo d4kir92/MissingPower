@@ -1,8 +1,17 @@
 ## Interface: 11509
 ## Version: 1.2.76
 ## Title: MissingPower |T136048:16:16:0:0|t by |cff55d2ffD4KiR |T132115:16:16:0:0|t
-## Notes: Show for each spell how much power is missing
+## Notes: Shows how many times you can cast the spell
+## Notes-deDE: Zeigt an, wie oft du den Zauber wirken kannst
+## Notes-esES: Muestra cuántas veces puedes lanzar el hechizo
+## Notes-esMX: Muestra cuántas veces puedes lanzar el hechizo
+## Notes-frFR: Affiche le nombre de fois où vous pouvez lancer le sort
+## Notes-itIT: Mostra quante volte puoi lanciare l'incantesimo
+## Notes-koKR: 주문을 몇 번 시전할 수 있는지 표시합니다
+## Notes-ptBR: Mostra quantas vezes você pode lançar a magia
 ## Notes-ruRU: Показывает, как часто Вы можете произносить заклинание
+## Notes-zhCN: 显示你可以施放该法术的次数
+## Notes-zhTW: 顯示你可以施放該法術的次數
 ## Author: D4KiR |T132115:16:16:0:0|t
 ## Category: Action Bars
 ## Category-deDE: Aktionsleisten
