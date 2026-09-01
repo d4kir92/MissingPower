@@ -1,106 +1,209 @@
 -- By D4KiR
 local _, MissingPower = ...
-local mp_settings = {}
+local mpset = nil
+local DEFAULT_WIDTH = 520
+local DEFAULT_HEIGHT = 520
 function MissingPower:ToggleSettings()
-	if mp_settings then
-		if mp_settings:IsShown() then
-			mp_settings:Hide()
-		else
-			mp_settings:Show()
+	if mpset == nil then return end
+	mpset:Toggle()
+end
+
+local function GetCollapsed(key)
+	if key == nil then return nil end
+	if type(MIPOPC) ~= "table" then return nil end
+	if type(MIPOPC["COLLAPSED"]) ~= "table" then return nil end
+	return MIPOPC["COLLAPSED"][key]
+end
+
+local function SetCollapsed(key, collapsed)
+	if key == nil then return end
+	if type(MIPOPC) ~= "table" then return end
+	if type(MIPOPC["COLLAPSED"]) ~= "table" then MIPOPC["COLLAPSED"] = {} end
+	if collapsed then
+		MIPOPC["COLLAPSED"][key] = true
+	else
+		MIPOPC["COLLAPSED"][key] = nil
+	end
+end
+
+local function AddCategory(key, level)
+	mpset:AddCategory({
+		["label"] = "LID_" .. key,
+		["key"] = key,
+		["search"] = key,
+		["level"] = level
+	})
+end
+
+local function AddCheckbox(key, default, func)
+	mpset:AddCheckbox({
+		["label"] = "LID_" .. key,
+		["search"] = key,
+		["value"] = MissingPower:GetConfig(key, default),
+		["func"] = function(value)
+			MissingPower:SV(MIPOPC, key, value)
+			if func then func() end
+		end
+	})
+end
+
+local function AddSlider(key, default, min, max, step, decimals, func)
+	mpset:AddSlider({
+		["label"] = "LID_" .. key,
+		["search"] = key,
+		["value"] = MissingPower:GetConfig(key, default),
+		["min"] = min,
+		["max"] = max,
+		["step"] = step,
+		["decimals"] = decimals,
+		["func"] = function(value)
+			MissingPower:SV(MIPOPC, key, value)
+			if func then func() end
+		end
+	})
+end
+
+local function AddDropdown(key, default, choices, func)
+	mpset:AddDropdown({
+		["label"] = "LID_" .. key,
+		["search"] = key,
+		["value"] = MissingPower:GetConfig(key, default),
+		["choices"] = choices,
+		["func"] = function(value)
+			MissingPower:SV(MIPOPC, key, value)
+			if func then func() end
+		end
+	})
+end
+
+local function AnchorChoices()
+	local choices = {}
+	local anchors = MissingPower:GetAnchorTab()
+	for id = 0, 8 do
+		if anchors[id] then
+			tinsert(choices, {
+				["value"] = id,
+				["label"] = "LID_" .. anchors[id]
+			})
 		end
 	end
+	return choices
+end
+
+local function AddColorPicker(key, default, func)
+	if MIPOPC[key .. "_R"] == nil then MissingPower:SetColor(key, default.R, default.G, default.B, default.A) end
+	local r, g, b, a = MissingPower:GetColor(key, "AddColorPicker")
+	mpset:AddColorPicker({
+		["label"] = "LID_" .. key,
+		["search"] = key,
+		["value"] = {
+			["r"] = r,
+			["g"] = g,
+			["b"] = b,
+			["a"] = a
+		},
+		["func"] = function(newR, newG, newB, newA)
+			MissingPower:SetColor(key, newR, newG, newB, newA)
+			if func then func() end
+		end
+	})
 end
 
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
-	MissingPower:SetVersion(136048, "1.2.78")
-	mp_settings = MissingPower:CreateWindow({
-		["name"] = "MissingPower",
+	MissingPower:SetVersion(136048, "1.3.0")
+	MissingPower:SetAppendTab(MIPOPC)
+	mpset = MissingPower:CreateUIWindow({
+		["name"] = "MissingPowerSettings",
 		["pTab"] = {"CENTER"},
-		["sw"] = 520,
-		["sh"] = 520,
+		["width"] = MissingPower:GetConfig("WINDOWWIDTH", DEFAULT_WIDTH),
+		["height"] = MissingPower:GetConfig("WINDOWHEIGHT", DEFAULT_HEIGHT),
+		["minWidth"] = 360,
+		["minHeight"] = 240,
+		["onResize"] = function(width, height)
+			MissingPower:SV(MIPOPC, "WINDOWWIDTH", width)
+			MissingPower:SV(MIPOPC, "WINDOWHEIGHT", height)
+		end,
+		["getCollapsed"] = function(key) return GetCollapsed(key) end,
+		["setCollapsed"] = function(key, collapsed) SetCollapsed(key, collapsed) end,
 		["title"] = format("|T136048:16:16:0:0|t Missing|rPower|r v%s", MissingPower:GetVersion())
 	})
 
-	mp_settings.SF = CreateFrame("ScrollFrame", "mp_settings_SF", mp_settings, "UIPanelScrollFrameTemplate")
-	mp_settings.SF:SetPoint("TOPLEFT", mp_settings, 8, -26)
-	mp_settings.SF:SetPoint("BOTTOMRIGHT", mp_settings, -32, 8)
-	mp_settings.SC = CreateFrame("Frame", "mp_settings_SC", mp_settings.SF)
-	mp_settings.SC:SetSize(mp_settings.SF:GetSize())
-	mp_settings.SC:SetPoint("TOPLEFT", mp_settings.SF, "TOPLEFT", 0, 0)
-	mp_settings.SF:SetScrollChild(mp_settings.SC)
-	local y = 0
-	MissingPower:SetAppendY(y)
-	MissingPower:SetAppendParent(mp_settings.SC)
-	MissingPower:SetAppendTab(MIPOPC)
-	MissingPower:AppendCategory("GENERAL")
-	MissingPower:AppendCheckbox("MMBTN", MissingPower:GetWoWBuild() ~= "RETAIL", function(sel, checked)
-		if checked then
+	mpset:SuspendLayout()
+	mpset:AddSearch()
+	AddCategory("GENERAL")
+	AddCheckbox("MMBTN", MissingPower:GetWoWBuild() ~= "RETAIL", function()
+		if MIPOPC["MMBTN"] then
 			MissingPower:ShowMMBtn("MissingPower")
 		else
 			MissingPower:HideMMBtn("MissingPower")
 		end
 	end)
 
-	MissingPower:AppendCategory("POWERCOST")
-	MissingPower:AppendCheckbox("hideoverlap", true, function() MissingPower:UpdateUi("hideoverlap") end)
-	MissingPower:AppendCheckbox("showamountcounter", true, function() MissingPower:UpdateUi("showamountcounter") end)
-	MissingPower:AppendSlider("poweralpha", 0.7, 0.0, 1.0, 0.02, 2, function() MissingPower:UpdateUi("poweralpha") end)
-	MissingPower:AppendSlider("displayiflowerthanx", 10, 0, 99, 1, 0, function() MissingPower:UpdateUi("lowerthenx") end)
-	MissingPower:AppendSlider("decimals", 1, 0.0, 2.0, 1, 0, function() MissingPower:UpdateUi("decimals") end)
-	MissingPower:AppendSlider("fontsize", 12, 6, 16, 1, 0, function() MissingPower:UpdateUi("fontsize") end)
-	MissingPower:AppendSlider("fontanchor", 0, 0, 8, 1, 0, function() MissingPower:UpdateUi("fontanchor") end)
-	MissingPower:AppendSlider("textoffsetx", 1, -100, 100, 1, 0, function() MissingPower:UpdateUi("x") end)
-	MissingPower:AppendSlider("textoffsety", 1, -100, 100, 1, 0, function() MissingPower:UpdateUi("y") end)
-	MissingPower:AppendCheckbox("customcolor", false, function() MissingPower:UpdateUi("customcolor") end)
-	MissingPower:AppendColorPicker("CMPCol", {
+	AddCategory("POWERCOST")
+	AddCheckbox("showamountcounter", true, function() MissingPower:UpdateUi("showamountcounter") end)
+	AddCheckbox("hideoverlap", true, function() MissingPower:UpdateUi("hideoverlap") end)
+	AddSlider("displayiflowerthanx", 10, 0, 99, 1, 0, function() MissingPower:UpdateUi("lowerthenx") end)
+	AddSlider("poweralpha", 0.7, 0.0, 1.0, 0.02, 2, function() MissingPower:UpdateUi("poweralpha") end)
+	AddCategory("TEXT", 2)
+	AddSlider("fontsize", 12, 6, 16, 1, 0, function() MissingPower:UpdateUi("fontsize") end)
+	AddSlider("decimals", 1, 0.0, 2.0, 1, 0, function() MissingPower:UpdateUi("decimals") end)
+	MissingPower:SV(MIPOPC, "fontanchor", tonumber(MissingPower:GetConfig("fontanchor", 0)) or 0)
+	AddDropdown("fontanchor", 0, AnchorChoices(), function() MissingPower:UpdateUi("fontanchor") end)
+	AddSlider("textoffsetx", 1, -100, 100, 1, 0, function() MissingPower:UpdateUi("x") end)
+	AddSlider("textoffsety", 1, -100, 100, 1, 0, function() MissingPower:UpdateUi("y") end)
+	AddCategory("COLORS", 2)
+	AddCheckbox("customcolor", false, function() MissingPower:UpdateUi("customcolor") end)
+	AddColorPicker("CMPCol", {
 		["R"] = 1,
 		["G"] = 1,
 		["B"] = 1,
 		["A"] = 1
-	}, function() end, 5)
+	}, function() MissingPower:UpdateUi("CMPCol") end)
 
 	if MissingPower:GetWoWBuild() == "CLASSIC" or MissingPower:GetWoWBuild() == "TBC" then
-		MissingPower:AppendCategory("FIVESECONDRULE")
-		MissingPower:AppendCheckbox("showtickbar", true, function() MissingPower:UpdateUi("showtickbar") end)
-		MissingPower:AppendColorPicker("TickbarColor", {
+		AddCategory("REGENERATION")
+		AddCategory("FIVESECONDRULE", 2)
+		AddCheckbox("showtickbar", true, function() MissingPower:UpdateUi("showtickbar") end)
+		AddCheckbox("showtickbarbg", true)
+		AddColorPicker("TickbarColor", {
 			["R"] = 1,
 			["G"] = 1,
 			["B"] = 1,
 			["A"] = 1
-		}, function() end, 5)
+		})
 
-		MissingPower:AppendCheckbox("showtickbarbg", true)
-		MissingPower:AppendColorPicker("TickbarBorderColor", {
+		AddColorPicker("TickbarBorderColor", {
 			["R"] = 0,
 			["G"] = 0,
 			["B"] = 0,
 			["A"] = 1
-		}, function() end, 5)
+		})
 
-		MissingPower:AppendCategory("HEALTHREGEN")
-		MissingPower:AppendCheckbox("showhealthreg", false, function() MissingPower:UpdateUi("showhealthreg") end)
-		MissingPower:AppendCategory("ENERGYTICKS")
-		MissingPower:AppendCheckbox("showenergyticks", true)
-		MissingPower:AppendColorPicker("EnergyTickbarColor", {
+		AddCategory("ENERGYTICKS", 2)
+		AddCheckbox("showenergyticks", true)
+		AddCheckbox("showenergyticksbg", true)
+		AddColorPicker("EnergyTickbarColor", {
 			["R"] = 1,
 			["G"] = 1,
 			["B"] = 1,
 			["A"] = 1
-		}, function() end, 5)
+		})
 
-		MissingPower:AppendCheckbox("showenergyticksbg", true)
-		MissingPower:AppendColorPicker("EnergyTickbarBorderColor", {
+		AddColorPicker("EnergyTickbarBorderColor", {
 			["R"] = 0,
 			["G"] = 0,
 			["B"] = 0,
 			["A"] = 1
-		}, function() end, 5)
+		})
 
-		MissingPower:AppendCategory("SWINGTIMERS")
-		MissingPower:AppendCheckbox("showswingtimer", false)
+		AddCategory("HEALTHREGEN", 2)
+		AddCheckbox("showhealthreg", false, function() MissingPower:UpdateUi("showhealthreg") end)
+		AddCategory("SWINGTIMERS")
+		AddCheckbox("showswingtimer", false)
 	end
 
+	mpset:ResumeLayout()
 	MissingPower:CreateMinimapButton({
 		["name"] = "MissingPower",
 		["icon"] = 136048,
