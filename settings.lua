@@ -111,7 +111,7 @@ end
 
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
-	MissingPower:SetVersion(136048, "1.3.0")
+	MissingPower:SetVersion(136048, "1.3.1")
 	MissingPower:SetAppendTab(MIPOPC)
 	mpset = MissingPower:CreateUIWindow({
 		["name"] = "MissingPowerSettings",
