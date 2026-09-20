@@ -57,6 +57,16 @@ function MissingPower:GetActionFromButton(button, action, isMAI)
 end
 
 local loaded = false
+function MissingPower:SetOOMColor(OOM, r, g, b)
+	local tex = OOM.texture
+	if tex == nil then return end
+	if tex.SetColorTexture then
+		tex:SetColorTexture(r, g, b, color.a)
+	else
+		tex:SetTexture(r, g, b, color.a)
+	end
+end
+
 function MissingPower:CreateOOM(obtn, name, nr)
 	local BTNNAME = name .. "OOM"
 	if _G[BTNNAME] == nil then
@@ -67,12 +77,7 @@ function MissingPower:CreateOOM(obtn, name, nr)
 		OOM:ClearAllPoints()
 		OOM:SetPoint("TOPLEFT", obtn, "TOPLEFT", 0, -obtn:GetHeight())
 		OOM.texture = OOM:CreateTexture("OOM.texture", "ARTWORK")
-		if OOM.texture.SetColorTexture then
-			OOM.texture:SetColorTexture(color.r, color.g, color.b, color.a)
-		else
-			OOM.texture:SetTexture(color.r, color.g, color.b, color.a)
-		end
-
+		MissingPower:SetOOMColor(OOM, color.r, color.g, color.b)
 		OOM.texture:SetAllPoints(OOM)
 		OOM:SetFrameStrata("BACKGROUND")
 		OOM.OldHide = OOM.OldHide or OOM.Hide
@@ -184,6 +189,14 @@ function MissingPower:HideOOM(btnname, from)
 	OOM:Hide(true)
 	OOM:SetFrameStrata("BACKGROUND")
 	OOM:SetAlpha(0)
+	OOM._lastAlpha = nil
+	OOM._cachedStrata = nil
+	local ab = ActionButtons[btnname]
+	if ab ~= nil then
+		ab.lastVisible = false
+		ab.lastOOMY = nil
+		ab.lastOOMH = nil
+	end
 end
 
 local offsets = {
@@ -458,6 +471,7 @@ function MissingPower:ShowOOM(init, from)
 					ab.lastColorB = wantB
 					ab.lastColorA = wantA
 					OOMAmountCounter.text:SetTextColor(wantR, wantG, wantB, wantA)
+					MissingPower:SetOOMColor(OOM, wantR, wantG, wantB)
 				end
 
 				if not OOMAmountCounter.text._pointSet then
