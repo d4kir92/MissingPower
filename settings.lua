@@ -111,7 +111,7 @@ end
 
 function MissingPower:InitSetting()
 	MIPOPC = MIPOPC or {}
-	MissingPower:SetVersion(136048, "1.3.5")
+	MissingPower:SetVersion()
 	MissingPower:SetAppendTab(MIPOPC)
 	mpset = MissingPower:CreateUIWindow({
 		["name"] = "MissingPowerSettings",
@@ -126,7 +126,7 @@ function MissingPower:InitSetting()
 		end,
 		["getCollapsed"] = function(key) return GetCollapsed(key) end,
 		["setCollapsed"] = function(key, collapsed) SetCollapsed(key, collapsed) end,
-		["title"] = format("|T136048:16:16:0:0|t Missing|rPower|r v%s", MissingPower:GetVersion())
+		["title"] = format("|T%s:16:16:0:0|t Missing|rPower|r v%s", MissingPower:GetAddonIcon(), MissingPower:GetVersion())
 	})
 
 	mpset:SuspendLayout()
@@ -206,9 +206,9 @@ function MissingPower:InitSetting()
 	mpset:ResumeLayout()
 	MissingPower:CreateMinimapButton({
 		["name"] = "MissingPower",
-		["icon"] = 136048,
+		["icon"] = MissingPower:GetAddonIcon(),
 		["dbtab"] = MIPOPC,
-		["vTT"] = {{"|T136048:16:16:0:0|t Missing|rPower|r", "v" .. MissingPower:GetVersion()}, {MissingPower:Trans("LID_LEFTCLICK"), MissingPower:Trans("LID_OPENSETTINGS")}, {MissingPower:Trans("LID_RIGHTCLICK"), MissingPower:Trans("LID_HIDEMINIMAPBUTTON")}},
+		["vTT"] = {{format("|T%s:16:16:0:0|t Missing|rPower|r", MissingPower:GetAddonIcon()),"v" .. MissingPower:GetVersion()}, {MissingPower:Trans("LID_LEFTCLICK"), MissingPower:Trans("LID_OPENSETTINGS")}, {MissingPower:Trans("LID_RIGHTCLICK"), MissingPower:Trans("LID_HIDEMINIMAPBUTTON")}},
 		["funcL"] = function() MissingPower:ToggleSettings() end,
 		["funcR"] = function()
 			MissingPower:SV(MIPOPC, "MMBTN", false)

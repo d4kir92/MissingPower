@@ -1,6 +1,6 @@
 -- By D4KiR
 local _, MissingPower = ...
-MissingPower:SetAddonOutput("MissingPower", 136048)
+MissingPower:SetAddonOutput()
 function MissingPower:GetConfig(str, val)
 	MIPOPC = MIPOPC or {}
 	if MIPOPC[str] == nil then
